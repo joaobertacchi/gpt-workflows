@@ -95,9 +95,11 @@ Gere o pacote público na raiz do repositório:
 ./scripts/build_public_zip.sh
 ```
 
-O script executa a validação automatizada e cria `dist/documentar-reuniao-0.3.5.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
+O script executa a validação automatizada e cria `dist/documentar-reuniao-0.3.6.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
 
 Em superfícies compatíveis, o relatório é entregue como o artefato renderizado `relatorio-reuniao.md`; o bloco Markdown bruto é usado somente como fallback.
+
+A tabela de próximos passos inclui a coluna `Prazo` com a data de cada ação; passos gerados por override sem prazo exibem `Não informado`.
 
 O pacote usa estes recursos públicos obrigatórios:
 

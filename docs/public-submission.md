@@ -21,7 +21,7 @@
 
 ## Release Notes
 
-Version 0.3.5 delivers meeting reports as rendered Markdown file artifacts on supported ChatGPT surfaces, preserves raw Markdown for copy or download, and retains a fenced Markdown fallback where artifacts are unavailable.
+Version 0.3.6 adds next-step deadlines: every action-based next step requires a calendar-date `Prazo`, relative deadline phrases are confirmed as calendar dates, and an explicit override renders `Não informado` in the unresolved `Prazo` cell. Reports continue to deliver as rendered Markdown file artifacts with a fenced Markdown fallback.
 
 ## Reviewer Data
 
