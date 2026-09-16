@@ -1,0 +1,700 @@
+{
+  "scenariosVersion": "0.1.0",
+  "description": "Offline state-machine fixtures. `fields` represent facts already extracted from a user turn; the harness does not pretend to parse natural language.",
+  "cases": [
+    {
+      "id": "selected-plugin-starts-intake",
+      "activation": "plugin_selected",
+      "turns": [],
+      "expectations": [
+        {
+          "action": "send_intake",
+          "state": "INTAKE",
+          "missing": [],
+          "outputContains": ["empresa (cliente)", "data da reunião/visita", "pessoa(s) de contato", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável por cada ação", "data para follow up"]
+        }
+      ]
+    },
+    {
+      "id": "explicit-mention-start-command-starts-intake",
+      "activation": "explicit_mention",
+      "turns": [
+        {
+          "text": "@Documentar Reunião começar",
+          "fields": {}
+        }
+      ],
+      "expectations": [
+        {
+          "action": "send_intake",
+          "state": "INTAKE",
+          "missing": [],
+          "outputContains": ["empresa (cliente)", "data da reunião/visita", "pessoa(s) de contato", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável por cada ação", "data para follow up"]
+        }
+      ]
+    },
+    {
+      "id": "explicit-mention-treats-suffix-as-first-turn",
+      "activation": "explicit_mention",
+      "turns": [
+        {
+          "text": "@Documentar Reunião Empresa Acme, reunião em 10/09/2026 com Ana, tipo negociação. Discutimos a renovação do contrato. Bruno enviará a proposta e o follow up será em 16/09/2026.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-10",
+            "contacts": ["Ana"],
+            "visit_type": "negociação",
+            "topics_discussed": ["Renovação do contrato"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "follow_up_date": "2026-09-16"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "generate", "state": "DONE", "missing": [], "outputNotContains": ["Pendências de informação"]}
+      ]
+    },
+    {
+      "id": "complete-on-first-turn",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Use relatorio-reuniao. Empresa Acme, reunião em 10/09/2026 com Ana, tipo negociação. Discutimos a renovação do contrato e o escopo comercial. Bruno enviará a proposta revisada e o follow up será em 16/09/2026.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-10",
+            "contacts": ["Ana"],
+            "visit_type": "negociação",
+            "topics_discussed": ["Renovação do contrato", "Escopo comercial"],
+            "next_steps": [{"action": "Enviar proposta revisada", "responsible": "Bruno"}],
+            "follow_up_date": "2026-09-16"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "generate", "state": "DONE", "missing": [], "outputNotContains": ["Registro detalhado"]}
+      ]
+    },
+    {
+      "id": "ask-only-for-missing-then-merge",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Foi uma visita à Beta em 2026-09-11.",
+          "fields": {
+            "company": "Beta",
+            "meeting_date": "2026-09-11",
+            "contacts": ["Carla"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Processo atual"]
+          }
+        },
+        {
+          "text": "Os próximos passos são preparar a demonstração com a Carla como responsável; o follow up será em 2026-09-18.",
+          "fields": {
+            "next_steps": [{"action": "Preparar demonstração", "responsible": "Carla"}],
+            "follow_up_date": "2026-09-18"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": ["next_steps", "follow_up_date"],
+          "outputContains": ["Próximos passos", "Data para follow up"],
+          "outputNotContains": ["Empresa (cliente)", "Data da reunião/visita", "Pessoa(s) de contato", "Tipo de reunião/visita", "Assuntos discutidos"]
+        },
+        {"action": "generate", "state": "DONE", "missing": []}
+      ]
+    },
+    {
+      "id": "explicit-override-generates-with-gaps",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Temos uma visita à Gamma em 2026-09-12. Pode gerar mesmo com pendências.",
+          "fields": {
+            "company": "Gamma",
+            "meeting_date": "2026-09-12",
+            "contacts": ["Diego"],
+            "visit_type": "desenvolvimento",
+            "topics_discussed": ["Nova solução"],
+            "provided_details": ["Diego explicou que a solução atual exige retrabalho manual."]
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "generate",
+          "state": "DONE_WITH_GAPS",
+          "missing": ["next_steps", "follow_up_date"],
+          "outputContains": ["rascunho com informações pendentes", "Pendências de informação", "Próximos passos", "Data para follow up", "Registro detalhado", "retrabalho manual"]
+        }
+      ]
+    },
+    {
+      "id": "ambiguous-follow-up-is-not-override",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A visita foi com a Delta. Pode seguir com isso?",
+          "fields": {
+            "company": "Delta"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "invalid-visit-type-asks-only-for-type",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Visita à Epsilon em 2026-09-13, tipo instalação.",
+          "fields": {
+            "company": "Epsilon",
+            "meeting_date": "2026-09-13",
+            "contacts": ["Eva"],
+            "visit_type": "instalação",
+            "topics_discussed": ["Manutenção"],
+            "next_steps": [{"action": "Enviar instruções", "responsible": "Eva"}],
+            "follow_up_date": "2026-09-20"
+          }
+        },
+        {
+          "text": "Corrigindo: o tipo de visita foi corretiva.",
+          "fields": {"visit_type": "corretiva"}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["visit_type"]},
+        {"action": "generate", "state": "DONE", "missing": []}
+      ]
+    },
+    {
+      "id": "missing-only-visit-type-asks-only-for-type",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Tenho todos os dados do registro, menos o tipo de reunião/visita.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "topics_discussed": ["Revisão do equipamento"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "follow_up_date": "2026-09-22"
+          }
+        },
+        {
+          "text": "O tipo de reunião/visita foi preventiva.",
+          "fields": {"visit_type": "preventiva"}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["visit_type"]},
+        {"action": "generate", "state": "DONE", "missing": []}
+      ]
+    },
+    {
+      "id": "planning-context-is-not-complete-report",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Atualizei os prazos e responsabilidades: até 15/09/2026 finalizo e disponibilizo o plugin para o Luciano; em 16 e 17/09 ele instala e testa no Android; até 17/09 informa o resultado e o feedback. O critério é o funcionamento no Android e a adequação do relatório.",
+          "fields": {}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company", "meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "generic-meeting-schema-does-not-satisfy-report-contract",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Eu tive a reunião em 13/09/2026, foi uma da tarde, durou aproximadamente uma hora e foi com o Luciano. Falamos sobre automatizar o registro das reuniões e elaborar uma prova de conceito. Eu fiquei de elaborar o protótipo e disponibilizar o plugin; o Luciano vai instalar, testar e dar o retorno.",
+          "fields": {
+            "meeting_date": "2026-09-13",
+            "contacts": ["Luciano"],
+            "topics_discussed": ["Automatizar o registro das reuniões", "Elaborar uma prova de conceito"],
+            "next_steps": [
+              {"action": "Elaborar o protótipo e disponibilizar o plugin", "responsible": "eu"},
+              {"action": "Instalar, testar e dar o retorno", "responsible": "Luciano"}
+            ]
+          }
+        },
+        {
+          "text": "Os participantes foram só eu mesmo e o Luciano. Os campos obrigatórios ainda não foram definidos.",
+          "fields": {"contacts": ["João", "Luciano"]}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company", "visit_type", "follow_up_date"]},
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company", "visit_type", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "string-does-not-satisfy-contacts-list",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "O contato foi informado em formato inválido no registro extraído.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": "Ana",
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["contacts"]}
+      ]
+    },
+    {
+      "id": "explicit-none-completes-next-steps-and-follow-up",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Não existem próximos passos e não haverá follow up.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputContains": ["Nenhum próximo passo definido", "Não haverá follow up"],
+          "outputNotContains": ["Pendências de informação"]
+        }
+      ]
+    },
+    {
+      "id": "relative-dates-require-confirmation",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A reunião foi ontem e o follow up será sexta que vem.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-14",
+            "contacts": ["Ana"],
+            "visit_type": "negociação",
+            "topics_discussed": ["Contrato"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "follow_up_date": "2026-09-18"
+          },
+          "inferredDates": ["meeting_date", "follow_up_date"]
+        },
+        {
+          "text": "Sim, as duas datas estão corretas.",
+          "confirmedDates": ["meeting_date", "follow_up_date"],
+          "fields": {}
+        }
+      ],
+      "expectations": [
+        {"action": "confirm_dates", "state": "WAITING_FOR_CONFIRMATION", "missing": ["meeting_date", "follow_up_date"]},
+        {"action": "generate", "state": "DONE", "missing": []}
+      ]
+    },
+    {
+      "id": "relative-date-can-be-corrected",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A reunião foi ontem.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-14",
+            "contacts": ["Ana"],
+            "visit_type": "negociação",
+            "topics_discussed": ["Contrato"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          },
+          "inferredDates": ["meeting_date"]
+        },
+        {
+          "text": "Não. A data correta foi 13/09/2026.",
+          "fields": {"meeting_date": "2026-09-13"}
+        }
+      ],
+      "expectations": [
+        {"action": "confirm_dates", "state": "WAITING_FOR_CONFIRMATION", "missing": ["meeting_date"]},
+        {"action": "generate", "state": "DONE", "missing": []}
+      ]
+    },
+    {
+      "id": "negated-override-phrase-does-not-generate",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Não quero continuar mesmo assim.",
+          "fields": {"company": "Acme"}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "invalid-absolute-date-remains-missing",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A data extraída foi inválida.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-99-99",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": ["meeting_date"],
+          "outputContains": ["Data da reunião/visita"],
+          "outputNotContains": ["Empresa (cliente)", "Pessoa(s) de contato", "Assuntos discutidos"]
+        }
+      ]
+    },
+    {
+      "id": "next-step-values-must-be-strings",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Os próximos passos foram extraídos com tipos inválidos.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": [{"action": 123, "responsible": 456}],
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["next_steps"]}
+      ]
+    },
+    {
+      "id": "explicit-retraction-clears-prior-value",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Registro completo.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          }
+        },
+        {
+          "text": "Correção: o contato anterior está incorreto e ainda não foi informado.",
+          "fields": {"contacts": "não informado"}
+        }
+      ],
+      "expectations": [
+        {"action": "generate", "state": "DONE", "missing": []},
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["contacts"]}
+      ]
+    },
+    {
+      "id": "ambiguous-conflict-asks-only-for-conflicting-field",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Registro completo da Acme.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          }
+        },
+        {
+          "text": "A empresa foi Beta ou Gama; não tenho certeza. A data de follow up anterior também está incorreta e ainda não foi informada.",
+          "fields": {"follow_up_date": "não informado"},
+          "conflictingFields": ["company"]
+        },
+        {
+          "text": "Confirmando: foi a Beta.",
+          "fields": {"company": "Beta"}
+        },
+        {
+          "text": "Não haverá follow up.",
+          "fields": {"follow_up_date": "Não haverá follow up"}
+        }
+      ],
+      "expectations": [
+        {"action": "generate", "state": "DONE", "missing": []},
+        {
+          "action": "ask_clarification",
+          "state": "WAITING_FOR_CLARIFICATION",
+          "missing": ["company", "follow_up_date"],
+          "outputContains": ["Empresa (cliente)"],
+          "outputNotContains": ["Data da reunião/visita", "Pessoa(s) de contato", "Assuntos discutidos", "Data para follow up"]
+        },
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["follow_up_date"]},
+        {"action": "generate", "state": "DONE", "missing": [], "outputContains": ["Beta", "Não haverá follow up"]}
+      ]
+    },
+    {
+      "id": "hypothetical-override-mention-does-not-generate",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Se eu disser continuar mesmo assim, o que acontece?",
+          "fields": {"company": "Acme"}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "relative-date-prompt-shows-resolved-calendar-date",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A reunião foi ontem.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-14",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          },
+          "inferredDates": ["meeting_date"]
+        }
+      ],
+      "expectations": [
+        {
+          "action": "confirm_dates",
+          "state": "WAITING_FOR_CONFIRMATION",
+          "missing": ["meeting_date"],
+          "outputContains": ["Data da reunião/visita", "2026-09-14"]
+        }
+      ]
+    },
+    {
+      "id": "correction-after-generation-regenerates-report",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Registro completo.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão inicial"],
+            "provided_details": ["Ana relatou que o processo era manual."],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          }
+        },
+        {
+          "text": "Correção: discutimos a renovação.",
+          "fields": {
+            "topics_discussed": ["Renovação"],
+            "provided_details": ["Ana esclareceu que o processo já era automatizado."]
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "generate", "state": "DONE", "missing": []},
+        {"action": "generate", "state": "DONE", "missing": [], "outputContains": ["Renovação", "processo já era automatizado"], "outputNotContains": ["Revisão inicial", "processo era manual", "Pendências de informação"]}
+      ]
+    },
+    {
+      "id": "negative-answer-does-not-complete-unrelated-field",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A empresa não foi informada.",
+          "fields": {
+            "company": "Não haverá follow up",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company"]}
+      ]
+    },
+    {
+      "id": "action-without-responsible-remains-missing",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Há uma ação, mas o responsável não foi informado.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": [{"action": "Enviar proposta"}],
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["next_steps"]}
+      ]
+    },
+    {
+      "id": "non-affirmative-override-mentions-do-not-generate",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Explique o que significa continuar mesmo assim.",
+          "fields": {"company": "Acme"}
+        },
+        {
+          "text": "Talvez continuar mesmo assim.",
+          "fields": {}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]},
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "negative-answers-inside-collections-are-invalid",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A extração colocou respostas negativas em campos não relacionados.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Não haverá follow up"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Nenhum próximo passo"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Sem follow up"}],
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["contacts", "topics_discussed", "next_steps"]}
+      ]
+    },
+    {
+      "id": "override-distinguishes-confirmation-from-possibility-question",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Continuar mesmo assim seria possível?",
+          "fields": {"company": "Acme"}
+        },
+        {
+          "text": "Sim continuar mesmo assim.",
+          "fields": {}
+        },
+        {
+          "text": "Confirmo: continuar mesmo assim.",
+          "fields": {}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]},
+        {"action": "generate", "state": "DONE_WITH_GAPS", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]},
+        {"action": "generate", "state": "DONE_WITH_GAPS", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "quoted-override-phrase-does-not-generate",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "“continuar mesmo assim”",
+          "fields": {"company": "Acme"}
+        }
+      ],
+      "expectations": [
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "contacts", "visit_type", "topics_discussed", "next_steps", "follow_up_date"]}
+      ]
+    },
+    {
+      "id": "rich-notes-preserve-all-relevant-details",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A reunião da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-13",
+            "contacts": ["Luciano"],
+            "visit_type": "desenvolvimento",
+            "topics_discussed": ["Adoção do registro de reuniões no CRM", "Alternativas ao WhatsApp", "Plugin público para ChatGPT"],
+            "provided_details": [
+              "A reunião ocorreu às 13h e durou aproximadamente uma hora.",
+              "Luciano relatou que o time de vendas deveria registrar reuniões com clientes, mas não vem fazendo isso de forma consistente.",
+              "Os registros das reuniões deveriam estar entrando no CRM.",
+              "Durante a conversa, Luciano avaliou uma solução baseada em WhatsApp e pediu alternativas melhores.",
+              "Foi proposto um plugin público para ChatGPT que Luciano e o time dele poderão instalar.",
+              "Os requisitos foram recebidos na segunda-feira, antes da preparação da prova de conceito.",
+              "O teste será realizado em dispositivos móveis."
+            ],
+            "next_steps": [
+              {"action": "Preparar e enviar a prova de conceito até o fim do dia", "responsible": "eu"},
+              {"action": "Instalar, testar em dispositivos móveis e enviar retorno até 17/09/2026", "responsible": "Luciano"}
+            ],
+            "follow_up_date": "2026-09-17"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputContains": ["Registro detalhado", "13h", "aproximadamente uma hora", "Luciano relatou", "CRM", "WhatsApp", "plugin público", "segunda-feira", "dispositivos móveis", "fim do dia", "17/09/2026"]
+        }
+      ]
+    }
+  ]
+}

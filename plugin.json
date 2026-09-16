@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "gpt-workflows",
+  "version": "0.3.2",
+  "description": "Registre reuniões e visitas comerciais, complete os campos obrigatórios e gere um relatório estruturado.",
+  "author": {
+    "name": "gpt-workflows contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "workflows",
+    "skills",
+    "templates",
+    "meetings",
+    "sales",
+    "commercial",
+    "meeting reports"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Documentar Reunião",
+        "shortDescription": "Registre uma reunião e gere um relatório estruturado.",
+        "longDescription": "Cole ou dite as anotações de uma reunião comercial. O workflow coleta os campos obrigatórios, confirma datas inferidas, pergunta somente o que faltar e gera um relatório estruturado.",
+        "developerName": "gpt-workflows contributors",
+        "category": "Productivity",
+        "capabilities": [],
+        "defaultPrompt": [
+          "Começar a documentar uma reunião.",
+          "Documentar estas anotações e perguntar apenas pelos campos obrigatórios ausentes.",
+          "Gerar mesmo com pendências."
+        ]
+      }
+    }
+  }
+}

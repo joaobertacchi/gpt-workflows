@@ -1,0 +1,22 @@
+{
+  "name": "gpt-workflows",
+  "version": "0.3.2",
+  "description": "Registre reuni\u00f5es e visitas comerciais, complete os campos obrigat\u00f3rios e gere um relat\u00f3rio estruturado.",
+  "author": {
+    "name": "gpt-workflows contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Documentar Reuni\u00e3o",
+    "shortDescription": "Registre uma reuni\u00e3o e gere um relat\u00f3rio estruturado.",
+    "longDescription": "Cole ou dite as anota\u00e7\u00f5es de uma reuni\u00e3o comercial. O workflow coleta os campos obrigat\u00f3rios, confirma datas inferidas, pergunta somente o que faltar e gera um relat\u00f3rio estruturado.",
+    "developerName": "gpt-workflows contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "Come\u00e7ar a documentar uma reuni\u00e3o.",
+      "Documentar estas anota\u00e7\u00f5es e perguntar apenas pelos campos obrigat\u00f3rios ausentes.",
+      "Gerar mesmo com pend\u00eancias."
+    ]
+  }
+}
