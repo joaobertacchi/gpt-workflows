@@ -46,6 +46,7 @@ gpt-workflows/
 │   ├── scenarios.json
 │   └── chatgpt-acceptance.md
 └── scripts/
+    ├── build_public_zip.sh
     └── test_flow.py
 ```
 
@@ -87,6 +88,14 @@ A primeira resposta deve mostrar imediatamente os sete campos obrigatórios. Os 
 O teste no ChatGPT para Android ocorre somente depois que o plugin estiver publicado no marketplace público e o cliente instalar essa versão pública. Android não faz parte do critério pré-submissão.
 
 ## Publicação
+
+Gere o pacote público na raiz do repositório:
+
+```bash
+./scripts/build_public_zip.sh
+```
+
+O script executa a validação automatizada e cria `dist/documentar-reuniao-0.3.3.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
 
 O pacote usa estes recursos públicos obrigatórios:
 
