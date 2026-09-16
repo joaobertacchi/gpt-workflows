@@ -31,7 +31,7 @@ These observations define the regression baseline for version `0.2.0`.
 | Detailed-note fidelity | Passed | Work screenshots `10.04.32`, `10.04.41` and `10.04.47` show the exact `Registro detalhado` heading and preserve time, duration, attribution, CRM context, WhatsApp evaluation, requested alternatives, plugin proposal, chronology, actions and deadlines. |
 | Copyable report boundary | Passed | Work screenshots show one report block with no content after it; the user confirmed its copy control copied only the report. |
 | Rendered Markdown artifact | Pending on 0.3.6 | Verify one rendered `relatorio-reuniao.md` artifact with formatted headings, labels, lists and tables; source copy or download must preserve Markdown, and the complete report must not be duplicated inline. |
-| Next-step deadline column | Pending on 0.3.6 | Verify the report table renders `Ação`, `Responsável` and `Prazo` columns; a relative deadline asks for calendar-date confirmation; an override with unresolved deadline shows `Não informado` in the `Prazo` cell. |
+| Next-step deadline column | Passed | User-confirmed in chat on 0.3.6: report generated correctly with the rendered `Prazo` column in the next-steps table. Relative-deadline confirmation and the `Não informado` override cell remain to be exercised in dedicated runs. |
 
 ## Partial-Collection History On 0.3.0
 
