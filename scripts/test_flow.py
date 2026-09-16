@@ -240,7 +240,9 @@ def render_delivery_guidance(incomplete: bool) -> str:
     return extract_skill_section(section)
 
 
-def render_report(record: dict[str, Any], missing: list[str]) -> str:
+def render_report(
+    record: dict[str, Any], missing: list[str], artifact_supported: bool
+) -> dict[str, Any]:
     template = extract_skill_section("REPORT_TEMPLATE")
     labels = {field["id"]: field["label"] for field in FIELD_SCHEMA["fields"]}
 
@@ -293,29 +295,63 @@ def render_report(record: dict[str, Any], missing: list[str]) -> str:
         pending = "\n".join(f"- {labels[field_id]}" for field_id in missing)
         template += f"\n\n## Pendências de informação\n\n{pending}\n"
     guidance = render_delivery_guidance(bool(missing))
-    return f"{guidance}\n\n```markdown\n{template.strip()}\n```"
+    report = template.strip()
+    if artifact_supported:
+        return {
+            "output": guidance,
+            "artifactName": "relatorio-reuniao.md",
+            "artifactContent": report,
+        }
+    return {
+        "output": f"{guidance}\n\n```markdown\n{report}\n```",
+        "artifactName": None,
+        "artifactContent": None,
+    }
 
 
-def assert_copy_boundary(output: str) -> None:
-    if output.count("```markdown") != 1 or output.count("```") != 2:
-        raise AssertionError("generated response must contain exactly one Markdown fence")
-    opening = output.index("```markdown")
-    closing = output.index("```", opening + len("```markdown"))
-    if not output[:opening].strip():
-        raise AssertionError("delivery guidance must precede the report block")
-    report = output[opening + len("```markdown") : closing].strip()
-    if not report.startswith("# Relatório de reunião/visita"):
-        raise AssertionError("only the report may occupy the Markdown fence")
+def assert_report_delivery(
+    turn: dict[str, Any], artifact_supported: bool
+) -> None:
+    output = turn["output"]
+    artifact_name = turn.get("artifactName")
+    artifact_content = turn.get("artifactContent")
     operational_phrases = (
         "Todas as informações necessárias foram preenchidas",
         "O relatório está pronto para ser revisado e compartilhado",
         "O relatório foi gerado como rascunho com informações pendentes",
         "O rascunho deve ser completado e revisado",
     )
+
+    if artifact_supported:
+        if artifact_name != "relatorio-reuniao.md":
+            raise AssertionError("report artifact must use the approved filename")
+        if not artifact_content or not artifact_content.startswith(
+            "# Relatório de reunião/visita"
+        ):
+            raise AssertionError("artifact must contain only the Markdown report")
+        if "```" in output or "```" in artifact_content:
+            raise AssertionError("artifact delivery must not use Markdown fences")
+        if "# Relatório de reunião/visita" in output:
+            raise AssertionError("artifact delivery must not duplicate the report inline")
+        if any(phrase in artifact_content for phrase in operational_phrases):
+            raise AssertionError("operational guidance must remain outside the artifact")
+        return
+
+    if artifact_name is not None or artifact_content is not None:
+        raise AssertionError("unsupported surfaces must not expose an artifact")
+    if output.count("```markdown") != 1 or output.count("```") != 2:
+        raise AssertionError("fallback must contain exactly one Markdown fence")
+    opening = output.index("```markdown")
+    closing = output.index("```", opening + len("```markdown"))
+    if not output[:opening].strip():
+        raise AssertionError("delivery guidance must precede the fallback block")
+    report = output[opening + len("```markdown") : closing].strip()
+    if not report.startswith("# Relatório de reunião/visita"):
+        raise AssertionError("only the report may occupy the fallback block")
     if any(phrase in report for phrase in operational_phrases):
-        raise AssertionError("operational guidance must remain outside the report block")
+        raise AssertionError("operational guidance must remain outside the fallback block")
     if output[closing + len("```") :].strip():
-        raise AssertionError("nothing may follow the report block")
+        raise AssertionError("nothing may follow the fallback block")
 
 
 def expectation_matches(
@@ -328,11 +364,15 @@ def expectation_matches(
         for key, value in expected.items()
         if key not in {"outputContains", "outputNotContains"}
     }
-    output = actual.get("output", "")
+    searchable_output = "\n".join(
+        value
+        for value in (actual.get("output"), actual.get("artifactContent"))
+        if value
+    )
     return (
         all(actual.get(key) == value for key, value in core.items())
-        and all(fragment in output for fragment in required)
-        and all(fragment not in output for fragment in forbidden)
+        and all(fragment in searchable_output for fragment in required)
+        and all(fragment not in searchable_output for fragment in forbidden)
     )
 
 
@@ -379,6 +419,7 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
         ]
 
     record: dict[str, Any] = {}
+    artifact_supported = case.get("artifactSupported", True)
     unconfirmed_dates: set[str] = set()
     conflicting_fields: set[str] = set()
     results = []
@@ -408,8 +449,10 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
         else:
             action = "generate"
             state = "DONE"
+        delivery: dict[str, Any] | None = None
         if action == "generate":
-            output = render_report(record, missing)
+            delivery = render_report(record, missing, artifact_supported)
+            output = delivery["output"]
         elif action == "confirm_dates":
             output = render_date_confirmation(record, unconfirmed_dates)
         elif action == "ask_clarification":
@@ -419,9 +462,13 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
             output = render_field_prompt(conflicts, clarification=True)
         else:
             output = render_field_prompt(missing)
-        results.append(
-            {"action": action, "state": state, "missing": missing, "output": output}
-        )
+        result = {"action": action, "state": state, "missing": missing, "output": output}
+        if delivery is not None:
+            result.update(
+                artifactName=delivery["artifactName"],
+                artifactContent=delivery["artifactContent"],
+            )
+        results.append(result)
     return results
 
 
@@ -807,7 +854,9 @@ def main() -> int:
         try:
             for turn in actual:
                 if turn["action"] == "generate":
-                    assert_copy_boundary(turn["output"])
+                    assert_report_delivery(
+                        turn, case.get("artifactSupported", True)
+                    )
         except AssertionError as error:
             failures.append(f"{case['id']}: {error}")
             continue
