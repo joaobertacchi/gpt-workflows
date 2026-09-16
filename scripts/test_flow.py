@@ -447,6 +447,7 @@ def check_packaging() -> None:
         "assets/logo.png",
         "PRIVACY.md",
         "TERMS.md",
+        "docs/public-submission.md",
     ]
     missing = [path for path in required_paths if not (ROOT / path).is_file()]
     if missing:
@@ -623,6 +624,7 @@ def check_packaging() -> None:
         "structured commercial meeting",
         "ontem",
         "time, duration, objective, decisions, success criteria",
+        "if the user asks to send or save the report",
     )
     missing_skill_concepts = [
         phrase for phrase in required_skill_concepts if phrase.casefold() not in skill_text
@@ -632,6 +634,23 @@ def check_packaging() -> None:
             "SKILL.md is missing strict generation behavior: "
             + ", ".join(missing_skill_concepts)
         )
+
+    submission = (ROOT / "docs/public-submission.md").read_text(encoding="utf-8")
+    positive_cases = re.findall(r"^### P[1-5] ", submission, flags=re.MULTILINE)
+    negative_cases = re.findall(r"^### N[1-3] ", submission, flags=re.MULTILINE)
+    if len(positive_cases) != 5 or len(negative_cases) != 3:
+        raise AssertionError(
+            "submission material must contain five positive and three negative cases"
+        )
+    required_submission_content = (
+        "João Eduardo Ferreira Bertacchi",
+        "https://github.com/joaobertacchi/gpt-workflows/issues",
+        "Initial public submission",
+        "Skills only",
+        "No credentials or fixture data required",
+    )
+    if any(phrase not in submission for phrase in required_submission_content):
+        raise AssertionError("submission material is missing mandatory portal content")
 
     intake = extract_skill_section("INTAKE")
     required_intake_labels = (

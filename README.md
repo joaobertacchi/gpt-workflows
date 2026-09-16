@@ -88,7 +88,15 @@ O teste no ChatGPT para Android ocorre somente depois que o plugin estiver publi
 
 ## Publicação
 
-O marco deste repositório é **pronto para submissão**. Antes de submeter, confirme no portal os dados reais do publicador, site, suporte, privacidade e termos exigidos. Não invente URLs para satisfazer os campos.
+O pacote usa estes recursos públicos obrigatórios:
+
+- [Repositório e website](https://github.com/joaobertacchi/gpt-workflows)
+- [Suporte](https://github.com/joaobertacchi/gpt-workflows/issues)
+- [Política de privacidade](PRIVACY.md)
+- [Termos de uso](TERMS.md)
+- [Material para submissão](docs/public-submission.md)
+
+Após confirmar a identidade verificada do publicador e a permissão **Apps Management: Write**, envie o pacote como **Skills only** pelo [portal de submissão](https://platform.openai.com/plugins).
 
 Documentação oficial:
 

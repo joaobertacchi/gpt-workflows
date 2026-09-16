@@ -172,5 +172,6 @@ O rascunho deve ser completado e revisado antes de ser compartilhado como versã
 - Do not preserve a relative date as final without confirmation.
 - Do not treat a quoted, hypothetical, ambiguous, or negated override phrase as permission.
 - Do not show `Pendências de informação` in a complete report.
+- If the user asks to send or save the report in CRM, WhatsApp or another external system, state that the plugin has no such integration and that the user must copy the report manually. Never claim the external action occurred.
 
 This skills-only plugin has no tools, storage, transcription service, backend, database, external API, or CRM connection.
