@@ -21,7 +21,7 @@
 
 ## Release Notes
 
-Initial public submission of Documentar Reunião, a skills-only plugin with no MCP server, authentication, external API, or developer-operated data collection. Version 0.3.4 adds the required square composer icon while preserving detailed notes and attribution, confirming inferred dates, collecting only unresolved required fields, and producing a report-only copy block.
+Version 0.3.5 delivers meeting reports as rendered Markdown file artifacts on supported ChatGPT surfaces, preserves raw Markdown for copy or download, and retains a fenced Markdown fallback where artifacts are unavailable.
 
 ## Reviewer Data
 
