@@ -10,7 +10,7 @@
 - Support: https://github.com/joaobertacchi/gpt-workflows/issues
 - Privacy: https://github.com/joaobertacchi/gpt-workflows/blob/main/PRIVACY.md
 - Terms: https://github.com/joaobertacchi/gpt-workflows/blob/main/TERMS.md
-- Short description: Registre uma reunião e gere um relatório estruturado.
+- Short description: Documente reuniões comerciais
 - Long description: Cole ou dite as anotações de uma reunião comercial. O workflow preserva os detalhes fornecidos, coleta somente os campos obrigatórios ausentes, confirma datas inferidas e gera um relatório estruturado e copiável.
 
 ## Starter Prompts

@@ -23,7 +23,7 @@
     "com.openai": {
       "interface": {
         "displayName": "Documentar Reunião",
-        "shortDescription": "Registre uma reunião e gere um relatório estruturado.",
+        "shortDescription": "Documente reuniões comerciais",
         "longDescription": "Cole ou dite as anotações de uma reunião comercial. O workflow coleta os campos obrigatórios, confirma datas inferidas, pergunta somente o que faltar e gera um relatório estruturado.",
         "developerName": "João Eduardo Ferreira Bertacchi",
         "category": "Productivity",

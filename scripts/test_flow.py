@@ -541,6 +541,20 @@ def check_packaging() -> None:
     for key in ("displayName", "shortDescription", "longDescription", "defaultPrompt"):
         if portable_interface[key] != compat_interface[key]:
             raise AssertionError(f"plugin manifests disagree on interface.{key}")
+    expected_short_description = "Documente reuniões comerciais"
+    if portable_interface["shortDescription"] != expected_short_description:
+        raise AssertionError("public short description must match the approved copy")
+    if len(portable_interface["displayName"]) > 30:
+        raise AssertionError("public display name must be at most 30 characters")
+    if len(portable_interface["shortDescription"]) > 30:
+        raise AssertionError("public short description must be at most 30 characters")
+    if len(portable_interface["developerName"]) > 80:
+        raise AssertionError("public developer name must be at most 80 characters")
+    starter_prompts = portable_interface["defaultPrompt"]
+    if len(starter_prompts) > 3:
+        raise AssertionError("public listing must have at most three starter prompts")
+    if any(len(prompt) > 128 for prompt in starter_prompts):
+        raise AssertionError("public starter prompts must be at most 128 characters")
     override_starters = [
         prompt
         for prompt in portable_interface["defaultPrompt"]
@@ -648,6 +662,7 @@ def check_packaging() -> None:
         "Initial public submission",
         "Skills only",
         "No credentials or fixture data required",
+        f"Short description: {expected_short_description}",
     )
     if any(phrase not in submission for phrase in required_submission_content):
         raise AssertionError("submission material is missing mandatory portal content")
