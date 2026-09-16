@@ -445,6 +445,8 @@ def check_packaging() -> None:
         "tests/scenarios.json",
         "tests/chatgpt-acceptance.md",
         "assets/logo.png",
+        "PRIVACY.md",
+        "TERMS.md",
     ]
     missing = [path for path in required_paths if not (ROOT / path).is_file()]
     if missing:
@@ -456,6 +458,28 @@ def check_packaging() -> None:
     width, height = struct.unpack(">II", logo[16:24])
     if width != height:
         raise AssertionError("assets/logo.png must be square")
+
+    public_documents = {
+        "PRIVACY.md": (
+            "does not independently collect, store, or transmit",
+            "no developer-operated server",
+            "OpenAI",
+            "https://github.com/joaobertacchi/gpt-workflows/issues",
+        ),
+        "TERMS.md": (
+            "review names, dates, responsibilities",
+            "cannot send messages or write to external systems",
+            "as is",
+            "MIT License",
+        ),
+    }
+    for path, required_phrases in public_documents.items():
+        text = (ROOT / path).read_text(encoding="utf-8")
+        missing_phrases = [
+            phrase for phrase in required_phrases if phrase not in text
+        ]
+        if missing_phrases:
+            raise AssertionError(f"{path} is missing mandatory public statements")
     for obsolete in (
         ROOT / "references",
         SKILL_ROOT / "assets",
