@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import re
+import struct
 import sys
 import unicodedata
 from datetime import datetime
@@ -443,12 +444,19 @@ def check_packaging() -> None:
         "skills/relatorio-reuniao/agents/openai.yaml",
         "tests/scenarios.json",
         "tests/chatgpt-acceptance.md",
+        "assets/logo.png",
     ]
     missing = [path for path in required_paths if not (ROOT / path).is_file()]
     if missing:
         raise AssertionError(f"missing package files: {', '.join(missing)}")
+
+    logo = (ROOT / "assets/logo.png").read_bytes()
+    if logo[:8] != b"\x89PNG\r\n\x1a\n" or logo[12:16] != b"IHDR":
+        raise AssertionError("assets/logo.png must be a valid PNG")
+    width, height = struct.unpack(">II", logo[16:24])
+    if width != height:
+        raise AssertionError("assets/logo.png must be square")
     for obsolete in (
-        ROOT / "assets",
         ROOT / "references",
         SKILL_ROOT / "assets",
         SKILL_ROOT / "references",
@@ -464,15 +472,47 @@ def check_packaging() -> None:
 
     portable_manifest = load_json("plugin.json")
     compat_manifest = load_json(".codex-plugin/plugin.json")
+    expected_version = "0.3.3"
+    expected_developer = "João Eduardo Ferreira Bertacchi"
+    expected_author_url = "https://github.com/joaobertacchi"
+    expected_repository = "https://github.com/joaobertacchi/gpt-workflows"
+    expected_interface = {
+        "websiteURL": expected_repository,
+        "privacyPolicyURL": f"{expected_repository}/blob/main/PRIVACY.md",
+        "termsOfServiceURL": f"{expected_repository}/blob/main/TERMS.md",
+        "logo": "./assets/logo.png",
+    }
+
     if portable_manifest["name"] != compat_manifest["name"]:
         raise AssertionError("plugin manifests must use the same name")
     if portable_manifest["version"] != compat_manifest["version"]:
         raise AssertionError("plugin manifests must use the same version")
-    if portable_manifest["version"] != "0.3.2":
-        raise AssertionError("detailed-report fidelity must ship as version 0.3.2")
+    if portable_manifest["version"] != expected_version:
+        raise AssertionError("public submission package must ship as version 0.3.3")
+    if portable_manifest["author"]["name"] != expected_developer:
+        raise AssertionError("portable manifest must use the verified developer name")
+    if compat_manifest["author"]["name"] != expected_developer:
+        raise AssertionError("compatibility manifest must use the verified developer name")
+    if portable_manifest["author"].get("url") != expected_author_url:
+        raise AssertionError("portable manifest must publish the developer URL")
+    if compat_manifest["author"].get("url") != expected_author_url:
+        raise AssertionError("compatibility manifest must publish the developer URL")
+    if portable_manifest.get("homepage") != expected_repository:
+        raise AssertionError("portable manifest must publish the repository homepage")
+    if portable_manifest.get("repository") != expected_repository:
+        raise AssertionError("portable manifest must publish its repository")
 
     portable_interface = portable_manifest["extensions"]["com.openai"]["interface"]
     compat_interface = compat_manifest["interface"]
+    if portable_interface.get("developerName") != expected_developer:
+        raise AssertionError("portable interface must use the verified developer name")
+    if compat_interface.get("developerName") != expected_developer:
+        raise AssertionError("compatibility interface must use the verified developer name")
+    for key, expected in expected_interface.items():
+        if portable_interface.get(key) != expected:
+            raise AssertionError(f"portable interface has invalid {key}")
+        if compat_interface.get(key) != expected:
+            raise AssertionError(f"compatibility interface has invalid {key}")
     for key in ("displayName", "shortDescription", "longDescription", "defaultPrompt"):
         if portable_interface[key] != compat_interface[key]:
             raise AssertionError(f"plugin manifests disagree on interface.{key}")
