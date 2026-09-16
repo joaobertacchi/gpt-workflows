@@ -788,6 +788,9 @@ def check_packaging() -> None:
         "relatorio-reuniao.md",
         "do not repeat the complete report inline",
         "if the active surface cannot create or expose a markdown artifact",
+        "responsável e o prazo de cada ação",
+        "`ação`, `responsável` and `prazo`",
+        "`prazo` cell",
     )
     missing_skill_concepts = [
         phrase for phrase in required_skill_concepts if phrase.casefold() not in skill_text
@@ -828,7 +831,7 @@ def check_packaging() -> None:
         "pessoa(s) de contato",
         "corretiva, preventiva, desenvolvimento ou negociação",
         "assuntos discutidos",
-        "responsável por cada ação",
+        "responsável e o prazo de cada ação",
         "data para follow up",
     )
     missing_intake_labels = [
@@ -844,7 +847,7 @@ def check_packaging() -> None:
         "Reunião com a empresa Beta em 15/09/2026. O contato foi Carla.",
         "Tipo de reunião/visita",
         "Assuntos discutidos",
-        "Próximos passos, com responsável por cada ação",
+        "Próximos passos, com responsável e prazo de cada ação",
         "Data para follow up",
         "Do not ask for generic notes",
         "Do not request decisions",

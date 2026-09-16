@@ -11,7 +11,7 @@
           "action": "send_intake",
           "state": "INTAKE",
           "missing": [],
-          "outputContains": ["empresa (cliente)", "data da reunião/visita", "pessoa(s) de contato", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável por cada ação", "data para follow up"]
+          "outputContains": ["empresa (cliente)", "data da reunião/visita", "pessoa(s) de contato", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável e o prazo de cada ação", "data para follow up"]
         }
       ]
     },
@@ -29,7 +29,7 @@
           "action": "send_intake",
           "state": "INTAKE",
           "missing": [],
-          "outputContains": ["empresa (cliente)", "data da reunião/visita", "pessoa(s) de contato", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável por cada ação", "data para follow up"]
+          "outputContains": ["empresa (cliente)", "data da reunião/visita", "pessoa(s) de contato", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável e o prazo de cada ação", "data para follow up"]
         }
       ]
     },
