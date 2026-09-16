@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import struct
 import sys
@@ -448,10 +449,27 @@ def check_packaging() -> None:
         "PRIVACY.md",
         "TERMS.md",
         "docs/public-submission.md",
+        ".gitignore",
+        "scripts/build_public_zip.sh",
     ]
     missing = [path for path in required_paths if not (ROOT / path).is_file()]
     if missing:
         raise AssertionError(f"missing package files: {', '.join(missing)}")
+
+    package_script_path = ROOT / "scripts/build_public_zip.sh"
+    if not os.access(package_script_path, os.X_OK):
+        raise AssertionError("scripts/build_public_zip.sh must be executable")
+    package_script = package_script_path.read_text(encoding="utf-8")
+    archive_paths = (
+        "plugin.json",
+        "assets/logo.png",
+        "skills/relatorio-reuniao/SKILL.md",
+        "skills/relatorio-reuniao/agents/openai.yaml",
+    )
+    if any(path not in package_script for path in archive_paths):
+        raise AssertionError("public ZIP script must name every approved archive member")
+    if "/dist/" not in (ROOT / ".gitignore").read_text(encoding="utf-8"):
+        raise AssertionError("generated dist directory must be ignored")
 
     logo = (ROOT / "assets/logo.png").read_bytes()
     if logo[:8] != b"\x89PNG\r\n\x1a\n" or logo[12:16] != b"IHDR":
