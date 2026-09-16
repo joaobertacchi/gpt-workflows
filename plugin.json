@@ -31,6 +31,7 @@
         "websiteURL": "https://github.com/joaobertacchi/gpt-workflows",
         "privacyPolicyURL": "https://github.com/joaobertacchi/gpt-workflows/blob/main/PRIVACY.md",
         "termsOfServiceURL": "https://github.com/joaobertacchi/gpt-workflows/blob/main/TERMS.md",
+        "composerIcon": "./assets/logo.png",
         "logo": "./assets/logo.png",
         "defaultPrompt": [
           "Começar a documentar uma reunião.",

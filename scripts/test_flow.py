@@ -523,6 +523,7 @@ def check_packaging() -> None:
         "websiteURL": expected_repository,
         "privacyPolicyURL": f"{expected_repository}/blob/main/PRIVACY.md",
         "termsOfServiceURL": f"{expected_repository}/blob/main/TERMS.md",
+        "composerIcon": "./assets/logo.png",
         "logo": "./assets/logo.png",
     }
 
@@ -558,6 +559,10 @@ def check_packaging() -> None:
             raise AssertionError(f"portable interface has invalid {key}")
         if compat_interface.get(key) != expected:
             raise AssertionError(f"compatibility interface has invalid {key}")
+    if portable_interface["composerIcon"] != portable_interface["logo"]:
+        raise AssertionError(
+            "composer icon and logo must reference the same square image"
+        )
     for key in ("displayName", "shortDescription", "longDescription", "defaultPrompt"):
         if portable_interface[key] != compat_interface[key]:
             raise AssertionError(f"plugin manifests disagree on interface.{key}")
