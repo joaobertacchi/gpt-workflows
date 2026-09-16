@@ -95,7 +95,7 @@ Gere o pacote público na raiz do repositório:
 ./scripts/build_public_zip.sh
 ```
 
-O script executa a validação automatizada e cria `dist/documentar-reuniao-0.3.3.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
+O script executa a validação automatizada e cria `dist/documentar-reuniao-0.3.4.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
 
 O pacote usa estes recursos públicos obrigatórios:
 

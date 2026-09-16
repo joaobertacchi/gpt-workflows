@@ -21,7 +21,7 @@
 
 ## Release Notes
 
-Initial public submission of Documentar Reunião, a skills-only plugin with no MCP server, authentication, external API, or developer-operated data collection. Version 0.3.3 preserves detailed notes and attribution, confirms inferred dates, collects only unresolved required fields, and produces a report-only copy block.
+Initial public submission of Documentar Reunião, a skills-only plugin with no MCP server, authentication, external API, or developer-operated data collection. Version 0.3.4 adds the required square composer icon while preserving detailed notes and attribution, confirming inferred dates, collecting only unresolved required fields, and producing a report-only copy block.
 
 ## Reviewer Data
 

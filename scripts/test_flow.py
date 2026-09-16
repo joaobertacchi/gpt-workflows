@@ -515,7 +515,7 @@ def check_packaging() -> None:
 
     portable_manifest = load_json("plugin.json")
     compat_manifest = load_json(".codex-plugin/plugin.json")
-    expected_version = "0.3.3"
+    expected_version = "0.3.4"
     expected_developer = "João Eduardo Ferreira Bertacchi"
     expected_author_url = "https://github.com/joaobertacchi"
     expected_repository = "https://github.com/joaobertacchi/gpt-workflows"
@@ -531,7 +531,9 @@ def check_packaging() -> None:
     if portable_manifest["version"] != compat_manifest["version"]:
         raise AssertionError("plugin manifests must use the same version")
     if portable_manifest["version"] != expected_version:
-        raise AssertionError("public submission package must ship as version 0.3.3")
+        raise AssertionError(
+            f"public submission package must ship as version {expected_version}"
+        )
     if portable_manifest["author"]["name"] != expected_developer:
         raise AssertionError("portable manifest must use the verified developer name")
     if compat_manifest["author"]["name"] != expected_developer:
@@ -668,6 +670,11 @@ def check_packaging() -> None:
         )
 
     submission = (ROOT / "docs/public-submission.md").read_text(encoding="utf-8")
+    if "Version 0.3.4" not in submission:
+        raise AssertionError("submission release notes must name version 0.3.4")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    if "dist/documentar-reuniao-0.3.4.zip" not in readme:
+        raise AssertionError("README must name the current public archive")
     positive_cases = re.findall(r"^### P[1-5] ", submission, flags=re.MULTILINE)
     negative_cases = re.findall(r"^### N[1-3] ", submission, flags=re.MULTILINE)
     if len(positive_cases) != 5 or len(negative_cases) != 3:
