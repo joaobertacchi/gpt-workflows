@@ -127,7 +127,9 @@ Do not ask for generic notes. Do not request decisions. Do not repeat Empresa, D
 
 Render this template in order. Render contacts as comma-separated names, topics as bullets, and action-based next steps as a table with `Ação` and `Responsável` columns.
 
-For every complete, overridden or regenerated report, place status and operational guidance before exactly one fenced `markdown` block. Put only the report inside that block and emit nothing after its closing fence. `Pendências de informação`, when applicable, belongs inside the report block.
+For every complete, overridden or regenerated report, place status and operational guidance before the report delivery. Create or update a native Markdown file artifact named `relatorio-reuniao.md`. Put only the report in that artifact, beginning with `# Relatório de reunião/visita`; do not put status or operational guidance in it, and do not repeat the complete report inline when artifact creation succeeds. Regenerated reports should update or replace the same artifact instead of intentionally creating duplicate report files.
+
+If the active surface cannot create or expose a Markdown artifact, output the status and operational guidance followed by exactly one fenced `markdown` block. Put only the report inside that fallback block and emit nothing after its closing fence. `Pendências de informação`, when applicable, belongs inside the artifact or fallback report.
 
 <!-- REPORT_TEMPLATE_START -->
 # Relatório de reunião/visita
@@ -154,7 +156,7 @@ Before a complete report block, output this guidance. Do not include a pending s
 <!-- COMPLETE_GUIDANCE_START -->
 ✅ **Todas as informações necessárias foram preenchidas.**
 
-O relatório está pronto para ser revisado e compartilhado. Revise nomes, datas e responsáveis; depois, copie o conteúdo do relatório para um e-mail, WhatsApp, CRM ou registro interno.
+O relatório está pronto para ser revisado e compartilhado. Revise nomes, datas e responsáveis; depois, use os controles do artefato para copiar ou baixar o arquivo Markdown. Se o artefato não estiver disponível, copie o conteúdo do bloco Markdown.
 <!-- COMPLETE_GUIDANCE_END -->
 
 For an overridden report, use `Não informado` for every unresolved field and append `## Pendências de informação` with every unresolved label inside the report. Before the report block, output this guidance:
@@ -162,7 +164,7 @@ For an overridden report, use `Não informado` for every unresolved field and ap
 <!-- INCOMPLETE_GUIDANCE_START -->
 ⚠️ **O relatório foi gerado como rascunho com informações pendentes.**
 
-O rascunho deve ser completado e revisado antes de ser compartilhado como versão final. O plugin não envia mensagens nem grava o relatório em outros sistemas.
+O rascunho deve ser completado e revisado antes de ser compartilhado como versão final. Use os controles do artefato para copiar ou baixar o arquivo Markdown; se ele não estiver disponível, copie o bloco Markdown. O plugin não envia mensagens nem grava o relatório em outros sistemas.
 <!-- INCOMPLETE_GUIDANCE_END -->
 
 ## Common Mistakes

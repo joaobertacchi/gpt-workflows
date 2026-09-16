@@ -645,7 +645,8 @@ def check_packaging() -> None:
     )
     required_guidance = (
         "Todas as informações necessárias foram preenchidas",
-        "copie o conteúdo do relatório",
+        "use os controles do artefato",
+        "copie o conteúdo do bloco Markdown",
         "O plugin não envia mensagens",
     )
     missing_guidance = [phrase for phrase in required_guidance if phrase not in guidance]
@@ -711,6 +712,10 @@ def check_packaging() -> None:
         "ontem",
         "time, duration, objective, decisions, success criteria",
         "if the user asks to send or save the report",
+        "create or update a native markdown file artifact",
+        "relatorio-reuniao.md",
+        "do not repeat the complete report inline",
+        "if the active surface cannot create or expose a markdown artifact",
     )
     missing_skill_concepts = [
         phrase for phrase in required_skill_concepts if phrase.casefold() not in skill_text
