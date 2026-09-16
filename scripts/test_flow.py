@@ -98,6 +98,17 @@ def is_absolute_date(value: Any, date_formats: list[str]) -> bool:
     return False
 
 
+def item_value_is_complete(
+    item_field: str, value: Any, item_field_types: dict[str, str]
+) -> bool:
+    kind = item_field_types.get(item_field)
+    if kind == "string":
+        return isinstance(value, str) and is_substantive(value, MISSING_SENTINELS)
+    if kind == "date":
+        return is_absolute_date(value, ITEM_DATE_FORMATS)
+    return False
+
+
 def field_is_complete(field: dict[str, Any], value: Any) -> bool:
     explicit_none = field.get("explicitNoneValue")
     if (
@@ -142,9 +153,9 @@ def field_is_complete(field: dict[str, Any], value: Any) -> bool:
             and all(
                 isinstance(item, dict)
                 and all(
-                    item_field_types.get(item_field) == "string"
-                    and isinstance(item.get(item_field), str)
-                    and is_substantive(item.get(item_field), MISSING_SENTINELS)
+                    item_value_is_complete(
+                        item_field, item.get(item_field), item_field_types
+                    )
                     for item_field in item_fields
                 )
                 for item in value
@@ -225,19 +236,66 @@ def render_field_prompt(field_ids: list[str], clarification: bool = False) -> st
     return f"{prefix}: " + "; ".join(labels[field_id] for field_id in field_ids) + "."
 
 
-def render_date_confirmation(record: dict[str, Any], field_ids: set[str]) -> str:
+def render_date_confirmation(
+    record: dict[str, Any],
+    field_ids: set[str],
+    item_dates: set[tuple[str, int]] | None = None,
+) -> str:
     labels = {field["id"]: field["label"] for field in FIELD_SCHEMA["fields"]}
-    dates = "; ".join(
+    entries = [
         f"{labels[field_id]}: {record[field_id]}"
         for field_id in FIELD_IDS
         if field_id in field_ids
-    )
-    return f"Confirme as datas interpretadas: {dates}. Estão corretas?"
+    ]
+    for field_id, item_index in sorted(
+        item_dates or set(),
+        key=lambda entry: (FIELD_IDS.index(entry[0]), entry[1]),
+    ):
+        deadline = record[field_id][item_index]["deadline"]
+        entries.append(f"{labels[field_id]} #{item_index + 1}: {deadline}")
+    return f"Confirme as datas interpretadas: {'; '.join(entries)}. Estão corretas?"
 
 
 def render_delivery_guidance(incomplete: bool) -> str:
     section = "INCOMPLETE_GUIDANCE" if incomplete else "COMPLETE_GUIDANCE"
     return extract_skill_section(section)
+
+
+def next_step_cell(value: Any) -> str:
+    if (
+        isinstance(value, str)
+        and is_substantive(value, MISSING_SENTINELS)
+        and not contains_explicit_negative(value)
+    ):
+        return value
+    return str(FIELD_SCHEMA["missingValue"])
+
+
+def next_step_deadline_cell(item: dict[str, Any]) -> str:
+    deadline = item.get("deadline")
+    if is_absolute_date(deadline, ITEM_DATE_FORMATS):
+        return deadline
+    return str(FIELD_SCHEMA["missingValue"])
+
+
+def render_next_steps(record: dict[str, Any]) -> str:
+    next_steps = record.get("next_steps")
+    if (
+        isinstance(next_steps, list)
+        and bool(next_steps)
+        and all(isinstance(item, dict) for item in next_steps)
+    ):
+        rows = ["| Ação | Responsável | Prazo |", "| --- | --- | --- |"]
+        rows.extend(
+            f"| {next_step_cell(item.get('action'))} | "
+            f"{next_step_cell(item.get('responsible'))} | "
+            f"{next_step_deadline_cell(item)} |"
+            for item in next_steps
+        )
+        return "\n".join(rows)
+    if isinstance(next_steps, str):
+        return next_steps
+    return FIELD_SCHEMA["missingValue"]
 
 
 def render_report(
@@ -268,15 +326,7 @@ def render_report(
     if isinstance(provided_details, list) and provided_details:
         rendered_details = "\n".join(f"- {item}" for item in provided_details)
         provided_details_section = f"\n\n## Registro detalhado\n\n{rendered_details}"
-    next_steps = value_or_missing("next_steps")
-    if isinstance(next_steps, list):
-        rows = ["| Ação | Responsável |", "| --- | --- |"]
-        rows.extend(
-            f"| {item['action']} | {item['responsible']} |" for item in next_steps
-        )
-        rendered_steps = "\n".join(rows)
-    else:
-        rendered_steps = next_steps or FIELD_SCHEMA["missingValue"]
+    rendered_steps = render_next_steps(record)
 
     values = {
         "company": value_or_missing("company"),
@@ -421,6 +471,7 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
     record: dict[str, Any] = {}
     artifact_supported = case.get("artifactSupported", True)
     unconfirmed_dates: set[str] = set()
+    unconfirmed_item_dates: set[tuple[str, int]] = set()
     conflicting_fields: set[str] = set()
     results = []
     for turn in case["turns"]:
@@ -431,16 +482,35 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
         unconfirmed_dates.difference_update(corrected_dates)
         unconfirmed_dates.update(inferred_dates)
         unconfirmed_dates.difference_update(turn.get("confirmedDates", []))
+        if "next_steps" in incoming:
+            unconfirmed_item_dates = {
+                entry for entry in unconfirmed_item_dates if entry[0] != "next_steps"
+            }
+            unconfirmed_item_dates.update(
+                ("next_steps", index)
+                for index in turn.get("inferredNextStepDeadlines", [])
+            )
+        confirmed_item_dates = set(turn.get("confirmedNextStepDeadlines", []))
+        unconfirmed_item_dates = {
+            entry
+            for entry in unconfirmed_item_dates
+            if entry[1] not in confirmed_item_dates
+        }
         conflicting_fields.difference_update(incoming)
         conflicting_fields.update(turn.get("conflictingFields", []))
-        missing = missing_fields(record, unconfirmed_dates | conflicting_fields)
+        missing = missing_fields(
+            record,
+            unconfirmed_dates
+            | conflicting_fields
+            | {field_id for field_id, _ in unconfirmed_item_dates},
+        )
         if missing and contains_override(turn.get("text", "")):
             action = "generate"
             state = "DONE_WITH_GAPS"
         elif conflicting_fields:
             action = "ask_clarification"
             state = "WAITING_FOR_CLARIFICATION"
-        elif unconfirmed_dates:
+        elif unconfirmed_dates or unconfirmed_item_dates:
             action = "confirm_dates"
             state = "WAITING_FOR_CONFIRMATION"
         elif missing:
@@ -454,7 +524,9 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
             delivery = render_report(record, missing, artifact_supported)
             output = delivery["output"]
         elif action == "confirm_dates":
-            output = render_date_confirmation(record, unconfirmed_dates)
+            output = render_date_confirmation(
+                record, unconfirmed_dates, unconfirmed_item_dates
+            )
         elif action == "ask_clarification":
             conflicts = [
                 field_id for field_id in FIELD_IDS if field_id in conflicting_fields
@@ -837,6 +909,7 @@ DATE_FIELD_IDS = {
     if field.get("validation", {}).get("kind") == "absolute_date"
 }
 MISSING_SENTINELS = {normalize(value) for value in VALIDATION_RULES["missingSentinels"]}
+ITEM_DATE_FORMATS = list(FIELD_SCHEMA.get("itemDateFormats", []))
 EXPLICIT_NEGATIVE_VALUES = {
     normalize(value)
     for values in VALIDATION_RULES["explicitNegativeAnswers"].values()

@@ -68,7 +68,29 @@ In `tests/scenarios.json`:
    `"next_steps": [{"action": "Enviar a proposta", "responsible": "Bruno"}],`
    with
    `"next_steps": [{"action": "Enviar a proposta", "responsible": "Bruno", "deadline": "18/09/2026"}],`
-9. Add three new cases at the end of `cases` (after `artifact-unavailable-uses-markdown-fallback`). Add a trailing comma after the closing `}` of `artifact-unavailable-uses-markdown-fallback` before inserting, keeping the final `]` and `}` intact):
+9. `relative-dates-require-confirmation`: replace
+   `"next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],`
+   with
+   `"next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-17"}],`
+10. `rich-notes-preserve-all-relevant-details` (actions keep their verbatim deadline phrases so existing `outputContains` fragments stay valid): replace
+
+```json
+            "next_steps": [
+              {"action": "Preparar e enviar a prova de conceito até o fim do dia", "responsible": "eu"},
+              {"action": "Instalar, testar em dispositivos móveis e enviar retorno até 17/09/2026", "responsible": "Luciano"}
+            ],
+```
+
+with
+
+```json
+            "next_steps": [
+              {"action": "Preparar e enviar a prova de conceito até o fim do dia", "responsible": "eu", "deadline": "2026-09-13"},
+              {"action": "Instalar, testar em dispositivos móveis e enviar retorno até 17/09/2026", "responsible": "Luciano", "deadline": "2026-09-17"}
+            ],
+```
+
+11. Add three new cases at the end of `cases` (after `artifact-unavailable-uses-markdown-fallback`). Add a trailing comma after the closing `}` of `artifact-unavailable-uses-markdown-fallback` before inserting, keeping the final `]` and `}` intact):
 
 ```json
     {

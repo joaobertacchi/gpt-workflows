@@ -45,7 +45,7 @@
             "contacts": ["Ana"],
             "visit_type": "negociação",
             "topics_discussed": ["Renovação do contrato"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-12"}],
             "follow_up_date": "2026-09-16"
           }
         }
@@ -66,7 +66,7 @@
             "contacts": ["Ana"],
             "visit_type": "negociação",
             "topics_discussed": ["Renovação do contrato", "Escopo comercial"],
-            "next_steps": [{"action": "Enviar proposta revisada", "responsible": "Bruno"}],
+            "next_steps": [{"action": "Enviar proposta revisada", "responsible": "Bruno", "deadline": "2026-09-12"}],
             "follow_up_date": "2026-09-16"
           }
         }
@@ -92,7 +92,7 @@
         {
           "text": "Os próximos passos são preparar a demonstração com a Carla como responsável; o follow up será em 2026-09-18.",
           "fields": {
-            "next_steps": [{"action": "Preparar demonstração", "responsible": "Carla"}],
+            "next_steps": [{"action": "Preparar demonstração", "responsible": "Carla", "deadline": "2026-09-17"}],
             "follow_up_date": "2026-09-18"
           }
         }
@@ -160,7 +160,7 @@
             "contacts": ["Eva"],
             "visit_type": "instalação",
             "topics_discussed": ["Manutenção"],
-            "next_steps": [{"action": "Enviar instruções", "responsible": "Eva"}],
+            "next_steps": [{"action": "Enviar instruções", "responsible": "Eva", "deadline": "2026-09-18"}],
             "follow_up_date": "2026-09-20"
           }
         },
@@ -185,7 +185,7 @@
             "meeting_date": "2026-09-15",
             "contacts": ["Ana"],
             "topics_discussed": ["Revisão do equipamento"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-18"}],
             "follow_up_date": "2026-09-22"
           }
         },
@@ -223,8 +223,8 @@
             "contacts": ["Luciano"],
             "topics_discussed": ["Automatizar o registro das reuniões", "Elaborar uma prova de conceito"],
             "next_steps": [
-              {"action": "Elaborar o protótipo e disponibilizar o plugin", "responsible": "eu"},
-              {"action": "Instalar, testar e dar o retorno", "responsible": "Luciano"}
+              {"action": "Elaborar o protótipo e disponibilizar o plugin", "responsible": "eu", "deadline": "2026-09-14"},
+              {"action": "Instalar, testar e dar o retorno", "responsible": "Luciano", "deadline": "2026-09-16"}
             ]
           }
         },
@@ -296,17 +296,17 @@
             "company": "Acme",
             "meeting_date": "2026-09-14",
             "contacts": ["Ana"],
-            "visit_type": "negociação",
-            "topics_discussed": ["Contrato"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "visit_type": "corretiva",
+            "topics_discussed": ["Falha no equipamento"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-17"}],
             "follow_up_date": "2026-09-18"
           },
           "inferredDates": ["meeting_date", "follow_up_date"]
         },
         {
-          "text": "Sim, as duas datas estão corretas.",
-          "confirmedDates": ["meeting_date", "follow_up_date"],
-          "fields": {}
+          "text": "Confirmo as duas datas.",
+          "fields": {},
+          "confirmedDates": ["meeting_date", "follow_up_date"]
         }
       ],
       "expectations": [
@@ -613,7 +613,7 @@
             "contacts": ["Não haverá follow up"],
             "visit_type": "preventiva",
             "topics_discussed": ["Nenhum próximo passo"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Sem follow up"}],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Sem follow up", "deadline": "2026-09-18"}],
             "follow_up_date": "Não haverá follow up"
           }
         }
@@ -680,8 +680,8 @@
               "O teste será realizado em dispositivos móveis."
             ],
             "next_steps": [
-              {"action": "Preparar e enviar a prova de conceito até o fim do dia", "responsible": "eu"},
-              {"action": "Instalar, testar em dispositivos móveis e enviar retorno até 17/09/2026", "responsible": "Luciano"}
+              {"action": "Preparar e enviar a prova de conceito até o fim do dia", "responsible": "eu", "deadline": "2026-09-13"},
+              {"action": "Instalar, testar em dispositivos móveis e enviar retorno até 17/09/2026", "responsible": "Luciano", "deadline": "2026-09-17"}
             ],
             "follow_up_date": "2026-09-17"
           }
@@ -709,7 +709,7 @@
             "contacts": ["Ana"],
             "visit_type": "negociação",
             "topics_discussed": ["Renovação"],
-            "next_steps": [{"action": "Enviar a proposta", "responsible": "Bruno"}],
+            "next_steps": [{"action": "Enviar a proposta", "responsible": "Bruno", "deadline": "18/09/2026"}],
             "follow_up_date": "18/09/2026"
           }
         }
@@ -722,6 +722,99 @@
           "outputContains": ["```markdown", "# Relatório de reunião/visita"],
           "artifactName": null,
           "artifactContent": null
+        }
+      ]
+    },
+    {
+      "id": "next-step-deadline-asks-only-for-deadline",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Bruno enviará a proposta, mas o prazo ainda não foi definido.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "follow_up_date": "Não haverá follow up"
+          }
+        },
+        {
+          "text": "O prazo do passo é 18/09/2026.",
+          "fields": {
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-18"}]
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": ["next_steps"],
+          "outputContains": ["Próximos passos"],
+          "outputNotContains": ["Empresa (cliente)", "Data da reunião/visita", "Pessoa(s) de contato", "Tipo de reunião/visita", "Assuntos discutidos", "Data para follow up"]
+        },
+        {"action": "generate", "state": "DONE", "missing": []}
+      ]
+    },
+    {
+      "id": "relative-next-step-deadline-requires-confirmation",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Bruno enviará a proposta até sexta que vem.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-18"}],
+            "follow_up_date": "Não haverá follow up"
+          },
+          "inferredNextStepDeadlines": [0]
+        },
+        {
+          "text": "Confirmo o prazo do passo.",
+          "fields": {},
+          "confirmedNextStepDeadlines": [0]
+        }
+      ],
+      "expectations": [
+        {
+          "action": "confirm_dates",
+          "state": "WAITING_FOR_CONFIRMATION",
+          "missing": ["next_steps"],
+          "outputContains": ["Próximos passos", "2026-09-18"]
+        },
+        {"action": "generate", "state": "DONE", "missing": []}
+      ]
+    },
+    {
+      "id": "override-waives-next-step-deadline",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Continuar mesmo assim.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "contacts": ["Ana"],
+            "visit_type": "preventiva",
+            "topics_discussed": ["Revisão"],
+            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
+            "follow_up_date": "Não haverá follow up"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "generate",
+          "state": "DONE_WITH_GAPS",
+          "missing": ["next_steps"],
+          "outputContains": ["| Ação | Responsável | Prazo |", "Não informado", "Pendências de informação"]
         }
       ]
     }
