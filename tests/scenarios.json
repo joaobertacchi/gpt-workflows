@@ -129,7 +129,7 @@
           "action": "generate",
           "state": "DONE_WITH_GAPS",
           "missing": ["next_steps", "follow_up_date"],
-          "outputContains": ["rascunho com informações pendentes", "Pendências de informação", "Próximos passos", "Data para follow up", "Registro detalhado", "retrabalho manual"]
+          "outputContains": ["Pendências de informação", "Próximos passos", "Data para follow up", "Registro detalhado", "retrabalho manual"]
         }
       ]
     },
@@ -693,35 +693,6 @@
           "state": "DONE",
           "missing": [],
           "outputContains": ["Registro detalhado", "13h", "aproximadamente uma hora", "Luciano relatou", "CRM", "WhatsApp", "plugin público", "segunda-feira", "dispositivos móveis", "fim do dia", "17/09/2026"]
-        }
-      ]
-    },
-    {
-      "id": "artifact-unavailable-uses-markdown-fallback",
-      "activation": "plugin_selected",
-      "artifactSupported": false,
-      "turns": [
-        {
-          "text": "Empresa Acme. Reunião em 15/09/2026 com Ana. Tipo negociação. Discutimos a renovação. Bruno enviará a proposta. Follow up em 18/09/2026.",
-          "fields": {
-            "company": "Acme",
-            "meeting_date": "15/09/2026",
-            "contacts": ["Ana"],
-            "visit_type": "negociação",
-            "topics_discussed": ["Renovação"],
-            "next_steps": [{"action": "Enviar a proposta", "responsible": "Bruno", "deadline": "18/09/2026"}],
-            "follow_up_date": "18/09/2026"
-          }
-        }
-      ],
-      "expectations": [
-        {
-          "action": "generate",
-          "state": "DONE",
-          "missing": [],
-          "outputContains": ["```markdown", "# Relatório de reunião/visita"],
-          "artifactName": null,
-          "artifactContent": null
         }
       ]
     },

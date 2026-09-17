@@ -256,11 +256,6 @@ def render_date_confirmation(
     return f"Confirme as datas interpretadas: {'; '.join(entries)}. Estão corretas?"
 
 
-def render_delivery_guidance(incomplete: bool) -> str:
-    section = "INCOMPLETE_GUIDANCE" if incomplete else "COMPLETE_GUIDANCE"
-    return extract_skill_section(section)
-
-
 def next_step_cell(value: Any) -> str:
     if (
         isinstance(value, str)
@@ -298,9 +293,7 @@ def render_next_steps(record: dict[str, Any]) -> str:
     return FIELD_SCHEMA["missingValue"]
 
 
-def render_report(
-    record: dict[str, Any], missing: list[str], artifact_supported: bool
-) -> dict[str, Any]:
+def render_report(record: dict[str, Any], missing: list[str]) -> str:
     template = extract_skill_section("REPORT_TEMPLATE")
     labels = {field["id"]: field["label"] for field in FIELD_SCHEMA["fields"]}
 
@@ -344,64 +337,23 @@ def render_report(
     if missing:
         pending = "\n".join(f"- {labels[field_id]}" for field_id in missing)
         template += f"\n\n## Pendências de informação\n\n{pending}\n"
-    guidance = render_delivery_guidance(bool(missing))
-    report = template.strip()
-    if artifact_supported:
-        return {
-            "output": guidance,
-            "artifactName": "relatorio-reuniao.md",
-            "artifactContent": report,
-        }
-    return {
-        "output": f"{guidance}\n\n```markdown\n{report}\n```",
-        "artifactName": None,
-        "artifactContent": None,
-    }
+    return template.strip()
 
 
-def assert_report_delivery(
-    turn: dict[str, Any], artifact_supported: bool
-) -> None:
+def assert_inline_report_delivery(turn: dict[str, Any]) -> None:
     output = turn["output"]
-    artifact_name = turn.get("artifactName")
-    artifact_content = turn.get("artifactContent")
     operational_phrases = (
         "Todas as informações necessárias foram preenchidas",
         "O relatório está pronto para ser revisado e compartilhado",
         "O relatório foi gerado como rascunho com informações pendentes",
         "O rascunho deve ser completado e revisado",
     )
-
-    if artifact_supported:
-        if artifact_name != "relatorio-reuniao.md":
-            raise AssertionError("report artifact must use the approved filename")
-        if not artifact_content or not artifact_content.startswith(
-            "# Relatório de reunião/visita"
-        ):
-            raise AssertionError("artifact must contain only the Markdown report")
-        if "```" in output or "```" in artifact_content:
-            raise AssertionError("artifact delivery must not use Markdown fences")
-        if "# Relatório de reunião/visita" in output:
-            raise AssertionError("artifact delivery must not duplicate the report inline")
-        if any(phrase in artifact_content for phrase in operational_phrases):
-            raise AssertionError("operational guidance must remain outside the artifact")
-        return
-
-    if artifact_name is not None or artifact_content is not None:
-        raise AssertionError("unsupported surfaces must not expose an artifact")
-    if output.count("```markdown") != 1 or output.count("```") != 2:
-        raise AssertionError("fallback must contain exactly one Markdown fence")
-    opening = output.index("```markdown")
-    closing = output.index("```", opening + len("```markdown"))
-    if not output[:opening].strip():
-        raise AssertionError("delivery guidance must precede the fallback block")
-    report = output[opening + len("```markdown") : closing].strip()
-    if not report.startswith("# Relatório de reunião/visita"):
-        raise AssertionError("only the report may occupy the fallback block")
-    if any(phrase in report for phrase in operational_phrases):
-        raise AssertionError("operational guidance must remain outside the fallback block")
-    if output[closing + len("```") :].strip():
-        raise AssertionError("nothing may follow the fallback block")
+    if not output.startswith("# Relatório de reunião/visita"):
+        raise AssertionError("the entire message must be exactly the report")
+    if "```" in output:
+        raise AssertionError("report message must not use Markdown fences")
+    if any(phrase in output for phrase in operational_phrases):
+        raise AssertionError("report message must not contain operational guidance")
 
 
 def expectation_matches(
@@ -414,15 +366,11 @@ def expectation_matches(
         for key, value in expected.items()
         if key not in {"outputContains", "outputNotContains"}
     }
-    searchable_output = "\n".join(
-        value
-        for value in (actual.get("output"), actual.get("artifactContent"))
-        if value
-    )
+    output = actual.get("output", "")
     return (
         all(actual.get(key) == value for key, value in core.items())
-        and all(fragment in searchable_output for fragment in required)
-        and all(fragment not in searchable_output for fragment in forbidden)
+        and all(fragment in output for fragment in required)
+        and all(fragment not in output for fragment in forbidden)
     )
 
 
@@ -469,7 +417,6 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
         ]
 
     record: dict[str, Any] = {}
-    artifact_supported = case.get("artifactSupported", True)
     unconfirmed_dates: set[str] = set()
     unconfirmed_item_dates: set[tuple[str, int]] = set()
     conflicting_fields: set[str] = set()
@@ -519,10 +466,8 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
         else:
             action = "generate"
             state = "DONE"
-        delivery: dict[str, Any] | None = None
         if action == "generate":
-            delivery = render_report(record, missing, artifact_supported)
-            output = delivery["output"]
+            output = render_report(record, missing)
         elif action == "confirm_dates":
             output = render_date_confirmation(
                 record, unconfirmed_dates, unconfirmed_item_dates
@@ -534,13 +479,9 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
             output = render_field_prompt(conflicts, clarification=True)
         else:
             output = render_field_prompt(missing)
-        result = {"action": action, "state": state, "missing": missing, "output": output}
-        if delivery is not None:
-            result.update(
-                artifactName=delivery["artifactName"],
-                artifactContent=delivery["artifactContent"],
-            )
-        results.append(result)
+        results.append(
+            {"action": action, "state": state, "missing": missing, "output": output}
+        )
     return results
 
 
@@ -935,9 +876,7 @@ def main() -> int:
         try:
             for turn in actual:
                 if turn["action"] == "generate":
-                    assert_report_delivery(
-                        turn, case.get("artifactSupported", True)
-                    )
+                    assert_inline_report_delivery(turn)
         except AssertionError as error:
             failures.append(f"{case['id']}: {error}")
             continue
