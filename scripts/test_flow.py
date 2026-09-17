@@ -493,8 +493,6 @@ def check_packaging() -> None:
         "PARTIAL_EXAMPLE",
         "DETAIL_FIDELITY_EXAMPLE",
         "REPORT_TEMPLATE",
-        "COMPLETE_GUIDANCE",
-        "INCOMPLETE_GUIDANCE",
     ):
         extract_skill_section(section)
 
@@ -650,25 +648,6 @@ def check_packaging() -> None:
     ):
         raise AssertionError("incomplete-report starters must use an explicit override phrase")
 
-    guidance = "\n".join(
-        (
-            extract_skill_section("COMPLETE_GUIDANCE"),
-            extract_skill_section("INCOMPLETE_GUIDANCE"),
-        )
-    )
-    required_guidance = (
-        "Todas as informações necessárias foram preenchidas",
-        "use os controles do artefato",
-        "copie o conteúdo do bloco Markdown",
-        "O plugin não envia mensagens",
-    )
-    missing_guidance = [phrase for phrase in required_guidance if phrase not in guidance]
-    if missing_guidance:
-        raise AssertionError(
-            "SKILL.md is missing required delivery guidance: "
-            + ", ".join(missing_guidance)
-        )
-
     invocation_metadata = (
         ROOT / "skills/relatorio-reuniao/agents/openai.yaml"
     ).read_text(encoding="utf-8")
@@ -717,7 +696,6 @@ def check_packaging() -> None:
         "starts a new active report",
         "only these seven fields are required",
         "generate immediately when all fields are valid",
-        "do not include a pending section",
         "confirm",
         "nenhum próximo passo definido",
         "não haverá follow up",
@@ -725,10 +703,11 @@ def check_packaging() -> None:
         "ontem",
         "time, duration, objective, decisions, success criteria",
         "if the user asks to send or save the report",
-        "create or update a native markdown file artifact",
-        "relatorio-reuniao.md",
-        "do not repeat the complete report inline",
-        "if the active surface cannot create or expose a markdown artifact",
+        "the entire message must be exactly the report",
+        "beginning with `# relatório de reunião/visita`",
+        "no code fences",
+        "the conversation copy button must copy only the report",
+        "a complete report contains no `pendências de informação` section",
         "responsável e o prazo de cada ação",
         "`ação`, `responsável` and `prazo`",
         "`prazo` cell",
