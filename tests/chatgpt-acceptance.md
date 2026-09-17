@@ -12,11 +12,11 @@ These observations define the regression baseline for version `0.2.0`.
 
 ## Build
 
-- Plugin version: 0.3.6
+- Plugin version: 0.3.7
 - Marketplace: personal
-- Source verification: passed (`python3 scripts/test_flow.py`, 34/34)
-- Installed-cache verification: pending for 0.3.6
-- Auxiliary Codex loading: pending for 0.3.6
+- Source verification: passed (`python3 scripts/test_flow.py`, 33/33)
+- Installed-cache verification: pending for 0.3.7
+- Auxiliary Codex loading: pending for 0.3.7
 
 ## Local ChatGPT Scenarios
 
@@ -30,7 +30,7 @@ These observations define the regression baseline for version `0.2.0`.
 | Explicit incomplete override | Passed | Work-mode screenshot supplied in chat for version 0.3.0: incomplete draft used `Não informado` and listed contact, visit type, topics, next steps and follow-up date under `Pendências de informação`. |
 | Detailed-note fidelity | Passed | Work screenshots `10.04.32`, `10.04.41` and `10.04.47` show the exact `Registro detalhado` heading and preserve time, duration, attribution, CRM context, WhatsApp evaluation, requested alternatives, plugin proposal, chronology, actions and deadlines. |
 | Copyable report boundary | Passed | Work screenshots show one report block with no content after it; the user confirmed its copy control copied only the report. |
-| Rendered Markdown artifact | Pending on 0.3.6 | Verify one rendered `relatorio-reuniao.md` artifact with formatted headings, labels, lists and tables; source copy or download must preserve Markdown, and the complete report must not be duplicated inline. |
+| Report-only message | Pending on 0.3.7 | Verify the entire message is exactly the report rendered as Markdown: no status, no guidance, no code fences; the message copy button copies only the report; a draft report contains `Pendências de informação` inside the report. |
 | Next-step deadline column | Passed | User-confirmed in chat on 0.3.6: report generated correctly with the rendered `Prazo` column; relative deadline phrases were confirmed as calendar dates shown in the table; the explicit override generated with `Não informado` in the `Prazo` cell as expected. |
 
 ## Partial-Collection History On 0.3.0
@@ -67,7 +67,7 @@ These attempts used the regular Chat surface rather than ChatGPT Work and theref
 
 ## Procedure
 
-Quit and reopen ChatGPT after installing version `0.3.6`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
+Quit and reopen ChatGPT after installing version `0.3.7`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
 
 ### Start checklist
 
@@ -129,7 +129,7 @@ Send:
 A reunião da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026.
 ```
 
-Expected: a readable executive topic summary and a `Registro detalhado` section preserve every supplied fact without invention. Attribution and chronology remain intact. Status and operational guidance stay in chat; the report opens as a rendered `relatorio-reuniao.md` artifact containing only the report. Copying or downloading the artifact preserves Markdown source. The next-steps table must include the `Prazo` column with a calendar date per action. On a surface without artifact support, guidance precedes exactly one fenced Markdown fallback containing only the report.
+Expected: a readable executive topic summary and a `Registro detalhado` section preserve every supplied fact without invention. Attribution and chronology remain intact. The entire message must be exactly the rendered report: no status, no guidance, no code fences. The message copy button copies only the report. The next-steps table must include the `Prazo` column with a calendar date per action. A draft report carries `Pendências de informação` inside the report.
 
 Record `Passed` or `Failed` and a conversation identifier, transcript, or screenshot in the table. Preserve the exact unexpected response for any failure.
 

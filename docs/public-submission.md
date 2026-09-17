@@ -21,7 +21,7 @@
 
 ## Release Notes
 
-Version 0.3.6 adds next-step deadlines: every action-based next step requires a calendar-date `Prazo`, relative deadline phrases are confirmed as calendar dates, and an explicit override renders `Não informado` in the unresolved `Prazo` cell. Reports continue to deliver as rendered Markdown file artifacts with a fenced Markdown fallback.
+Version 0.3.7 delivers the report as the entire chat message: ChatGPT renders the Markdown report inline with no code fences and no guidance, so the message copy button copies exactly the report; overridden drafts carry `Pendências de informação` inside the report.
 
 ## Reviewer Data
 
