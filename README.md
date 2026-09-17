@@ -16,6 +16,11 @@ O workflow:
 
 O PoC não possui MCP, backend, banco de dados, API externa, CRM, credenciais ou persistência. A entrada de voz depende da experiência normal do ChatGPT para produzir a mensagem do usuário.
 
+## Como usar
+
+- [Instale o Documentar Reunião no ChatGPT](https://chatgpt.com/plugins/plugins_6aaadbf9b0608191820ae6351956faab).
+- Consulte o [guia completo de instalação e uso](INSTRUCOES_DE_USO.md).
+
 ## Campos obrigatórios
 
 - empresa (cliente);
