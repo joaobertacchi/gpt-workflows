@@ -99,13 +99,18 @@ def is_absolute_date(value: Any, date_formats: list[str]) -> bool:
 
 
 def item_value_is_complete(
-    item_field: str, value: Any, item_field_types: dict[str, str]
+    field: dict[str, Any], item_field: str, value: Any
 ) -> bool:
-    kind = item_field_types.get(item_field)
+    kind = field.get("itemFieldTypes", {}).get(item_field)
     if kind == "string":
         return isinstance(value, str) and is_substantive(value, MISSING_SENTINELS)
     if kind == "date":
         return is_absolute_date(value, ITEM_DATE_FORMATS)
+    if kind == "enum":
+        allowed = field.get("itemAllowedValues", {}).get(item_field, [])
+        return isinstance(value, str) and normalize(value) in {
+            normalize(option) for option in allowed
+        }
     return False
 
 
@@ -145,18 +150,19 @@ def field_is_complete(field: dict[str, Any], value: Any) -> bool:
         )
     if field_type == "array<object>":
         item_fields = field.get("itemFields", [])
-        item_field_types = field.get("itemFieldTypes", {})
+        optional_fields = set(field.get("itemOptionalFields", []))
+        required_item_fields = [
+            item_field for item_field in item_fields if item_field not in optional_fields
+        ]
         return (
             isinstance(value, list)
             and bool(value)
-            and bool(item_fields)
+            and bool(required_item_fields)
             and all(
                 isinstance(item, dict)
                 and all(
-                    item_value_is_complete(
-                        item_field, item.get(item_field), item_field_types
-                    )
-                    for item_field in item_fields
+                    item_value_is_complete(field, item_field, item.get(item_field))
+                    for item_field in required_item_fields
                 )
                 for item in value
             )
@@ -293,6 +299,75 @@ def render_next_steps(record: dict[str, Any]) -> str:
     return FIELD_SCHEMA["missingValue"]
 
 
+def render_participants(record: dict[str, Any], missing: list[str]) -> str:
+    if "participantes" in missing:
+        return FIELD_SCHEMA["missingValue"]
+    value = record.get("participantes")
+    if not isinstance(value, list) or not value:
+        return FIELD_SCHEMA["missingValue"]
+    lines = []
+    for item in value:
+        if not isinstance(item, dict):
+            continue
+        nome = next_step_cell(item.get("nome"))
+        lado_value = item.get("lado")
+        lado = (
+            {"cliente": "Cliente", "empresa": "Empresa"}.get(
+                normalize(lado_value), lado_value
+            )
+            if isinstance(lado_value, str)
+            else FIELD_SCHEMA["missingValue"]
+        )
+        funcao = item.get("funcao")
+        if isinstance(funcao, str) and normalize(funcao) == normalize(
+            "função não informada"
+        ):
+            funcao_value = "(função não informada)"
+        else:
+            funcao_value = next_step_cell(funcao)
+        lines.append(f"- {nome} — {lado} — {funcao_value}")
+    return "\n".join(lines)
+
+
+def render_description(record: dict[str, Any], missing: list[str]) -> str:
+    topics = record.get("topics_discussed")
+    if "topics_discussed" in missing or not isinstance(topics, list):
+        topics = []
+    topic_details: dict[int, list[str]] = {}
+    trailing: list[str] = []
+    details = record.get("provided_details")
+    if isinstance(details, list):
+        for item in details:
+            if not isinstance(item, dict):
+                continue
+            texto = item.get("texto")
+            if not isinstance(texto, str) or not is_substantive(texto, MISSING_SENTINELS):
+                continue
+            topico = item.get("topico")
+            match = None
+            if isinstance(topico, str) and is_substantive(topico, MISSING_SENTINELS):
+                topico_norm = normalize(topico)
+                for index, topic in enumerate(topics):
+                    if isinstance(topic, str) and normalize(topic) == topico_norm:
+                        match = index
+                        break
+            if match is None:
+                trailing.append(texto)
+            else:
+                topic_details.setdefault(match, []).append(texto)
+    if not topics and not trailing:
+        return FIELD_SCHEMA["missingValue"]
+    if not topics:
+        return " ".join(trailing)
+    lines = []
+    for index, topic in enumerate(topics):
+        prose = " ".join(topic_details.get(index, []))
+        lines.append(f"**{topic}** — {prose}" if prose else f"**{topic}**")
+    if trailing:
+        lines.append(" ".join(trailing))
+    return "\n\n".join(lines)
+
+
 def render_report(record: dict[str, Any], missing: list[str]) -> str:
     template = extract_skill_section("REPORT_TEMPLATE")
     labels = {field["id"]: field["label"] for field in FIELD_SCHEMA["fields"]}
@@ -302,34 +377,18 @@ def render_report(record: dict[str, Any], missing: list[str]) -> str:
             return FIELD_SCHEMA["missingValue"]
         return record.get(field_id, FIELD_SCHEMA["missingValue"])
 
-    contact_values = value_or_missing("contacts")
-    contacts = (
-        ", ".join(contact_values)
-        if isinstance(contact_values, list)
-        else contact_values
-    )
-    topic_values = value_or_missing("topics_discussed")
-    topics = (
-        "\n".join(f"- {item}" for item in topic_values)
-        if isinstance(topic_values, list)
-        else topic_values
-    )
-    provided_details = record.get("provided_details")
-    provided_details_section = ""
-    if isinstance(provided_details, list) and provided_details:
-        rendered_details = "\n".join(f"- {item}" for item in provided_details)
-        provided_details_section = f"\n\n## Registro detalhado\n\n{rendered_details}"
-    rendered_steps = render_next_steps(record)
-
     values = {
         "company": value_or_missing("company"),
         "meeting_date": value_or_missing("meeting_date"),
-        "contacts": contacts or FIELD_SCHEMA["missingValue"],
         "visit_type": value_or_missing("visit_type"),
+        "objetivo_visita": value_or_missing("objetivo_visita"),
+        "responsavel_comercial": value_or_missing("responsavel_comercial"),
+        "responsavel_tecnico": value_or_missing("responsavel_tecnico"),
         "follow_up_date": value_or_missing("follow_up_date"),
-        "topics_discussed": topics or FIELD_SCHEMA["missingValue"],
-        "provided_details_section": provided_details_section,
-        "next_steps": rendered_steps,
+        "participantes": render_participants(record, missing),
+        "descricao_section": render_description(record, missing),
+        "next_steps": render_next_steps(record),
+        "elaborado_por": value_or_missing("elaborado_por"),
     }
     for key, value in values.items():
         template = template.replace("{{" + key + "}}", str(value))
@@ -348,7 +407,7 @@ def assert_inline_report_delivery(turn: dict[str, Any]) -> None:
         "O relatório foi gerado como rascunho com informações pendentes",
         "O rascunho deve ser completado e revisado",
     )
-    if not output.startswith("# Relatório de reunião/visita"):
+    if not output.startswith("# Relatório de Visita"):
         raise AssertionError("the entire message must be exactly the report")
     if "```" in output:
         raise AssertionError("report message must not use Markdown fences")
@@ -573,7 +632,7 @@ def check_packaging() -> None:
 
     portable_manifest = load_json("plugin.json")
     compat_manifest = load_json(".codex-plugin/plugin.json")
-    expected_version = "0.3.8"
+    expected_version = "0.4.0"
     expected_developer = "João Eduardo Ferreira Bertacchi"
     expected_author_url = "https://github.com/joaobertacchi"
     expected_repository = "https://github.com/joaobertacchi/gpt-workflows"
@@ -680,12 +739,29 @@ def check_packaging() -> None:
             + ", ".join(missing_validation_keys)
         )
 
-    provided_details_field = next(
+    participantes_field = next(
+        field for field in FIELD_SCHEMA["fields"] if field["id"] == "participantes"
+    )
+    if participantes_field.get("itemFields") != ["nome", "lado", "funcao"]:
+        raise AssertionError("participantes items must carry nome, lado and funcao")
+    if participantes_field.get("itemAllowedValues", {}).get("lado") != [
+        "cliente",
+        "empresa",
+    ]:
+        raise AssertionError("participantes lado must be cliente or empresa")
+    tecnico_field = next(
+        field for field in FIELD_SCHEMA["fields"] if field["id"] == "responsavel_tecnico"
+    )
+    if tecnico_field.get("explicitNoneValue") != "Não houve responsável técnico":
+        raise AssertionError("responsavel_tecnico must allow its explicit none value")
+    details_field = next(
         field for field in FIELD_SCHEMA["fields"] if field["id"] == "provided_details"
     )
-    if provided_details_field["label"] != "Registro detalhado":
+    if details_field.get("itemFields") != ["texto"] or details_field.get(
+        "itemOptionalFields"
+    ) != ["topico"]:
         raise AssertionError(
-            "provided_details label must match the required report heading"
+            "provided_details items must carry texto and optional topico"
         )
 
     skill_text = (ROOT / "skills/relatorio-reuniao/SKILL.md").read_text(
@@ -694,17 +770,20 @@ def check_packaging() -> None:
     required_skill_concepts = (
         "@documentar reunião",
         "starts a new active report",
-        "only these seven fields are required",
+        "only these eleven fields are required",
         "generate immediately when all fields are valid",
         "confirm",
         "nenhum próximo passo definido",
         "não haverá follow up",
         "structured commercial meeting",
         "ontem",
-        "time, duration, objective, decisions, success criteria",
+        "time, duration, decisions, success criteria",
+        "não houve responsável técnico",
+        "função não informada",
+        "## descrição",
         "if the user asks to send or save the report",
         "the entire message must be exactly the report",
-        "beginning with `# relatório de reunião/visita`",
+        "beginning with `# relatório de visita`",
         "no code fences",
         "the conversation copy button must copy only the report",
         "a complete report contains no `pendências de informação` section",
@@ -722,10 +801,10 @@ def check_packaging() -> None:
         )
 
     submission = (ROOT / "docs/public-submission.md").read_text(encoding="utf-8")
-    if "Version 0.3.8" not in submission:
-        raise AssertionError("submission release notes must name version 0.3.8")
+    if "Version 0.4.0" not in submission:
+        raise AssertionError("submission release notes must name version 0.4.0")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    if "dist/documentar-reuniao-0.3.8.zip" not in readme:
+    if "dist/documentar-reuniao-0.4.0.zip" not in readme:
         raise AssertionError("README must name the current public archive")
     positive_cases = re.findall(r"^### P[1-5] ", submission, flags=re.MULTILINE)
     negative_cases = re.findall(r"^### N[1-3] ", submission, flags=re.MULTILINE)
@@ -736,7 +815,7 @@ def check_packaging() -> None:
     required_submission_content = (
         "João Eduardo Ferreira Bertacchi",
         "https://github.com/joaobertacchi/gpt-workflows/issues",
-        "Version 0.3.8 delivers the report",
+        "Version 0.4.0 delivers the report",
         "Skills only",
         "No credentials or fixture data required",
         f"Short description: {expected_short_description}",
@@ -748,11 +827,15 @@ def check_packaging() -> None:
     required_intake_labels = (
         "empresa (cliente)",
         "data da reunião/visita",
-        "pessoa(s) de contato",
+        "objetivo da visita",
+        "responsável comercial",
+        "responsável técnico",
+        "participantes",
         "corretiva, preventiva, desenvolvimento ou negociação",
         "assuntos discutidos",
         "responsável e o prazo de cada ação",
         "data para follow up",
+        "elaborado por",
     )
     missing_intake_labels = [
         label for label in required_intake_labels if label.casefold() not in intake.casefold()
@@ -764,11 +847,15 @@ def check_packaging() -> None:
 
     partial_example = extract_skill_section("PARTIAL_EXAMPLE")
     required_partial_content = (
-        "Reunião com a empresa Beta em 15/09/2026. O contato foi Carla.",
+        "Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).",
         "Tipo de reunião/visita",
+        "Objetivo da visita",
+        "Responsável comercial",
+        "Responsável técnico",
         "Assuntos discutidos",
         "Próximos passos, com responsável e prazo de cada ação",
         "Data para follow up",
+        "Elaborado por",
         "Do not ask for generic notes",
         "Do not request decisions",
     )
@@ -783,7 +870,9 @@ def check_packaging() -> None:
 
     detail_example = extract_skill_section("DETAIL_FIDELITY_EXAMPLE")
     required_detail_content = (
-        "## Registro detalhado",
+        "## Descrição",
+        "**Registro das reuniões no CRM**",
+        "**Plugin público para ChatGPT**",
         "Luciano relatou",
         "Luciano avaliou",
         "Luciano pediu",
@@ -802,12 +891,15 @@ def check_packaging() -> None:
     required_placeholders = (
         "{{company}}",
         "{{meeting_date}}",
-        "{{contacts}}",
         "{{visit_type}}",
+        "{{objetivo_visita}}",
+        "{{responsavel_comercial}}",
+        "{{responsavel_tecnico}}",
         "{{follow_up_date}}",
-        "{{topics_discussed}}",
-        "{{provided_details_section}}",
+        "{{participantes}}",
+        "{{descricao_section}}",
         "{{next_steps}}",
+        "{{elaborado_por}}",
     )
     missing_placeholders = [
         placeholder for placeholder in required_placeholders if placeholder not in template
