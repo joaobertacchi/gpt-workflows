@@ -139,7 +139,7 @@ Do not ask for generic notes. Do not request decisions. Do not repeat Empresa, D
 
 ## Report Output
 
-Render this template in order. Render participants as one `Nome — Lado — Função` line each with `Cliente` or `Empresa` capitalized, render the unified `Descrição` section with each supplied topic as a bold label followed by its supporting facts as professional prose, and render action-based next steps as a table with `Ação`, `Responsável` and `Prazo` columns.
+Render this template in order. Render participants as one `Nome — Lado — Função` line each with `Cliente` or `Empresa` capitalized and the role escape rendered as `(função não informada)`, render the unified `Descrição` section with each supplied topic as a bold label followed by its supporting facts as professional prose, and render action-based next steps as a table with `Ação`, `Responsável` and `Prazo` columns.
 
 If generation is overridden while a step deadline is unresolved, render `Não informado` in that `Prazo` cell.
 

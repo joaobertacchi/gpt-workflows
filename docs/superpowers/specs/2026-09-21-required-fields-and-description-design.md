@@ -53,7 +53,7 @@ The reporter's own first-person actions keep first person in the detailed record
 
 ## Intake
 
-The intake lists eleven collection items: empresa, data, tipo, objetivo da visita, responsável comercial, responsável técnico, participantes (com lado e função), assuntos discutidos, próximos passos com responsável e prazo, data para follow up, e elaborado por. The intake continues to state that extra narrated facts are welcome but details are never requested.
+The intake lists eleven collection items: empresa, data, tipo, objetivo da visita, responsável comercial, responsável técnico, participantes (com lado e função), assuntos discutidos, próximos passos com responsável e prazo, data para follow up, e elaborado por. The rule that details are never requested lives in the Detail Fidelity section, as in the previous release.
 
 ## Report Format
 

@@ -90,10 +90,10 @@ Expected: complete report generated immediately with the extended header, `Parti
 Send:
 
 ```text
-Reunião com a empresa Beta em 15/09/2026. O contato foi Carla.
+Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).
 ```
 
-Expected: the plugin requests only visit type, objective, both representatives, topics, next steps with a responsible person and deadline for each action, follow-up date, and report author for the same Beta-style prompt. After those answers, it generates without asking again for company, date, or contact.
+Expected: the plugin requests only visit type, objective, both representatives, topics, next steps with a responsible person and deadline for each action, follow-up date, and report author for the same Beta-style prompt. After those answers, it generates without asking again for company, date, or participants.
 
 ### Relative-date confirmation
 
