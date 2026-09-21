@@ -49,7 +49,7 @@ Assim que todas as informações obrigatórias estiverem válidas, o plugin gera
 
 - identificação da empresa, data, contatos e tipo da visita;
 - assuntos discutidos;
-- registro detalhado dos fatos fornecidos;
+- registro detalhado dos fatos fornecidos, reescrito em linguagem profissional sem inventar nenhuma informação;
 - próximos passos, responsáveis e prazos;
 - data para follow up.
 

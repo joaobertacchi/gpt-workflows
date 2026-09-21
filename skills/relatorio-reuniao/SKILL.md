@@ -78,29 +78,31 @@ Only these seven fields are required. Time, duration, objective, decisions, succ
 
 ## Detail Fidelity
 
-- Preserve every relevant user-supplied fact. Store context and specificity behind topic labels in `provided_details`; a concise topic does not replace its supporting facts.
+- Fidelity applies to facts, not wording. Preserve every relevant user-supplied fact and store context and specificity behind topic labels in `provided_details`; a concise topic does not replace its supporting facts.
 - Relevant supplied facts include context, chronology, problems, evidence, current processes, alternatives, decisions, restrictions, channels, deadlines, times, durations and expectations.
-- Improve grammar and remove repetition or speech disfluencies, but preserve names, attribution, dates, times, quantities, relationships and temporal order. Never replace distinct facts with a lossy generalization or invent an interpretation.
+- Preserve names, attribution, dates, times, quantities, relationships and temporal order. Never replace distinct facts with a lossy generalization or invent an interpretation.
+- Rewriting is required, not optional. Render the detailed record as polished professional prose in a formal commercial register, connecting facts into clear sentences or short narrative paragraphs. Use bullets only for discrete parallel facts. A near-verbatim reproduction of the user's spoken phrasing is a fidelity failure.
+- Remove speech disfluencies, filler and repetition while keeping every distinct fact and its attribution.
 - Do not ask for `provided_details`. When absent, continue using only the seven required fields.
 - A correction replaces affected detail facts while preserving unrelated facts.
 
-For rich notes, use the exact `Registro detalhado` heading and retain the actor attached to every attributed fact. Do not rename the section from the field label or turn attributed statements into actorless summaries.
+For rich notes, use the exact `Registro detalhado` heading and retain the actor attached to every attributed fact, including the reporter's own first-person actions. Do not rename the section from the field label or turn attributed statements into actorless summaries.
 
 <!-- DETAIL_FIDELITY_EXAMPLE_START -->
-User facts:
+User facts (dictated by voice):
 
-`Luciano relatou que o time não registra as reuniões no CRM. Luciano avaliou o WhatsApp e Luciano pediu alternativas melhores. Eu propus um plugin público para ChatGPT.`
+`então o Luciano falou que tipo o time de vendas devia registrar as reuniões no CRM mas que na real nunca faz isso, e ele tinha avaliado WhatsApp mas não resolveu, e pediu pra eu ver alternativa melhor, e aí eu falei que ia propor um plugin público pro ChatGPT`
 
 Required detailed section excerpt:
 
 ## Registro detalhado
 
-- Luciano relatou que o time não vem registrando as reuniões no CRM.
-- Luciano avaliou uma solução baseada em WhatsApp.
+- Luciano relatou que o time de vendas deveria registrar as reuniões no CRM, mas que na prática isso não acontece.
+- Luciano avaliou o WhatsApp como alternativa para esses registros.
 - Luciano pediu alternativas melhores para o registro das reuniões.
 - Eu propus um plugin público para ChatGPT.
 
-Do not remove or change the actor attached to any of these facts.
+The dictated sentences were rewritten as professional prose. Every fact and its actor are retained, but none of the user's spoken phrasing survives as-is: do not echo dictated sentences near-verbatim.
 <!-- DETAIL_FIDELITY_EXAMPLE_END -->
 
 ## Missing-Field Response
@@ -160,6 +162,7 @@ For an overridden report, use `Não informado` for every unresolved field and ap
 - Do not request time, duration, decisions, success criteria, or unrelated deadlines.
 - Do not preserve a relative date as final without confirmation.
 - Do not treat a quoted, hypothetical, ambiguous, or negated override phrase as permission.
+- Do not reproduce the user's dictated or typed sentences near-verbatim in `Registro detalhado`; rewrite them as professional prose while preserving every fact and its actor.
 - Do not show `Pendências de informação` in a complete report.
 - If the user asks to send or save the report in CRM, WhatsApp or another external system, state that the plugin has no such integration and that the user must copy the report manually. Never claim the external action occurred.
 

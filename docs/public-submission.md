@@ -21,7 +21,7 @@
 
 ## Release Notes
 
-Version 0.3.7 delivers the report as the entire chat message: ChatGPT renders the Markdown report inline with no code fences and no guidance, so the message copy button copies exactly the report; overridden drafts carry `Pendências de informação` inside the report.
+Version 0.3.8 delivers the report as the entire chat message: ChatGPT renders the Markdown report inline with no code fences and no guidance, so the message copy button copies exactly the report; overridden drafts carry `Pendências de informação` inside the report. The detailed record rewrites supplied facts as polished professional prose while preserving every fact and its attribution, instead of echoing dictated sentences.
 
 ## Reviewer Data
 

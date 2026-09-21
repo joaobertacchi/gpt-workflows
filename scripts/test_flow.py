@@ -573,7 +573,7 @@ def check_packaging() -> None:
 
     portable_manifest = load_json("plugin.json")
     compat_manifest = load_json(".codex-plugin/plugin.json")
-    expected_version = "0.3.7"
+    expected_version = "0.3.8"
     expected_developer = "João Eduardo Ferreira Bertacchi"
     expected_author_url = "https://github.com/joaobertacchi"
     expected_repository = "https://github.com/joaobertacchi/gpt-workflows"
@@ -722,10 +722,10 @@ def check_packaging() -> None:
         )
 
     submission = (ROOT / "docs/public-submission.md").read_text(encoding="utf-8")
-    if "Version 0.3.7" not in submission:
-        raise AssertionError("submission release notes must name version 0.3.7")
+    if "Version 0.3.8" not in submission:
+        raise AssertionError("submission release notes must name version 0.3.8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    if "dist/documentar-reuniao-0.3.7.zip" not in readme:
+    if "dist/documentar-reuniao-0.3.8.zip" not in readme:
         raise AssertionError("README must name the current public archive")
     positive_cases = re.findall(r"^### P[1-5] ", submission, flags=re.MULTILINE)
     negative_cases = re.findall(r"^### N[1-3] ", submission, flags=re.MULTILINE)
@@ -736,7 +736,7 @@ def check_packaging() -> None:
     required_submission_content = (
         "João Eduardo Ferreira Bertacchi",
         "https://github.com/joaobertacchi/gpt-workflows/issues",
-        "Version 0.3.7 delivers the report",
+        "Version 0.3.8 delivers the report",
         "Skills only",
         "No credentials or fixture data required",
         f"Short description: {expected_short_description}",
