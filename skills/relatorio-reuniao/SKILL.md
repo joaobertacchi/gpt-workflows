@@ -91,7 +91,7 @@ Only these eleven fields are required. Time, duration, decisions, success criter
 - Preserve names, attribution, dates, times, quantities, relationships and temporal order. Never replace distinct facts with a lossy generalization or invent an interpretation.
 - Rewriting is required, not optional. Render the unified `Descrição` section as polished professional prose in a formal commercial register, with each supplied topic as a bold label followed by the facts that belong to it. A near-verbatim reproduction of the user's spoken phrasing is a fidelity failure.
 - Remove speech disfluencies, filler and repetition while keeping every distinct fact and its attribution.
-- Do not ask for `provided_details`. When absent, continue using only the seven required fields.
+- Do not ask for `provided_details`. When absent, continue using only the eleven required fields.
 - A correction replaces affected detail facts while preserving unrelated facts.
 
 For rich notes, use the exact `Descrição` heading, render each supplied topic label in bold followed by its supporting facts as professional prose, retain the actor attached to every attributed fact including the reporter's own first-person actions, and render facts that fit no informed topic in a final unlabeled paragraph. Do not rename the section or turn attributed statements into actorless summaries.
