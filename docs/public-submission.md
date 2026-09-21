@@ -11,7 +11,7 @@
 - Privacy: https://github.com/joaobertacchi/gpt-workflows/blob/main/PRIVACY.md
 - Terms: https://github.com/joaobertacchi/gpt-workflows/blob/main/TERMS.md
 - Short description: Documente reuniões comerciais
-- Long description: Cole ou dite as anotações de uma reunião comercial. O workflow coleta os campos obrigatórios — incluindo objetivo, responsáveis, participantes e elaborado por —, preserva os detalhes fornecidos, confirma datas inferidas e gera um relatório estruturado e copiável.
+- Long description: Cole ou dite as anotações de uma reunião comercial. O workflow coleta os campos obrigatórios (incluindo objetivo, responsáveis, participantes e elaborado por), preserva os detalhes fornecidos, confirma datas inferidas e gera um relatório estruturado e copiável.
 
 ## Starter Prompts
 
@@ -33,13 +33,13 @@ No credentials or fixture data required.
 
 Prompt: `começar`
 
-Expected behavior: activate the skill and list exactly the seven required categories.
+Expected behavior: activate the skill and list exactly the eleven required categories.
 
 Expected result shape: one concise intake checklist; no report.
 
 ### P2 Complete first turn
 
-Prompt: `Empresa Acme. Visita em 15/09/2026. Tipo negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato. Bruno enviará a proposta revisada. O follow up será em 18/09/2026. Elaborado por Bruno.`
+Prompt: `Empresa Acme. Visita em 15/09/2026. Tipo negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato. Bruno enviará a proposta revisada até 17/09/2026. O follow up será em 18/09/2026. Elaborado por Bruno.`
 
 Expected behavior: generate immediately without asking for data already supplied.
 
@@ -73,7 +73,7 @@ Expected result shape: `Descrição` grouped by topic in professional prose, par
 
 ### N1 Invalid visit type
 
-Prompt: `Empresa Acme. Reunião em 15/09/2026 com Ana. Tipo instalação. Discutimos manutenção. Bruno enviará o orçamento. Follow up em 18/09/2026.`
+Prompt: `Empresa Acme. Reunião em 15/09/2026. Tipo instalação. Objetivo: revisar o equipamento. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos manutenção. Bruno enviará o orçamento. Follow up em 18/09/2026. Elaborado por Bruno.`
 
 Expected behavior: reject `instalação` and ask only for a valid visit type.
 

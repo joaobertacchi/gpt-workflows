@@ -52,7 +52,7 @@ Assim que todas as informações obrigatórias estiverem válidas, o plugin gera
 
 - identificação da empresa, data, tipo, objetivo, responsáveis comercial e técnico, e data para follow up;
 - participantes, com o lado e a função de cada um;
-- descrição dos assuntos discutidos agrupada por assunto, reescrita em linguagem profissional sem inventar nenhuma informação;
+- descrição dos assuntos discutidos agrupada por tópico, reescrita em linguagem profissional sem inventar nenhuma informação;
 - próximos passos, responsáveis e prazos; e
 - linha de elaborado por.
 

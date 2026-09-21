@@ -14,7 +14,7 @@ These observations define the regression baseline for version `0.2.0`.
 
 - Plugin version: 0.4.0
 - Marketplace: personal
-- Source verification: passed (`python3 scripts/test_flow.py`, 33/33)
+- Source verification: passed (`python3 scripts/test_flow.py`, 39/39)
 - Installed-cache verification: pending for 0.4.0
 - Auxiliary Codex loading: pending for 0.4.0
 
@@ -80,10 +80,10 @@ Expected: the response lists the eleven required collection categories.
 Send:
 
 ```text
-Empresa Acme. Reunião em 15/09/2026 com Ana. Tipo negociação. Discutimos a renovação do contrato. Bruno enviará a proposta revisada. O follow up será em 18/09/2026.
+Empresa Acme. Reunião em 15/09/2026. Tipo negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato. Bruno enviará a proposta revisada até 17/09/2026. O follow up será em 18/09/2026. Elaborado por Bruno.
 ```
 
-Expected: a complete report in the same response, with no pending-information section.
+Expected: complete report generated immediately with the extended header, `Participantes` list and `Elaborado por` signature, and no pending section.
 
 ### Missing-field follow-up
 
@@ -93,7 +93,7 @@ Send:
 Reunião com a empresa Beta em 15/09/2026. O contato foi Carla.
 ```
 
-Expected: asks only for type, topics, next steps with responsible people, and follow-up date. After those answers, it generates without asking again for company, date, or contact.
+Expected: the plugin requests only visit type, objective, both representatives, topics, next steps with a responsible person and deadline for each action, follow-up date, and report author for the same Beta-style prompt. After those answers, it generates without asking again for company, date, or contact.
 
 ### Relative-date confirmation
 
@@ -126,7 +126,7 @@ Expected: an incomplete draft with a `Pendências de informação` section listi
 Send:
 
 ```text
-A reunião da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026.
+A visita da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Objetivo: alinhar o registro de reuniões no CRM. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Luciano (cliente) e João (empresa). Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026. Elaborado por João.
 ```
 
 Expected: a `Descrição` section grouping the supplied facts under their topics as professional prose, the `Participantes` list with side and function, the extended header with objective and both representatives, and the `Elaborado por` signature. Every supplied fact is preserved without invention; reproducing dictated sentences near-verbatim records `Failed`. The entire message must be exactly the rendered report beginning with `# Relatório de Visita`: no status, no guidance, no code fences. The message copy button copies only the report. The next-steps table must include the `Prazo` column with a calendar date per action. A draft report carries `Pendências de informação` inside the report.

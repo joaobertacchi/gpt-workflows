@@ -31,7 +31,7 @@ O PoC não possui MCP, backend, banco de dados, API externa, CRM, credenciais ou
 - responsável técnico (ou a declaração de que não houve);
 - participantes, com o lado (cliente ou empresa) e a função de cada um;
 - assuntos discutidos;
-- próximos passos, com responsável e prazo por cada ação;
+- próximos passos, com responsável e prazo de cada ação;
 - data para follow up; e
 - elaborado por.
 
