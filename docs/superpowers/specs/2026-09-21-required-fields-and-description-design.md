@@ -32,7 +32,7 @@ The schema grows from seven to twelve fields. `contacts` is removed without back
 6. `responsavel_tecnico` — string, required, `allowExplicitNone` with `explicitNoneValue` `Não houve responsável técnico`; purely commercial visits have none.
 7. `participantes` — array of objects, required, replaces `contacts`; every item requires `nome` (string), `lado` (enum `cliente|empresa`), and `funcao` (string). `funcao` accepts the explicit value `função não informada` when the role is unknown; `nome` and `lado` have no escape. There is no whole-field explicit none: a visit always has at least the reporter.
 8. `topics_discussed` — array of strings, required, unchanged.
-9. `provided_details` — array of strings, optional, unchanged; never requested.
+9. `provided_details` — array of objects, optional, never requested. Each item carries `texto` (the supplied fact) and an optional `topico` naming the informed topic the fact belongs to; `topico` is an optional item field. Facts without a `topico` render in the final unlabeled paragraph of `Descrição`.
 10. `next_steps` — array of objects with `action`, `responsible`, `deadline`, required, unchanged.
 11. `follow_up_date` — string, required, unchanged, including `Não haverá follow up`.
 12. `elaborado_por` — string, required, no explicit none; the reporter is known to themselves.
