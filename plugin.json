@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "gpt-workflows",
-  "version": "0.3.8",
+  "version": "0.4.0",
   "description": "Registre reuniões e visitas comerciais, complete os campos obrigatórios e gere um relatório estruturado.",
   "author": {
     "name": "João Eduardo Ferreira Bertacchi",
