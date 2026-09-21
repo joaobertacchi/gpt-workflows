@@ -18,11 +18,14 @@ Você não precisa seguir uma ordem nem preencher um formulário. Fale naturalme
 
 - empresa ou cliente;
 - data da reunião ou visita;
-- pessoas de contato;
+- objetivo da visita;
+- responsável comercial e responsável técnico (ou a declaração de que não houve);
+- participantes, com o lado (cliente ou empresa) e a função de cada um;
 - tipo da reunião ou visita: `corretiva`, `preventiva`, `desenvolvimento` ou `negociação`;
 - assuntos discutidos;
 - próximos passos, com responsável e prazo de cada ação;
-- data para follow up
+- data para follow up; e
+- elaborado por.
 
 ## 3. Use texto ou voz
 
@@ -47,11 +50,11 @@ Caso não existam próximos passos ou não deva haver follow up, informe isso ex
 
 Assim que todas as informações obrigatórias estiverem válidas, o plugin gera automaticamente um relatório com:
 
-- identificação da empresa, data, contatos e tipo da visita;
-- assuntos discutidos;
-- registro detalhado dos fatos fornecidos, reescrito em linguagem profissional sem inventar nenhuma informação;
-- próximos passos, responsáveis e prazos;
-- data para follow up.
+- identificação da empresa, data, tipo, objetivo, responsáveis comercial e técnico, e data para follow up;
+- participantes, com o lado e a função de cada um;
+- descrição dos assuntos discutidos agrupada por assunto, reescrita em linguagem profissional sem inventar nenhuma informação;
+- próximos passos, responsáveis e prazos; e
+- linha de elaborado por.
 
 Revise nomes, datas, responsabilidades e demais informações antes de compartilhar ou registrar o conteúdo no sistema da empresa. Se encontrar algum erro, informe a correção na mesma conversa; o plugin atualizará e gerará novamente o relatório.
 

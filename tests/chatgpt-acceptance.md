@@ -12,11 +12,11 @@ These observations define the regression baseline for version `0.2.0`.
 
 ## Build
 
-- Plugin version: 0.3.8
+- Plugin version: 0.4.0
 - Marketplace: personal
 - Source verification: passed (`python3 scripts/test_flow.py`, 33/33)
-- Installed-cache verification: pending for 0.3.8
-- Auxiliary Codex loading: pending for 0.3.8
+- Installed-cache verification: pending for 0.4.0
+- Auxiliary Codex loading: pending for 0.4.0
 
 ## Local ChatGPT Scenarios
 
@@ -67,13 +67,13 @@ These attempts used the regular Chat surface rather than ChatGPT Work and theref
 
 ## Procedure
 
-Quit and reopen ChatGPT after installing version `0.3.8`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
+Quit and reopen ChatGPT after installing version `0.4.0`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
 
 ### Start checklist
 
 Send `começar` after the selected mention.
 
-Expected: the first response immediately lists company, meeting date, contacts, one of the four valid types, topics, next steps with a responsible person, and follow-up date.
+Expected: the response lists the eleven required collection categories.
 
 ### Complete first turn
 
@@ -129,7 +129,7 @@ Send:
 A reunião da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026.
 ```
 
-Expected: a readable executive topic summary and a `Registro detalhado` section preserve every supplied fact without invention. Attribution and chronology remain intact, and the detailed record is written as polished professional prose: reproducing the user's dictated or typed sentences near-verbatim records `Failed`. The entire message must be exactly the rendered report: no status, no guidance, no code fences. The message copy button copies only the report. The next-steps table must include the `Prazo` column with a calendar date per action. A draft report carries `Pendências de informação` inside the report.
+Expected: a `Descrição` section grouping the supplied facts under their topics as professional prose, the `Participantes` list with side and function, the extended header with objective and both representatives, and the `Elaborado por` signature. Every supplied fact is preserved without invention; reproducing dictated sentences near-verbatim records `Failed`. The entire message must be exactly the rendered report beginning with `# Relatório de Visita`: no status, no guidance, no code fences. The message copy button copies only the report. The next-steps table must include the `Prazo` column with a calendar date per action. A draft report carries `Pendências de informação` inside the report.
 
 Record `Passed` or `Failed` and a conversation identifier, transcript, or screenshot in the table. Preserve the exact unexpected response for any failure.
 

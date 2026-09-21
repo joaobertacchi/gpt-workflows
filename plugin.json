@@ -24,7 +24,7 @@
       "interface": {
         "displayName": "Documentar Reunião",
         "shortDescription": "Documente reuniões comerciais",
-        "longDescription": "Cole ou dite as anotações de uma reunião comercial. O workflow coleta os campos obrigatórios, confirma datas inferidas, pergunta somente o que faltar e gera um relatório estruturado.",
+        "longDescription": "Cole ou dite as anotações de uma reunião comercial. O workflow coleta os campos obrigatórios — incluindo objetivo, responsáveis, participantes e elaborado por —, preserva os detalhes fornecidos, confirma datas inferidas, pergunta somente o que faltar e gera um relatório estruturado.",
         "developerName": "João Eduardo Ferreira Bertacchi",
         "category": "Productivity",
         "capabilities": [],

@@ -25,11 +25,15 @@ O PoC não possui MCP, backend, banco de dados, API externa, CRM, credenciais ou
 
 - empresa (cliente);
 - data da reunião ou visita;
-- pessoa(s) de contato;
 - tipo: `corretiva`, `preventiva`, `desenvolvimento` ou `negociação`;
+- objetivo da visita;
+- responsável comercial;
+- responsável técnico (ou a declaração de que não houve);
+- participantes, com o lado (cliente ou empresa) e a função de cada um;
 - assuntos discutidos;
-- próximos passos, com responsável por cada ação; e
-- data para follow up.
+- próximos passos, com responsável e prazo por cada ação;
+- data para follow up; e
+- elaborado por.
 
 Uma declaração explícita de que não existem próximos passos completa apenas esse campo e é registrada como `Nenhum próximo passo definido`. Uma declaração explícita de que não haverá follow up também é válida e é registrada como `Não haverá follow up`.
 

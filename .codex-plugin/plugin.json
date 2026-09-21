@@ -10,7 +10,7 @@
   "interface": {
     "displayName": "Documentar Reuni\u00e3o",
     "shortDescription": "Documente reuni\u00f5es comerciais",
-    "longDescription": "Cole ou dite as anota\u00e7\u00f5es de uma reuni\u00e3o comercial. O workflow coleta os campos obrigat\u00f3rios, confirma datas inferidas, pergunta somente o que faltar e gera um relat\u00f3rio estruturado.",
+    "longDescription": "Cole ou dite as anota\u00e7\u00f5es de uma reuni\u00e3o comercial. O workflow coleta os campos obrigat\u00f3rios \u2014 incluindo objetivo, respons\u00e1veis, participantes e elaborado por \u2014, preserva os detalhes fornecidos, confirma datas inferidas, pergunta somente o que faltar e gera um relat\u00f3rio estruturado.",
     "developerName": "Jo\u00e3o Eduardo Ferreira Bertacchi",
     "category": "Productivity",
     "capabilities": [],
