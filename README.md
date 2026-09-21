@@ -92,7 +92,7 @@ Antes da submissão pública:
 4. selecione a skill pelo menu `@`; e
 5. envie `começar`.
 
-A primeira resposta deve mostrar imediatamente os sete campos obrigatórios. Os demais cenários estão em `tests/chatgpt-acceptance.md`.
+A primeira resposta deve mostrar imediatamente os onze campos obrigatórios. Os demais cenários estão em `tests/chatgpt-acceptance.md`.
 
 O teste no ChatGPT para Android ocorre somente depois que o plugin estiver publicado no marketplace público e o cliente instalar essa versão pública. Android não faz parte do critério pré-submissão.
 
