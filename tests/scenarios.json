@@ -260,7 +260,7 @@
           "text": "Eu tive a reunião em 13/09/2026, foi uma da tarde, durou aproximadamente uma hora e foi com o Luciano. Falamos sobre automatizar o registro das reuniões e elaborar uma prova de conceito. Eu fiquei de elaborar o protótipo e disponibilizar o plugin; o Luciano vai instalar, testar e dar o retorno.",
           "fields": {
             "meeting_date": "2026-09-13",
-            "participantes": [{"nome": "Luciano", "lado": "cliente", "funcao": "não informada"}],
+            "participantes": [{"nome": "Luciano", "lado": "cliente", "funcao": "função não informada"}],
             "topics_discussed": ["Automatizar o registro das reuniões", "Elaborar uma prova de conceito"],
             "next_steps": [
               {"action": "Elaborar o protótipo e disponibilizar o plugin", "responsible": "eu", "deadline": "2026-09-14"},
@@ -270,7 +270,7 @@
         },
         {
           "text": "Os participantes foram só eu mesmo e o Luciano. Os campos obrigatórios ainda não foram definidos.",
-          "fields": {"participantes": [{"nome": "João", "lado": "empresa", "funcao": "não informada"}, {"nome": "Luciano", "lado": "cliente", "funcao": "não informada"}]}
+          "fields": {"participantes": [{"nome": "João", "lado": "empresa", "funcao": "função não informada"}, {"nome": "Luciano", "lado": "cliente", "funcao": "função não informada"}]}
         }
       ],
       "expectations": [
@@ -1061,7 +1061,7 @@
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["participantes"]}
+        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["participantes"], "outputContains": ["Participantes"], "outputNotContains": ["Empresa (cliente)", "Data da reunião/visita", "Tipo de reunião/visita", "Objetivo da visita", "Responsável comercial", "Responsável técnico", "Assuntos discutidos", "Próximos passos", "Data para follow up", "Elaborado por"]}
       ]
     },
     {
