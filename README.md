@@ -23,19 +23,19 @@ O PoC não possui MCP, backend, banco de dados, API externa, CRM, credenciais ou
 
 ## Campos obrigatórios
 
-- empresa (cliente);
-- data da reunião ou visita;
-- tipo: `corretiva`, `preventiva`, `desenvolvimento` ou `negociação`;
+- cliente;
+- data;
+- natureza da visita: `Comercial`, `Técnica` ou `Técnica Comercial`;
+- tipo de visita: `corretiva`, `preventiva`, `desenvolvimento` ou `negociação`;
 - objetivo da visita;
 - responsável comercial;
 - responsável técnico (ou a declaração de que não houve);
 - participantes, com o lado (cliente ou empresa) e a função de cada um;
 - assuntos discutidos;
-- próximos passos, com responsável e prazo de cada ação;
-- data para follow up; e
+- próximos passos, com responsável e prazo de cada ação; e
 - elaborado por.
 
-Uma declaração explícita de que não existem próximos passos completa apenas esse campo e é registrada como `Nenhum próximo passo definido`. Uma declaração explícita de que não haverá follow up também é válida e é registrada como `Não haverá follow up`.
+Uma declaração explícita de que não existem próximos passos completa apenas esse campo e é registrada como `Nenhum próximo passo definido`.
 
 Datas relativas, como “ontem” ou “sexta que vem”, são interpretadas a partir da data da conversa. O relatório só é considerado completo depois que o usuário confirma ou corrige as datas interpretadas.
 
@@ -104,7 +104,7 @@ Gere o pacote público na raiz do repositório:
 ./scripts/build_public_zip.sh
 ```
 
-O script executa a validação automatizada e cria `dist/documentar-reuniao-0.4.0.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
+O script executa a validação automatizada e cria `dist/documentar-reuniao-0.5.0.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
 
 O relatório é entregue como a mensagem inteira da conversa, renderizado em Markdown, sem orientações ou cercas de código; o botão de cópia da mensagem copia apenas o relatório.
 

@@ -16,15 +16,15 @@ Em uma nova conversa, digite `@` e selecione **Documentar Reunião** e envie. Vo
 
 Você não precisa seguir uma ordem nem preencher um formulário. Fale naturalmente e inclua, quando possível:
 
-- empresa ou cliente;
-- data da reunião ou visita;
+- cliente;
+- data;
+- natureza da visita: `Comercial`, `Técnica` ou `Técnica Comercial`;
+- tipo de visita: `corretiva`, `preventiva`, `desenvolvimento` ou `negociação`;
 - objetivo da visita;
 - responsável comercial e responsável técnico (ou a declaração de que não houve);
 - participantes, com o lado (cliente ou empresa) e a função de cada um;
-- tipo da reunião ou visita: `corretiva`, `preventiva`, `desenvolvimento` ou `negociação`;
 - assuntos discutidos;
-- próximos passos, com responsável e prazo de cada ação;
-- data para follow up; e
+- próximos passos, com responsável e prazo de cada ação; e
 - elaborado por.
 
 ## 3. Use texto ou voz
@@ -33,24 +33,23 @@ Você pode digitar, colar anotações ou usar a entrada de voz disponível no Ch
 
 Exemplo de relato completo:
 
-> Visitei a empresa Acme em 15/09/2026 e conversei com Ana Souza. Foi uma visita de negociação. Discutimos a renovação do contrato e a revisão dos valores. Bruno enviará a proposta revisada até 17/09/2026. Ana analisará a proposta até 19/09/2026. O follow up será em 22/09/2026.
+> Visitei o cliente Acme em 15/09/2026. A natureza foi Comercial e o tipo foi negociação. O objetivo foi renovar o contrato. Bruno foi o responsável comercial e Caio, o responsável técnico. Participaram Ana Souza (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato e a revisão dos valores. Bruno enviará a proposta revisada até 17/09/2026, e Ana analisará a proposta até 19/09/2026. Elaborado por Bruno.
 
 ## 4. Responda somente ao que estiver faltando
 
 Se alguma informação obrigatória estiver ausente ou inválida, o plugin solicitará apenas os campos que ainda precisam ser completados. Você pode responder normalmente, em uma ou mais mensagens.
 
-Se uma data relativa for usada, como “ontem” ou “sexta que vem”, o plugin mostrará a data que interpretou e pedirá sua confirmação antes de gerar o relatório.
+Se uma data relativa for usada para a visita ou para o prazo de uma ação, como “ontem” ou “sexta que vem”, o plugin mostrará a data que interpretou e pedirá sua confirmação antes de gerar o relatório.
 
-Caso não existam próximos passos ou não deva haver follow up, informe isso explicitamente, por exemplo:
+Caso não existam próximos passos, informe isso explicitamente:
 
 - `Não existem próximos passos.`
-- `Não haverá follow up.`
 
 ## 5. Revise e copie o relatório
 
 Assim que todas as informações obrigatórias estiverem válidas, o plugin gera automaticamente um relatório com:
 
-- identificação da empresa, data, tipo, objetivo, responsáveis comercial e técnico, e data para follow up;
+- cliente, data, natureza, tipo, objetivo e responsáveis comercial e técnico;
 - participantes, com o lado e a função de cada um;
 - descrição dos assuntos discutidos agrupada por tópico, reescrita em linguagem profissional sem inventar nenhuma informação;
 - próximos passos, responsáveis e prazos; e

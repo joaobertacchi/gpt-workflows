@@ -21,7 +21,7 @@
 
 ## Release Notes
 
-Version 0.4.0 delivers the report under the heading `Relatório de Visita`: it records the commercial representative, the technical representative, the visit objective, every participant with side and role, and the report author, and uses a single `Descrição` section grouping the facts by topic in professional prose; overridden drafts carry `Pendências de informação` inside the report.
+Version 0.5.0 delivers `Natureza da Visita` with the canonical values `Comercial`, `Técnica` and `Técnica Comercial`, adopts the shorter labels `Cliente`, `Data` and `Tipo de Visita`, and removes the follow-up field from collection and output.
 
 ## Reviewer Data
 
@@ -33,13 +33,13 @@ No credentials or fixture data required.
 
 Prompt: `começar`
 
-Expected behavior: activate the skill and list exactly the eleven required categories.
+Expected behavior: activate the skill and list exactly the eleven required categories, with no follow-up category.
 
 Expected result shape: one concise intake checklist; no report.
 
 ### P2 Complete first turn
 
-Prompt: `Empresa Acme. Visita em 15/09/2026. Tipo negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato. Bruno enviará a proposta revisada até 17/09/2026. O follow up será em 18/09/2026. Elaborado por Bruno.`
+Prompt: `Cliente Acme. Data: 15/09/2026. Natureza: Comercial. Tipo: negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato. Bruno enviará a proposta revisada até 17/09/2026. Elaborado por Bruno.`
 
 Expected behavior: generate immediately without asking for data already supplied.
 
@@ -49,21 +49,21 @@ Expected result shape: complete report block with no `Pendências de informaçã
 
 Prompt: `Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).`
 
-Expected behavior: ask only for visit type, objective, commercial and technical representatives, topics, next steps with responsible people, follow-up date, and report author.
+Expected behavior: ask only for `Natureza da Visita`, `Tipo de Visita`, objective, commercial and technical representatives, topics, next steps with responsible people and deadlines, and report author.
 
 Expected result shape: one missing-field list; no report.
 
 ### P4 Relative dates
 
-Prompt: `Empresa Acme. Reunião ontem com Ana, tipo negociação. Discutimos a renovação. Bruno enviará a proposta. O follow up será sexta que vem.`
+Prompt: `Cliente Acme. Visita ontem. Natureza Comercial. Tipo negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação. Bruno enviará a proposta sexta que vem. Elaborado por Bruno.`
 
-Expected behavior: resolve both relative dates and wait for explicit confirmation.
+Expected behavior: resolve the relative visit date and next-step deadline and wait for explicit confirmation.
 
 Expected result shape: confirmation question showing both calendar dates; no report before confirmation.
 
 ### P5 Detailed fidelity
 
-Prompt: `A visita da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Objetivo: alinhar o registro de reuniões no CRM. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Luciano (cliente) e João (empresa). Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026. Elaborado por João.`
+Prompt: `A visita da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Natureza: Técnica Comercial. Objetivo: alinhar o registro de reuniões no CRM. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Luciano (cliente, operações) e João (empresa, produto). Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026. Elaborado por João.`
 
 Expected behavior: request the missing valid visit type, confirm the interpreted relative date, then preserve every supplied fact and attribution.
 
@@ -73,7 +73,7 @@ Expected result shape: `Descrição` grouped by topic in professional prose, par
 
 ### N1 Invalid visit type
 
-Prompt: `Empresa Acme. Reunião em 15/09/2026. Tipo instalação. Objetivo: revisar o equipamento. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos manutenção. Bruno enviará o orçamento. Follow up em 18/09/2026. Elaborado por Bruno.`
+Prompt: `Cliente Acme. Data: 15/09/2026. Natureza: Técnica. Tipo: instalação. Objetivo: revisar o equipamento. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos manutenção. Bruno enviará o orçamento até 18/09/2026. Elaborado por Bruno.`
 
 Expected behavior: reject `instalação` and ask only for a valid visit type.
 
