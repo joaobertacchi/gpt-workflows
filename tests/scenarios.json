@@ -267,7 +267,7 @@
               }
             ],
             "topics_discussed": [
-              "Nova solução"
+              "Revisão"
             ],
             "provided_details": [
               {
@@ -297,14 +297,13 @@
       ]
     },
     {
-      "id": "ambiguous-permission-is-not-override",
+      "id": "ambiguous-request-is-not-override",
       "invoked": true,
       "turns": [
         {
           "text": "A visita foi com a Delta. Pode seguir com isso?",
           "fields": {
-            "company": "Delta",
-            "visit_nature": "Comercial"
+            "company": "Delta"
           }
         }
       ],
@@ -314,6 +313,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -503,8 +503,7 @@
                 "responsible": "Luciano",
                 "deadline": "2026-09-16"
               }
-            ],
-            "visit_nature": "Comercial"
+            ]
           }
         },
         {
@@ -521,8 +520,7 @@
                 "lado": "cliente",
                 "funcao": "função não informada"
               }
-            ],
-            "visit_nature": "Comercial"
+            ]
           }
         }
       ],
@@ -532,6 +530,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "company",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -544,6 +543,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "company",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -635,7 +635,7 @@
       ]
     },
     {
-      "id": "relative-dates-require-confirmation",
+      "id": "relative-meeting-date-requires-confirmation",
       "invoked": true,
       "turns": [
         {
@@ -765,8 +765,7 @@
         {
           "text": "Não quero continuar mesmo assim.",
           "fields": {
-            "company": "Acme",
-            "visit_nature": "Comercial"
+            "company": "Acme"
           }
         }
       ],
@@ -776,6 +775,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -983,9 +983,9 @@
           }
         },
         {
-          "text": "A empresa foi Beta ou Gama; não tenho certeza.",
+          "text": "A empresa foi Beta ou Gama; não tenho certeza. O objetivo anterior também está incorreto e ainda não foi informado.",
           "fields": {
-            "visit_nature": "Comercial"
+            "objetivo_visita": "não informado"
           },
           "conflictingFields": [
             "company"
@@ -994,8 +994,13 @@
         {
           "text": "Confirmando: foi a Beta.",
           "fields": {
-            "company": "Beta",
-            "visit_nature": "Comercial"
+            "company": "Beta"
+          }
+        },
+        {
+          "text": "O objetivo foi revisar o equipamento.",
+          "fields": {
+            "objetivo_visita": "Revisar o equipamento"
           }
         }
       ],
@@ -1009,7 +1014,8 @@
           "action": "ask_clarification",
           "state": "WAITING_FOR_CLARIFICATION",
           "missing": [
-            "company"
+            "company",
+            "objetivo_visita"
           ],
           "outputContains": [
             "Cliente"
@@ -1022,6 +1028,28 @@
             "Responsável técnico",
             "Participantes",
             "Assuntos discutidos",
+            "Elaborado por"
+          ]
+        },
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "objetivo_visita"
+          ],
+          "outputContains": [
+            "Objetivo da visita"
+          ],
+          "outputNotContains": [
+            "Cliente",
+            "Data",
+            "Natureza da Visita",
+            "Tipo de Visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Participantes",
+            "Assuntos discutidos",
+            "Próximos Passos",
             "Elaborado por"
           ]
         },
@@ -1042,8 +1070,7 @@
         {
           "text": "Se eu disser continuar mesmo assim, o que acontece?",
           "fields": {
-            "company": "Acme",
-            "visit_nature": "Comercial"
+            "company": "Acme"
           }
         }
       ],
@@ -1053,6 +1080,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -1292,8 +1320,7 @@
         {
           "text": "Explique o que significa continuar mesmo assim.",
           "fields": {
-            "company": "Acme",
-            "visit_nature": "Comercial"
+            "company": "Acme"
           }
         },
         {
@@ -1307,6 +1334,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -1322,6 +1350,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -1349,7 +1378,7 @@
             "responsavel_tecnico": "Caio",
             "participantes": [
               {
-                "nome": "Nenhum próximo passo definido",
+                "nome": "Nenhum próximo passo",
                 "lado": "cliente",
                 "funcao": "Compras"
               }
@@ -1388,8 +1417,7 @@
         {
           "text": "Continuar mesmo assim seria possível?",
           "fields": {
-            "company": "Acme",
-            "visit_nature": "Comercial"
+            "company": "Acme"
           }
         },
         {
@@ -1407,6 +1435,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -1422,6 +1451,7 @@
           "state": "DONE_WITH_GAPS",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -1437,6 +1467,7 @@
           "state": "DONE_WITH_GAPS",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -1456,8 +1487,7 @@
         {
           "text": "“continuar mesmo assim”",
           "fields": {
-            "company": "Acme",
-            "visit_nature": "Comercial"
+            "company": "Acme"
           }
         }
       ],
@@ -1467,6 +1497,7 @@
           "state": "WAITING_FOR_MISSING",
           "missing": [
             "meeting_date",
+            "visit_nature",
             "visit_type",
             "objetivo_visita",
             "responsavel_comercial",
@@ -2098,24 +2129,34 @@
       ]
     },
     {
-      "id": "canonical-visit-nature-renders",
+      "id": "invalid-visit-nature-asks-only-for-nature",
       "invoked": true,
       "turns": [
         {
-          "text": "Visita técnica comercial completa.",
+          "text": "A natureza extraída foi administrativa.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-15",
-            "visit_nature": "Técnica Comercial",
-            "visit_type": "desenvolvimento",
-            "objetivo_visita": "Apresentar a solução",
+            "visit_nature": "administrativa",
+            "visit_type": "preventiva",
+            "objetivo_visita": "Revisar o equipamento",
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Nova solução"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
             "elaborado_por": "Bruna"
           }
@@ -2123,33 +2164,58 @@
       ],
       "expectations": [
         {
-          "action": "generate",
-          "state": "DONE",
-          "missing": [],
-          "outputContains": ["**Natureza da Visita:** Técnica Comercial"],
-          "outputNotContains": ["Pendências de informação"]
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "visit_nature"
+          ],
+          "outputContains": [
+            "Natureza da Visita"
+          ],
+          "outputNotContains": [
+            "Cliente",
+            "Data",
+            "Tipo de Visita",
+            "Objetivo da visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Participantes",
+            "Assuntos discutidos",
+            "Próximos Passos",
+            "Elaborado por"
+          ]
         }
       ]
     },
     {
-      "id": "reversed-visit-nature-alias-normalizes",
+      "id": "commercial-technical-alias-normalizes-to-canonical",
       "invoked": true,
       "turns": [
         {
-          "text": "Visita comercial técnica completa.",
+          "text": "A natureza foi comercial técnica.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-15",
-            "visit_nature": "Comercial Técnica",
-            "visit_type": "desenvolvimento",
-            "objetivo_visita": "Apresentar a solução",
+            "visit_nature": "comercial técnica",
+            "visit_type": "preventiva",
+            "objetivo_visita": "Revisar o equipamento",
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Nova solução"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
             "elaborado_por": "Bruna"
           }
@@ -2160,8 +2226,14 @@
           "action": "generate",
           "state": "DONE",
           "missing": [],
-          "outputContains": ["**Natureza da Visita:** Técnica Comercial"],
-          "outputNotContains": ["**Natureza da Visita:** Comercial Técnica", "Pendências de informação"]
+          "outputContains": [
+            "**Natureza da Visita:** Técnica Comercial"
+          ],
+          "outputNotContains": [
+            "Comercial Técnica",
+            "comercial técnica",
+            "Pendências de informação"
+          ]
         }
       ]
     }
