@@ -103,7 +103,10 @@ def contains_explicit_negative(value: Any) -> bool:
 
 def merge_record(record: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
     merged = dict(record)
+    field_ids = {field["id"] for field in FIELD_SCHEMA["fields"]}
     for field_id, value in incoming.items():
+        if field_id not in field_ids:
+            continue
         merged[field_id] = canonicalize_field_value(field_id, value)
     return merged
 
@@ -778,6 +781,8 @@ def check_packaging() -> None:
         raise AssertionError("visit_nature must normalize the reversed alias")
     if any(field["id"] == "follow_up_date" for field in FIELD_SCHEMA["fields"]):
         raise AssertionError("follow_up_date must be removed from the schema")
+    if merge_record({}, {"follow_up_date": "2026-09-30"}):
+        raise AssertionError("removed fields must not enter the active record")
 
     participantes_field = next(
         field for field in FIELD_SCHEMA["fields"] if field["id"] == "participantes"
@@ -1013,6 +1018,8 @@ OVERRIDE_PHRASES = [normalize(value) for value in VALIDATION_RULES["explicitOver
 def main() -> int:
     check_packaging()
     scenarios = load_json("tests/scenarios.json")["cases"]
+    if len(scenarios) != 41:
+        raise AssertionError(f"expected 41 scenarios, found {len(scenarios)}")
     failures: list[str] = []
     for case in scenarios:
         actual = simulate(case)

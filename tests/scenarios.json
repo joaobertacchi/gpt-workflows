@@ -2192,11 +2192,11 @@
       "invoked": true,
       "turns": [
         {
-          "text": "A natureza foi comercial técnica.",
+          "text": "A natureza foi COMERCIAL TECNICA.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-15",
-            "visit_nature": "comercial técnica",
+            "visit_nature": "COMERCIAL TECNICA",
             "visit_type": "preventiva",
             "objetivo_visita": "Revisar o equipamento",
             "responsavel_comercial": "Bruna",
@@ -2230,6 +2230,7 @@
             "**Natureza da Visita:** Técnica Comercial"
           ],
           "outputNotContains": [
+            "COMERCIAL TECNICA",
             "Comercial Técnica",
             "comercial técnica",
             "Pendências de informação"

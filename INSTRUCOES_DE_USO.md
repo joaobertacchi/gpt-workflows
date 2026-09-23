@@ -21,7 +21,8 @@ Você não precisa seguir uma ordem nem preencher um formulário. Fale naturalme
 - natureza da visita: `Comercial`, `Técnica` ou `Técnica Comercial`;
 - tipo de visita: `corretiva`, `preventiva`, `desenvolvimento` ou `negociação`;
 - objetivo da visita;
-- responsável comercial e responsável técnico (ou a declaração de que não houve);
+- responsável comercial;
+- responsável técnico (ou a declaração de que não houve);
 - participantes, com o lado (cliente ou empresa) e a função de cada um;
 - assuntos discutidos;
 - próximos passos, com responsável e prazo de cada ação; e
