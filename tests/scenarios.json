@@ -11,7 +11,21 @@
           "action": "send_intake",
           "state": "INTAKE",
           "missing": [],
-          "outputContains": ["empresa (cliente)", "data da reunião/visita", "objetivo da visita", "responsável comercial", "responsável técnico", "participantes", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável e o prazo de cada ação", "data para follow up", "elaborado por"]
+          "outputContains": [
+            "cliente",
+            "data",
+            "natureza da visita",
+            "comercial, técnica ou técnica comercial",
+            "tipo de visita",
+            "objetivo da visita",
+            "responsável comercial",
+            "responsável técnico",
+            "participantes",
+            "corretiva, preventiva, desenvolvimento ou negociação",
+            "assuntos discutidos",
+            "responsável e o prazo de cada ação",
+            "elaborado por"
+          ]
         }
       ]
     },
@@ -29,7 +43,21 @@
           "action": "send_intake",
           "state": "INTAKE",
           "missing": [],
-          "outputContains": ["empresa (cliente)", "data da reunião/visita", "objetivo da visita", "responsável comercial", "responsável técnico", "participantes", "corretiva, preventiva, desenvolvimento ou negociação", "assuntos discutidos", "responsável e o prazo de cada ação", "data para follow up", "elaborado por"]
+          "outputContains": [
+            "cliente",
+            "data",
+            "natureza da visita",
+            "comercial, técnica ou técnica comercial",
+            "tipo de visita",
+            "objetivo da visita",
+            "responsável comercial",
+            "responsável técnico",
+            "participantes",
+            "corretiva, preventiva, desenvolvimento ou negociação",
+            "assuntos discutidos",
+            "responsável e o prazo de cada ação",
+            "elaborado por"
+          ]
         }
       ]
     },
@@ -38,7 +66,7 @@
       "activation": "explicit_mention",
       "turns": [
         {
-          "text": "@Documentar Reunião Empresa Acme, reunião em 10/09/2026 com Ana, tipo negociação. Discutimos a renovação do contrato. Bruno enviará a proposta e o follow up será em 16/09/2026.",
+          "text": "@Documentar Reunião Empresa Acme, reunião em 10/09/2026 com Ana, tipo negociação. Discutimos a renovação do contrato. Bruno enviará a proposta em 12/09/2026.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-10",
@@ -47,18 +75,41 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Renovação do contrato"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-12"}],
-            "follow_up_date": "2026-09-16",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Renovação do contrato"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno",
+                "deadline": "2026-09-12"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "generate", "state": "DONE", "missing": [], "outputNotContains": ["Pendências de informação"]}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputNotContains": [
+            "Pendências de informação"
+          ]
+        }
       ]
     },
     {
@@ -66,7 +117,7 @@
       "invoked": true,
       "turns": [
         {
-          "text": "Use relatorio-reuniao. Empresa Acme, reunião em 10/09/2026 com Ana, tipo negociação. Discutimos a renovação do contrato e o escopo comercial. Bruno enviará a proposta revisada e o follow up será em 16/09/2026.",
+          "text": "Use relatorio-reuniao. Empresa Acme, reunião em 10/09/2026 com Ana, tipo negociação. Discutimos a renovação do contrato e o escopo comercial. Bruno enviará a proposta revisada em 12/09/2026.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-10",
@@ -75,18 +126,49 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Renovação do contrato", "Escopo comercial"],
-            "next_steps": [{"action": "Enviar proposta revisada", "responsible": "Bruno", "deadline": "2026-09-12"}],
-            "follow_up_date": "2026-09-16",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Renovação do contrato",
+              "Escopo comercial"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta revisada",
+                "responsible": "Bruno",
+                "deadline": "2026-09-12"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "generate", "state": "DONE", "missing": [], "outputContains": ["## Descrição", "- Ana — Cliente — Compras", "- Bruna — Empresa — Comercial", "**Elaborado por:** Bruna"], "outputNotContains": ["Pendências de informação", "## Registro detalhado"]}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputContains": [
+            "## Descrição",
+            "- Ana — Cliente — Compras",
+            "- Bruna — Empresa — Comercial",
+            "**Elaborado por:** Bruna"
+          ],
+          "outputNotContains": [
+            "Pendências de informação",
+            "## Registro detalhado"
+          ]
+        }
       ]
     },
     {
@@ -103,18 +185,35 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Carla", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Carla",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Processo atual"],
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Processo atual"
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         },
         {
-          "text": "Os próximos passos são preparar a demonstração com a Carla como responsável; o follow up será em 2026-09-18.",
+          "text": "O próximo passo é preparar a demonstração até 2026-09-17, com Carla como responsável.",
           "fields": {
-            "next_steps": [{"action": "Preparar demonstração", "responsible": "Carla", "deadline": "2026-09-17"}],
-            "follow_up_date": "2026-09-18"
+            "next_steps": [
+              {
+                "action": "Preparar demonstração",
+                "responsible": "Carla",
+                "deadline": "2026-09-17"
+              }
+            ],
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -122,11 +221,29 @@
         {
           "action": "ask_missing",
           "state": "WAITING_FOR_MISSING",
-          "missing": ["next_steps", "follow_up_date"],
-          "outputContains": ["Próximos passos", "Data para follow up"],
-          "outputNotContains": ["Empresa (cliente)", "Data da reunião/visita", "Tipo de reunião/visita", "Objetivo da visita", "Responsável comercial", "Responsável técnico", "Participantes", "Assuntos discutidos", "Elaborado por"]
+          "missing": [
+            "next_steps"
+          ],
+          "outputContains": [
+            "Próximos Passos"
+          ],
+          "outputNotContains": [
+            "Cliente",
+            "Data",
+            "Tipo de Visita",
+            "Objetivo da visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Participantes",
+            "Assuntos discutidos",
+            "Elaborado por"
+          ]
         },
-        {"action": "generate", "state": "DONE", "missing": []}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        }
       ]
     },
     {
@@ -143,11 +260,23 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Diego", "lado": "cliente", "funcao": "Diretoria"}
+              {
+                "nome": "Diego",
+                "lado": "cliente",
+                "funcao": "Diretoria"
+              }
             ],
-            "topics_discussed": ["Nova solução"],
-            "provided_details": [{"topico": "Nova solução", "texto": "Diego explicou que a solução atual exige retrabalho manual."}],
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Nova solução"
+            ],
+            "provided_details": [
+              {
+                "topico": "Nova solução",
+                "texto": "Diego explicou que a solução atual exige retrabalho manual."
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -155,24 +284,46 @@
         {
           "action": "generate",
           "state": "DONE_WITH_GAPS",
-          "missing": ["next_steps", "follow_up_date"],
-          "outputContains": ["Pendências de informação", "Próximos passos", "Data para follow up", "## Descrição", "retrabalho manual"]
+          "missing": [
+            "next_steps"
+          ],
+          "outputContains": [
+            "Pendências de informação",
+            "Próximos Passos",
+            "## Descrição",
+            "retrabalho manual"
+          ]
         }
       ]
     },
     {
-      "id": "ambiguous-follow-up-is-not-override",
+      "id": "ambiguous-permission-is-not-override",
       "invoked": true,
       "turns": [
         {
           "text": "A visita foi com a Delta. Pode seguir com isso?",
           "fields": {
-            "company": "Delta"
+            "company": "Delta",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -189,22 +340,47 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Eva", "lado": "cliente", "funcao": "Manutenção"}
+              {
+                "nome": "Eva",
+                "lado": "cliente",
+                "funcao": "Manutenção"
+              }
             ],
-            "topics_discussed": ["Manutenção"],
-            "next_steps": [{"action": "Enviar instruções", "responsible": "Eva", "deadline": "2026-09-18"}],
-            "follow_up_date": "2026-09-20",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Manutenção"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar instruções",
+                "responsible": "Eva",
+                "deadline": "2026-09-18"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         },
         {
           "text": "Corrigindo: o tipo de visita foi corretiva.",
-          "fields": {"visit_type": "corretiva"}
+          "fields": {
+            "visit_type": "corretiva",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["visit_type"]},
-        {"action": "generate", "state": "DONE", "missing": []}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "visit_type"
+          ]
+        },
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        }
       ]
     },
     {
@@ -220,23 +396,52 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão do equipamento"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-18"}],
-            "follow_up_date": "2026-09-22",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Revisão do equipamento"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno",
+                "deadline": "2026-09-18"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         },
         {
           "text": "O tipo de reunião/visita foi preventiva.",
-          "fields": {"visit_type": "preventiva"}
+          "fields": {
+            "visit_type": "preventiva",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["visit_type"]},
-        {"action": "generate", "state": "DONE", "missing": []}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "visit_type"
+          ]
+        },
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        }
       ]
     },
     {
@@ -249,7 +454,23 @@
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company", "meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "company",
+            "meeting_date",
+            "visit_nature",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -260,22 +481,76 @@
           "text": "Eu tive a reunião em 13/09/2026, foi uma da tarde, durou aproximadamente uma hora e foi com o Luciano. Falamos sobre automatizar o registro das reuniões e elaborar uma prova de conceito. Eu fiquei de elaborar o protótipo e disponibilizar o plugin; o Luciano vai instalar, testar e dar o retorno.",
           "fields": {
             "meeting_date": "2026-09-13",
-            "participantes": [{"nome": "Luciano", "lado": "cliente", "funcao": "função não informada"}],
-            "topics_discussed": ["Automatizar o registro das reuniões", "Elaborar uma prova de conceito"],
+            "participantes": [
+              {
+                "nome": "Luciano",
+                "lado": "cliente",
+                "funcao": "função não informada"
+              }
+            ],
+            "topics_discussed": [
+              "Automatizar o registro das reuniões",
+              "Elaborar uma prova de conceito"
+            ],
             "next_steps": [
-              {"action": "Elaborar o protótipo e disponibilizar o plugin", "responsible": "eu", "deadline": "2026-09-14"},
-              {"action": "Instalar, testar e dar o retorno", "responsible": "Luciano", "deadline": "2026-09-16"}
-            ]
+              {
+                "action": "Elaborar o protótipo e disponibilizar o plugin",
+                "responsible": "eu",
+                "deadline": "2026-09-14"
+              },
+              {
+                "action": "Instalar, testar e dar o retorno",
+                "responsible": "Luciano",
+                "deadline": "2026-09-16"
+              }
+            ],
+            "visit_nature": "Comercial"
           }
         },
         {
           "text": "Os participantes foram só eu mesmo e o Luciano. Os campos obrigatórios ainda não foram definidos.",
-          "fields": {"participantes": [{"nome": "João", "lado": "empresa", "funcao": "função não informada"}, {"nome": "Luciano", "lado": "cliente", "funcao": "função não informada"}]}
+          "fields": {
+            "participantes": [
+              {
+                "nome": "João",
+                "lado": "empresa",
+                "funcao": "função não informada"
+              },
+              {
+                "nome": "Luciano",
+                "lado": "cliente",
+                "funcao": "função não informada"
+              }
+            ],
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "follow_up_date", "elaborado_por"]},
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "company",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "elaborado_por"
+          ]
+        },
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "company",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -292,23 +567,31 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": "Ana",
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["participantes"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "participantes"
+          ]
+        }
       ]
     },
     {
-      "id": "explicit-none-completes-next-steps-and-follow-up",
+      "id": "explicit-none-completes-next-steps",
       "invoked": true,
       "turns": [
         {
-          "text": "Não existem próximos passos e não haverá follow up.",
+          "text": "Não existem próximos passos.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-15",
@@ -317,13 +600,23 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -332,8 +625,12 @@
           "action": "generate",
           "state": "DONE",
           "missing": [],
-          "outputContains": ["Nenhum próximo passo definido", "Não haverá follow up"],
-          "outputNotContains": ["Pendências de informação"]
+          "outputContains": [
+            "Nenhum próximo passo definido"
+          ],
+          "outputNotContains": [
+            "Pendências de informação"
+          ]
         }
       ]
     },
@@ -342,7 +639,7 @@
       "invoked": true,
       "turns": [
         {
-          "text": "A reunião foi ontem e o follow up será sexta que vem.",
+          "text": "A reunião foi ontem.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-14",
@@ -351,25 +648,55 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Falha no equipamento"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-17"}],
-            "follow_up_date": "2026-09-18",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Falha no equipamento"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno",
+                "deadline": "2026-09-17"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           },
-          "inferredDates": ["meeting_date", "follow_up_date"]
+          "inferredDates": [
+            "meeting_date"
+          ]
         },
         {
-          "text": "Confirmo as duas datas.",
+          "text": "Confirmo a data.",
           "fields": {},
-          "confirmedDates": ["meeting_date", "follow_up_date"]
+          "confirmedDates": [
+            "meeting_date"
+          ]
         }
       ],
       "expectations": [
-        {"action": "confirm_dates", "state": "WAITING_FOR_CONFIRMATION", "missing": ["meeting_date", "follow_up_date"]},
-        {"action": "generate", "state": "DONE", "missing": []}
+        {
+          "action": "confirm_dates",
+          "state": "WAITING_FOR_CONFIRMATION",
+          "missing": [
+            "meeting_date"
+          ]
+        },
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        }
       ]
     },
     {
@@ -386,24 +713,49 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Contrato"],
+            "topics_discussed": [
+              "Contrato"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           },
-          "inferredDates": ["meeting_date"]
+          "inferredDates": [
+            "meeting_date"
+          ]
         },
         {
           "text": "Não. A data correta foi 13/09/2026.",
-          "fields": {"meeting_date": "2026-09-13"}
+          "fields": {
+            "meeting_date": "2026-09-13",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "confirm_dates", "state": "WAITING_FOR_CONFIRMATION", "missing": ["meeting_date"]},
-        {"action": "generate", "state": "DONE", "missing": []}
+        {
+          "action": "confirm_dates",
+          "state": "WAITING_FOR_CONFIRMATION",
+          "missing": [
+            "meeting_date"
+          ]
+        },
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        }
       ]
     },
     {
@@ -412,11 +764,28 @@
       "turns": [
         {
           "text": "Não quero continuar mesmo assim.",
-          "fields": {"company": "Acme"}
+          "fields": {
+            "company": "Acme",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -433,13 +802,23 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -447,9 +826,21 @@
         {
           "action": "ask_missing",
           "state": "WAITING_FOR_MISSING",
-          "missing": ["meeting_date"],
-          "outputContains": ["Data da reunião/visita"],
-          "outputNotContains": ["Empresa (cliente)", "Participantes", "Assuntos discutidos", "Objetivo da visita", "Responsável comercial", "Responsável técnico", "Elaborado por"]
+          "missing": [
+            "meeting_date"
+          ],
+          "outputContains": [
+            "Data"
+          ],
+          "outputNotContains": [
+            "Cliente",
+            "Participantes",
+            "Assuntos discutidos",
+            "Objetivo da visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Elaborado por"
+          ]
         }
       ]
     },
@@ -467,18 +858,39 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
-            "next_steps": [{"action": 123, "responsible": 456}],
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Revisão"
+            ],
+            "next_steps": [
+              {
+                "action": 123,
+                "responsible": 456
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["next_steps"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "next_steps"
+          ]
+        }
       ]
     },
     {
@@ -495,23 +907,46 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         },
         {
           "text": "Correção: os participantes anteriores estão incorretos e ainda não foram informados.",
-          "fields": {"participantes": "não informado"}
+          "fields": {
+            "participantes": "não informado",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "generate", "state": "DONE", "missing": []},
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["participantes"]}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        },
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "participantes"
+          ]
+        }
       ]
     },
     {
@@ -528,40 +963,76 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         },
         {
-          "text": "A empresa foi Beta ou Gama; não tenho certeza. A data de follow up anterior também está incorreta e ainda não foi informada.",
-          "fields": {"follow_up_date": "não informado"},
-          "conflictingFields": ["company"]
+          "text": "A empresa foi Beta ou Gama; não tenho certeza.",
+          "fields": {
+            "visit_nature": "Comercial"
+          },
+          "conflictingFields": [
+            "company"
+          ]
         },
         {
           "text": "Confirmando: foi a Beta.",
-          "fields": {"company": "Beta"}
-        },
-        {
-          "text": "Não haverá follow up.",
-          "fields": {"follow_up_date": "Não haverá follow up"}
+          "fields": {
+            "company": "Beta",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "generate", "state": "DONE", "missing": []},
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        },
         {
           "action": "ask_clarification",
           "state": "WAITING_FOR_CLARIFICATION",
-          "missing": ["company", "follow_up_date"],
-          "outputContains": ["Empresa (cliente)"],
-          "outputNotContains": ["Data da reunião/visita", "Tipo de reunião/visita", "Objetivo da visita", "Responsável comercial", "Responsável técnico", "Participantes", "Assuntos discutidos", "Data para follow up", "Elaborado por"]
+          "missing": [
+            "company"
+          ],
+          "outputContains": [
+            "Cliente"
+          ],
+          "outputNotContains": [
+            "Data",
+            "Tipo de Visita",
+            "Objetivo da visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Participantes",
+            "Assuntos discutidos",
+            "Elaborado por"
+          ]
         },
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["follow_up_date"]},
-        {"action": "generate", "state": "DONE", "missing": [], "outputContains": ["Beta", "Não haverá follow up"]}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputContains": [
+            "Beta"
+          ]
+        }
       ]
     },
     {
@@ -570,11 +1041,28 @@
       "turns": [
         {
           "text": "Se eu disser continuar mesmo assim, o que acontece?",
-          "fields": {"company": "Acme"}
+          "fields": {
+            "company": "Acme",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -591,23 +1079,40 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           },
-          "inferredDates": ["meeting_date"]
+          "inferredDates": [
+            "meeting_date"
+          ]
         }
       ],
       "expectations": [
         {
           "action": "confirm_dates",
           "state": "WAITING_FOR_CONFIRMATION",
-          "missing": ["meeting_date"],
-          "outputContains": ["Data da reunião/visita", "2026-09-14"]
+          "missing": [
+            "meeting_date"
+          ],
+          "outputContains": [
+            "Data",
+            "2026-09-14"
+          ]
         }
       ]
     },
@@ -625,27 +1130,67 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão inicial"],
-            "provided_details": [{"topico": "Revisão inicial", "texto": "Ana relatou que o processo era manual."}],
+            "topics_discussed": [
+              "Revisão inicial"
+            ],
+            "provided_details": [
+              {
+                "topico": "Revisão inicial",
+                "texto": "Ana relatou que o processo era manual."
+              }
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         },
         {
           "text": "Correção: discutimos a renovação.",
           "fields": {
-            "topics_discussed": ["Renovação"],
-            "provided_details": [{"topico": "Renovação", "texto": "Ana esclareceu que o processo já era automatizado."}]
+            "topics_discussed": [
+              "Renovação"
+            ],
+            "provided_details": [
+              {
+                "topico": "Renovação",
+                "texto": "Ana esclareceu que o processo já era automatizado."
+              }
+            ],
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "generate", "state": "DONE", "missing": []},
-        {"action": "generate", "state": "DONE", "missing": [], "outputContains": ["**Renovação**", "processo já era automatizado"], "outputNotContains": ["Revisão inicial", "processo era manual", "Pendências de informação"]}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        },
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputContains": [
+            "**Renovação**",
+            "processo já era automatizado"
+          ],
+          "outputNotContains": [
+            "Revisão inicial",
+            "processo era manual",
+            "Pendências de informação"
+          ]
+        }
       ]
     },
     {
@@ -655,25 +1200,41 @@
         {
           "text": "A empresa não foi informada.",
           "fields": {
-            "company": "Não haverá follow up",
+            "company": "Nenhum próximo passo definido",
             "meeting_date": "2026-09-15",
             "visit_type": "preventiva",
             "objetivo_visita": "Revisar o equipamento",
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["company"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "company"
+          ]
+        }
       ]
     },
     {
@@ -690,18 +1251,38 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
-            "next_steps": [{"action": "Enviar proposta"}],
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Revisão"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["next_steps"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "next_steps"
+          ]
+        }
       ]
     },
     {
@@ -710,7 +1291,10 @@
       "turns": [
         {
           "text": "Explique o que significa continuar mesmo assim.",
-          "fields": {"company": "Acme"}
+          "fields": {
+            "company": "Acme",
+            "visit_nature": "Comercial"
+          }
         },
         {
           "text": "Talvez continuar mesmo assim.",
@@ -718,8 +1302,36 @@
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]},
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        },
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -735,16 +1347,38 @@
             "objetivo_visita": "Revisar o equipamento",
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
-            "participantes": [{"nome": "Não haverá follow up", "lado": "cliente", "funcao": "Compras"}],
-            "topics_discussed": ["Nenhum próximo passo"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Sem follow up", "deadline": "2026-09-18"}],
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "participantes": [
+              {
+                "nome": "Nenhum próximo passo definido",
+                "lado": "cliente",
+                "funcao": "Compras"
+              }
+            ],
+            "topics_discussed": [
+              "Nenhum próximo passo"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Nenhum próximo passo",
+                "deadline": "2026-09-18"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["participantes", "topics_discussed", "next_steps"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "participantes",
+            "topics_discussed",
+            "next_steps"
+          ]
+        }
       ]
     },
     {
@@ -753,7 +1387,10 @@
       "turns": [
         {
           "text": "Continuar mesmo assim seria possível?",
-          "fields": {"company": "Acme"}
+          "fields": {
+            "company": "Acme",
+            "visit_nature": "Comercial"
+          }
         },
         {
           "text": "Sim continuar mesmo assim.",
@@ -765,9 +1402,51 @@
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]},
-        {"action": "generate", "state": "DONE_WITH_GAPS", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]},
-        {"action": "generate", "state": "DONE_WITH_GAPS", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        },
+        {
+          "action": "generate",
+          "state": "DONE_WITH_GAPS",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        },
+        {
+          "action": "generate",
+          "state": "DONE_WITH_GAPS",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -776,11 +1455,28 @@
       "turns": [
         {
           "text": "“continuar mesmo assim”",
-          "fields": {"company": "Acme"}
+          "fields": {
+            "company": "Acme",
+            "visit_nature": "Comercial"
+          }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["meeting_date", "visit_type", "objetivo_visita", "responsavel_comercial", "responsavel_tecnico", "participantes", "topics_discussed", "next_steps", "follow_up_date", "elaborado_por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "meeting_date",
+            "visit_type",
+            "objetivo_visita",
+            "responsavel_comercial",
+            "responsavel_tecnico",
+            "participantes",
+            "topics_discussed",
+            "next_steps",
+            "elaborado_por"
+          ]
+        }
       ]
     },
     {
@@ -797,23 +1493,57 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Luciano", "lado": "cliente", "funcao": "não informada"},
-              {"nome": "João", "lado": "empresa", "funcao": "Projetos"}
+              {
+                "nome": "Luciano",
+                "lado": "cliente",
+                "funcao": "não informada"
+              },
+              {
+                "nome": "João",
+                "lado": "empresa",
+                "funcao": "Projetos"
+              }
             ],
-            "topics_discussed": ["Adoção do registro de reuniões no CRM", "Alternativas ao WhatsApp", "Plugin público para ChatGPT"],
+            "topics_discussed": [
+              "Adoção do registro de reuniões no CRM",
+              "Alternativas ao WhatsApp",
+              "Plugin público para ChatGPT"
+            ],
             "provided_details": [
-              {"topico": "Adoção do registro de reuniões no CRM", "texto": "A reunião ocorreu às 13h e durou aproximadamente uma hora."},
-              {"topico": "Adoção do registro de reuniões no CRM", "texto": "Luciano relatou que o time de vendas deveria registrar reuniões com clientes, mas não vem fazendo isso de forma consistente, e os registros deveriam estar entrando no CRM."},
-              {"topico": "Alternativas ao WhatsApp", "texto": "Durante a conversa, Luciano avaliou uma solução baseada em WhatsApp e pediu alternativas melhores."},
-              {"topico": "Plugin público para ChatGPT", "texto": "Foi proposto um plugin público para ChatGPT que Luciano e o time dele poderão instalar."},
-              {"texto": "Os requisitos foram recebidos na segunda-feira, antes da preparação da prova de conceito, e o teste será realizado em dispositivos móveis."}
+              {
+                "topico": "Adoção do registro de reuniões no CRM",
+                "texto": "A reunião ocorreu às 13h e durou aproximadamente uma hora."
+              },
+              {
+                "topico": "Adoção do registro de reuniões no CRM",
+                "texto": "Luciano relatou que o time de vendas deveria registrar reuniões com clientes, mas não vem fazendo isso de forma consistente, e os registros deveriam estar entrando no CRM."
+              },
+              {
+                "topico": "Alternativas ao WhatsApp",
+                "texto": "Durante a conversa, Luciano avaliou uma solução baseada em WhatsApp e pediu alternativas melhores."
+              },
+              {
+                "topico": "Plugin público para ChatGPT",
+                "texto": "Foi proposto um plugin público para ChatGPT que Luciano e o time dele poderão instalar."
+              },
+              {
+                "texto": "Os requisitos foram recebidos na segunda-feira, antes da preparação da prova de conceito, e o teste será realizado em dispositivos móveis."
+              }
             ],
             "next_steps": [
-              {"action": "Preparar e enviar a prova de conceito até o fim do dia", "responsible": "João", "deadline": "2026-09-13"},
-              {"action": "Instalar, testar em dispositivos móveis e enviar retorno até 17/09/2026", "responsible": "Luciano", "deadline": "2026-09-17"}
+              {
+                "action": "Preparar e enviar a prova de conceito até o fim do dia",
+                "responsible": "João",
+                "deadline": "2026-09-13"
+              },
+              {
+                "action": "Instalar, testar em dispositivos móveis e enviar retorno até 17/09/2026",
+                "responsible": "Luciano",
+                "deadline": "2026-09-17"
+              }
             ],
-            "follow_up_date": "2026-09-17",
-            "elaborado_por": "João"
+            "elaborado_por": "João",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -822,7 +1552,22 @@
           "action": "generate",
           "state": "DONE",
           "missing": [],
-          "outputContains": ["## Descrição", "**Adoção do registro de reuniões no CRM**", "**Alternativas ao WhatsApp**", "**Plugin público para ChatGPT**", "13h", "aproximadamente uma hora", "Luciano relatou", "CRM", "WhatsApp", "plugin público", "segunda-feira", "dispositivos móveis", "fim do dia", "17/09/2026"]
+          "outputContains": [
+            "## Descrição",
+            "**Adoção do registro de reuniões no CRM**",
+            "**Alternativas ao WhatsApp**",
+            "**Plugin público para ChatGPT**",
+            "13h",
+            "aproximadamente uma hora",
+            "Luciano relatou",
+            "CRM",
+            "WhatsApp",
+            "plugin público",
+            "segunda-feira",
+            "dispositivos móveis",
+            "fim do dia",
+            "17/09/2026"
+          ]
         }
       ]
     },
@@ -840,19 +1585,41 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Revisão"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         },
         {
           "text": "O prazo do passo é 18/09/2026.",
           "fields": {
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-18"}]
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno",
+                "deadline": "2026-09-18"
+              }
+            ],
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -860,11 +1627,29 @@
         {
           "action": "ask_missing",
           "state": "WAITING_FOR_MISSING",
-          "missing": ["next_steps"],
-          "outputContains": ["Próximos passos"],
-          "outputNotContains": ["Empresa (cliente)", "Data da reunião/visita", "Tipo de reunião/visita", "Objetivo da visita", "Responsável comercial", "Responsável técnico", "Participantes", "Assuntos discutidos", "Data para follow up", "Elaborado por"]
+          "missing": [
+            "next_steps"
+          ],
+          "outputContains": [
+            "Próximos Passos"
+          ],
+          "outputNotContains": [
+            "Cliente",
+            "Data",
+            "Tipo de Visita",
+            "Objetivo da visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Participantes",
+            "Assuntos discutidos",
+            "Elaborado por"
+          ]
         },
-        {"action": "generate", "state": "DONE", "missing": []}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        }
       ]
     },
     {
@@ -881,30 +1666,59 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno", "deadline": "2026-09-18"}],
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Revisão"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno",
+                "deadline": "2026-09-18"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           },
-          "inferredNextStepDeadlines": [0]
+          "inferredNextStepDeadlines": [
+            0
+          ]
         },
         {
           "text": "Confirmo o prazo do passo.",
           "fields": {},
-          "confirmedNextStepDeadlines": [0]
+          "confirmedNextStepDeadlines": [
+            0
+          ]
         }
       ],
       "expectations": [
         {
           "action": "confirm_dates",
           "state": "WAITING_FOR_CONFIRMATION",
-          "missing": ["next_steps"],
-          "outputContains": ["Próximos passos", "2026-09-18"]
+          "missing": [
+            "next_steps"
+          ],
+          "outputContains": [
+            "Próximos Passos",
+            "2026-09-18"
+          ]
         },
-        {"action": "generate", "state": "DONE", "missing": []}
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": []
+        }
       ]
     },
     {
@@ -921,13 +1735,28 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
-            "next_steps": [{"action": "Enviar proposta", "responsible": "Bruno"}],
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "topics_discussed": [
+              "Revisão"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno"
+              }
+            ],
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -935,8 +1764,14 @@
         {
           "action": "generate",
           "state": "DONE_WITH_GAPS",
-          "missing": ["next_steps"],
-          "outputContains": ["| Ação | Responsável | Prazo |", "Não informado", "Pendências de informação"]
+          "missing": [
+            "next_steps"
+          ],
+          "outputContains": [
+            "| Ação | Responsável | Prazo |",
+            "Não informado",
+            "Pendências de informação"
+          ]
         }
       ]
     },
@@ -954,13 +1789,23 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Não houve responsável técnico",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Contrato"],
+            "topics_discussed": [
+              "Contrato"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -969,8 +1814,12 @@
           "action": "generate",
           "state": "DONE",
           "missing": [],
-          "outputContains": ["Não houve responsável técnico"],
-          "outputNotContains": ["Pendências de informação"]
+          "outputContains": [
+            "Não houve responsável técnico"
+          ],
+          "outputNotContains": [
+            "Pendências de informação"
+          ]
         }
       ]
     },
@@ -988,13 +1837,23 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "função não informada"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "função não informada"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Revisão"],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -1003,8 +1862,12 @@
           "action": "generate",
           "state": "DONE",
           "missing": [],
-          "outputContains": ["- Ana — Cliente — (função não informada)"],
-          "outputNotContains": ["Pendências de informação"]
+          "outputContains": [
+            "- Ana — Cliente — (função não informada)"
+          ],
+          "outputNotContains": [
+            "Pendências de informação"
+          ]
         }
       ]
     },
@@ -1021,11 +1884,18 @@
             "objetivo_visita": "Revisar o equipamento",
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
-            "participantes": [{"nome": "Ana", "funcao": "Compras"}],
-            "topics_discussed": ["Revisão"],
+            "participantes": [
+              {
+                "nome": "Ana",
+                "funcao": "Compras"
+              }
+            ],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -1033,9 +1903,23 @@
         {
           "action": "ask_missing",
           "state": "WAITING_FOR_MISSING",
-          "missing": ["participantes"],
-          "outputContains": ["Participantes"],
-          "outputNotContains": ["Empresa (cliente)", "Data da reunião/visita", "Tipo de reunião/visita", "Objetivo da visita", "Responsável comercial", "Responsável técnico", "Assuntos discutidos", "Próximos passos", "Data para follow up", "Elaborado por"]
+          "missing": [
+            "participantes"
+          ],
+          "outputContains": [
+            "Participantes"
+          ],
+          "outputNotContains": [
+            "Cliente",
+            "Data",
+            "Tipo de Visita",
+            "Objetivo da visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Assuntos discutidos",
+            "Próximos Passos",
+            "Elaborado por"
+          ]
         }
       ]
     },
@@ -1052,16 +1936,44 @@
             "objetivo_visita": "Revisar o equipamento",
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
-            "participantes": [{"nome": "Ana", "lado": "fornecedor", "funcao": "Compras"}],
-            "topics_discussed": ["Revisão"],
+            "participantes": [
+              {
+                "nome": "Ana",
+                "lado": "fornecedor",
+                "funcao": "Compras"
+              }
+            ],
+            "topics_discussed": [
+              "Revisão"
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
       "expectations": [
-        {"action": "ask_missing", "state": "WAITING_FOR_MISSING", "missing": ["participantes"], "outputContains": ["Participantes"], "outputNotContains": ["Empresa (cliente)", "Data da reunião/visita", "Tipo de reunião/visita", "Objetivo da visita", "Responsável comercial", "Responsável técnico", "Assuntos discutidos", "Próximos passos", "Data para follow up", "Elaborado por"]}
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "participantes"
+          ],
+          "outputContains": [
+            "Participantes"
+          ],
+          "outputNotContains": [
+            "Cliente",
+            "Data",
+            "Tipo de Visita",
+            "Objetivo da visita",
+            "Responsável comercial",
+            "Responsável técnico",
+            "Assuntos discutidos",
+            "Próximos Passos",
+            "Elaborado por"
+          ]
+        }
       ]
     },
     {
@@ -1078,18 +1990,37 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "topics_discussed": ["Contrato", "Renovação"],
+            "topics_discussed": [
+              "Contrato",
+              "Renovação"
+            ],
             "provided_details": [
-              {"topico": "Contrato", "texto": "Bruna relatou que o contrato vence em dezembro."},
-              {"topico": "Renovação", "texto": "Ana pediu a revisão dos valores."},
-              {"texto": "A visita durou cerca de uma hora."}
+              {
+                "topico": "Contrato",
+                "texto": "Bruna relatou que o contrato vence em dezembro."
+              },
+              {
+                "topico": "Renovação",
+                "texto": "Ana pediu a revisão dos valores."
+              },
+              {
+                "texto": "A visita durou cerca de uma hora."
+              }
             ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -1098,8 +2029,19 @@
           "action": "generate",
           "state": "DONE",
           "missing": [],
-          "outputContains": ["## Descrição", "**Contrato**", "contrato vence em dezembro", "**Renovação**", "revisão dos valores", "A visita durou cerca de uma hora", "**Elaborado por:** Bruna"],
-          "outputNotContains": ["## Assuntos discutidos", "## Registro detalhado"]
+          "outputContains": [
+            "## Descrição",
+            "**Contrato**",
+            "contrato vence em dezembro",
+            "**Renovação**",
+            "revisão dos valores",
+            "A visita durou cerca de uma hora",
+            "**Elaborado por:** Bruna"
+          ],
+          "outputNotContains": [
+            "## Assuntos discutidos",
+            "## Registro detalhado"
+          ]
         }
       ]
     },
@@ -1117,13 +2059,25 @@
             "responsavel_comercial": "Bruna",
             "responsavel_tecnico": "Caio",
             "participantes": [
-              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
-              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
             ],
-            "provided_details": [{"texto": "A visita durou cerca de uma hora."}],
+            "provided_details": [
+              {
+                "texto": "A visita durou cerca de uma hora."
+              }
+            ],
             "next_steps": "Nenhum próximo passo definido",
-            "follow_up_date": "Não haverá follow up",
-            "elaborado_por": "Bruna"
+            "elaborado_por": "Bruna",
+            "visit_nature": "Comercial"
           }
         }
       ],
@@ -1131,8 +2085,83 @@
         {
           "action": "generate",
           "state": "DONE_WITH_GAPS",
-          "missing": ["topics_discussed"],
-          "outputContains": ["## Descrição", "A visita durou cerca de uma hora", "Pendências de informação", "Assuntos discutidos"]
+          "missing": [
+            "topics_discussed"
+          ],
+          "outputContains": [
+            "## Descrição",
+            "A visita durou cerca de uma hora",
+            "Pendências de informação",
+            "Assuntos discutidos"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canonical-visit-nature-renders",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Visita técnica comercial completa.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "visit_nature": "Técnica Comercial",
+            "visit_type": "desenvolvimento",
+            "objetivo_visita": "Apresentar a solução",
+            "responsavel_comercial": "Bruna",
+            "responsavel_tecnico": "Caio",
+            "participantes": [
+              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
+              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+            ],
+            "topics_discussed": ["Nova solução"],
+            "next_steps": "Nenhum próximo passo definido",
+            "elaborado_por": "Bruna"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputContains": ["**Natureza da Visita:** Técnica Comercial"],
+          "outputNotContains": ["Pendências de informação"]
+        }
+      ]
+    },
+    {
+      "id": "reversed-visit-nature-alias-normalizes",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "Visita comercial técnica completa.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "visit_nature": "Comercial Técnica",
+            "visit_type": "desenvolvimento",
+            "objetivo_visita": "Apresentar a solução",
+            "responsavel_comercial": "Bruna",
+            "responsavel_tecnico": "Caio",
+            "participantes": [
+              {"nome": "Ana", "lado": "cliente", "funcao": "Compras"},
+              {"nome": "Bruna", "lado": "empresa", "funcao": "Comercial"}
+            ],
+            "topics_discussed": ["Nova solução"],
+            "next_steps": "Nenhum próximo passo definido",
+            "elaborado_por": "Bruna"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "generate",
+          "state": "DONE",
+          "missing": [],
+          "outputContains": ["**Natureza da Visita:** Técnica Comercial"],
+          "outputNotContains": ["**Natureza da Visita:** Comercial Técnica", "Pendências de informação"]
         }
       ]
     }
