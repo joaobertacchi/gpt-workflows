@@ -55,6 +55,29 @@ def normalize(value: str) -> str:
     return re.sub(r"\s+", " ", value)
 
 
+def canonicalize_field_value(field_id: str, value: Any) -> Any:
+    if not isinstance(value, str):
+        return value
+    field = next(
+        (
+            candidate
+            for candidate in FIELD_SCHEMA["fields"]
+            if candidate["id"] == field_id
+        ),
+        None,
+    )
+    if field is None:
+        return value
+    canonical_values = {
+        normalize(option): option for option in field.get("allowedValues", [])
+    }
+    aliases = VALIDATION_RULES.get("valueAliases", {}).get(field_id, {})
+    canonical_values.update(
+        {normalize(alias): canonical for alias, canonical in aliases.items()}
+    )
+    return canonical_values.get(normalize(value), value)
+
+
 def is_substantive(value: Any, sentinels: set[str]) -> bool:
     if value is None:
         return False
@@ -81,7 +104,7 @@ def contains_explicit_negative(value: Any) -> bool:
 def merge_record(record: dict[str, Any], incoming: dict[str, Any]) -> dict[str, Any]:
     merged = dict(record)
     for field_id, value in incoming.items():
-        merged[field_id] = value
+        merged[field_id] = canonicalize_field_value(field_id, value)
     return merged
 
 
@@ -380,11 +403,11 @@ def render_report(record: dict[str, Any], missing: list[str]) -> str:
     values = {
         "company": value_or_missing("company"),
         "meeting_date": value_or_missing("meeting_date"),
+        "visit_nature": value_or_missing("visit_nature"),
         "visit_type": value_or_missing("visit_type"),
         "objetivo_visita": value_or_missing("objetivo_visita"),
         "responsavel_comercial": value_or_missing("responsavel_comercial"),
         "responsavel_tecnico": value_or_missing("responsavel_tecnico"),
-        "follow_up_date": value_or_missing("follow_up_date"),
         "participantes": render_participants(record, missing),
         "descricao_section": render_description(record, missing),
         "next_steps": render_next_steps(record),
@@ -731,6 +754,7 @@ def check_packaging() -> None:
         "missingSentinels",
         "explicitOverridePhrases",
         "explicitNegativeAnswers",
+        "valueAliases",
     }
     missing_validation_keys = sorted(required_validation_keys - validation_rules.keys())
     if missing_validation_keys:
@@ -738,6 +762,22 @@ def check_packaging() -> None:
             "SKILL.md is missing validation data: "
             + ", ".join(missing_validation_keys)
         )
+
+    nature_field = next(
+        field for field in FIELD_SCHEMA["fields"] if field["id"] == "visit_nature"
+    )
+    if nature_field.get("allowedValues") != [
+        "Comercial",
+        "Técnica",
+        "Técnica Comercial",
+    ]:
+        raise AssertionError("visit_nature must expose the three canonical values")
+    if validation_rules.get("valueAliases", {}).get("visit_nature") != {
+        "comercial técnica": "Técnica Comercial"
+    }:
+        raise AssertionError("visit_nature must normalize the reversed alias")
+    if any(field["id"] == "follow_up_date" for field in FIELD_SCHEMA["fields"]):
+        raise AssertionError("follow_up_date must be removed from the schema")
 
     participantes_field = next(
         field for field in FIELD_SCHEMA["fields"] if field["id"] == "participantes"
@@ -774,12 +814,14 @@ def check_packaging() -> None:
         "generate immediately when all fields are valid",
         "confirm",
         "nenhum próximo passo definido",
-        "não haverá follow up",
         "structured commercial meeting",
         "ontem",
         "time, duration, decisions, success criteria",
         "não houve responsável técnico",
         "função não informada",
+        "comercial técnica",
+        "técnica comercial",
+        "natureza da visita",
         "## descrição",
         "if the user asks to send or save the report",
         "the entire message must be exactly the report",
@@ -825,16 +867,18 @@ def check_packaging() -> None:
 
     intake = extract_skill_section("INTAKE")
     required_intake_labels = (
-        "empresa (cliente)",
-        "data da reunião/visita",
+        "cliente",
+        "data",
+        "natureza da visita",
+        "comercial, técnica ou técnica comercial",
+        "tipo de visita",
+        "corretiva, preventiva, desenvolvimento ou negociação",
         "objetivo da visita",
         "responsável comercial",
         "responsável técnico",
         "participantes",
-        "corretiva, preventiva, desenvolvimento ou negociação",
         "assuntos discutidos",
         "responsável e o prazo de cada ação",
-        "data para follow up",
         "elaborado por",
     )
     missing_intake_labels = [
@@ -844,17 +888,19 @@ def check_packaging() -> None:
         raise AssertionError(
             "intake is missing required content: " + ", ".join(missing_intake_labels)
         )
+    if "follow up" in intake.casefold():
+        raise AssertionError("intake must not request follow up")
 
     partial_example = extract_skill_section("PARTIAL_EXAMPLE")
     required_partial_content = (
         "Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).",
-        "Tipo de reunião/visita",
+        "Natureza da Visita",
+        "Tipo de Visita",
         "Objetivo da visita",
         "Responsável comercial",
         "Responsável técnico",
         "Assuntos discutidos",
-        "Próximos passos, com responsável e prazo de cada ação",
-        "Data para follow up",
+        "Próximos Passos, com responsável e prazo de cada ação",
         "Elaborado por",
         "Do not ask for generic notes",
         "Do not request decisions",
@@ -867,6 +913,8 @@ def check_packaging() -> None:
             "partial example is missing required content: "
             + ", ".join(missing_partial_content)
         )
+    if "Data para follow up" in partial_example or "Tipo de reunião/visita" in partial_example:
+        raise AssertionError("partial example contains obsolete report labels")
 
     detail_example = extract_skill_section("DETAIL_FIDELITY_EXAMPLE")
     required_detail_content = (
@@ -891,11 +939,11 @@ def check_packaging() -> None:
     required_placeholders = (
         "{{company}}",
         "{{meeting_date}}",
+        "{{visit_nature}}",
         "{{visit_type}}",
         "{{objetivo_visita}}",
         "{{responsavel_comercial}}",
         "{{responsavel_tecnico}}",
-        "{{follow_up_date}}",
         "{{participantes}}",
         "{{descricao_section}}",
         "{{next_steps}}",
@@ -909,6 +957,20 @@ def check_packaging() -> None:
             "report template is missing placeholders: "
             + ", ".join(missing_placeholders)
         )
+    if "{{follow_up_date}}" in template:
+        raise AssertionError("report template must not render follow up")
+    required_template_content = (
+        "**Cliente:**",
+        "**Data:**",
+        "**Natureza da Visita:**",
+        "**Tipo de Visita:**",
+        "## Próximos Passos",
+    )
+    template_positions = [template.find(value) for value in required_template_content]
+    if any(position < 0 for position in template_positions) or template_positions != sorted(
+        template_positions
+    ):
+        raise AssertionError("report template labels are missing or out of order")
     if "Pendências de informação" in template:
         raise AssertionError(
             "complete report template must not contain an unconditional pending section"
