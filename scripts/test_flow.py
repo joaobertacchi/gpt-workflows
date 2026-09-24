@@ -262,8 +262,65 @@ def render_intake() -> str:
     return extract_skill_section("INTAKE")
 
 
-def render_field_prompt(field_ids: list[str], clarification: bool = False) -> str:
+def render_field_prompt(
+    field_ids: list[str],
+    clarification: bool = False,
+    record: dict[str, Any] | None = None,
+) -> str:
     labels = {field["id"]: field["label"] for field in FIELD_SCHEMA["fields"]}
+    if not clarification and "next_steps" in field_ids and record:
+        steps = record.get("next_steps")
+        if isinstance(steps, list):
+            next_steps_field = next(
+                field
+                for field in FIELD_SCHEMA["fields"]
+                if field["id"] == "next_steps"
+            )
+            actions_missing_responsible = []
+            actions_missing_deadlines = []
+            needs_generic_next_steps = False
+            for step in steps:
+                if not isinstance(step, dict) or not item_value_is_complete(
+                    next_steps_field, "action", step.get("action")
+                ):
+                    needs_generic_next_steps = True
+                    continue
+                action = step["action"]
+                if not item_value_is_complete(
+                    next_steps_field, "responsible", step.get("responsible")
+                ):
+                    actions_missing_responsible.append(action)
+                if not item_value_is_complete(
+                    next_steps_field, "deadline", step.get("deadline")
+                ):
+                    actions_missing_deadlines.append(action)
+            other_fields = [
+                field_id for field_id in field_ids if field_id != "next_steps"
+            ]
+            if (
+                len(actions_missing_deadlines) == 1
+                and not actions_missing_responsible
+                and not needs_generic_next_steps
+                and not other_fields
+            ):
+                return f'Qual é o prazo da ação "{actions_missing_deadlines[0]}"?'
+            if (
+                actions_missing_responsible
+                or actions_missing_deadlines
+                or needs_generic_next_steps
+            ):
+                requested = [labels[field_id] for field_id in other_fields]
+                if needs_generic_next_steps:
+                    requested.append(labels["next_steps"])
+                requested.extend(
+                    f'Responsável da ação "{action}"'
+                    for action in actions_missing_responsible
+                )
+                requested.extend(
+                    f'Prazo da ação "{action}"'
+                    for action in actions_missing_deadlines
+                )
+                return "Por favor, informe: " + "; ".join(requested) + "."
     prefix = "Preciso esclarecer" if clarification else "Por favor, informe"
     return f"{prefix}: " + "; ".join(labels[field_id] for field_id in field_ids) + "."
 
@@ -563,7 +620,7 @@ def simulate(case: dict[str, Any]) -> list[dict[str, Any]]:
             ]
             output = render_field_prompt(conflicts, clarification=True)
         else:
-            output = render_field_prompt(missing)
+            output = render_field_prompt(missing, record=record)
         results.append(
             {"action": action, "state": state, "missing": missing, "output": output}
         )
@@ -658,7 +715,7 @@ def check_packaging() -> None:
 
     portable_manifest = load_json("plugin.json")
     compat_manifest = load_json(".codex-plugin/plugin.json")
-    expected_version = "0.5.0"
+    expected_version = "0.5.1"
     expected_developer = "João Eduardo Ferreira Bertacchi"
     expected_author_url = "https://github.com/joaobertacchi"
     expected_repository = "https://github.com/joaobertacchi/gpt-workflows"
@@ -783,6 +840,32 @@ def check_packaging() -> None:
         raise AssertionError("follow_up_date must be removed from the schema")
     if merge_record({}, {"follow_up_date": "2026-09-30"}):
         raise AssertionError("removed fields must not enter the active record")
+    nested_deadline_prompt = render_field_prompt(
+        ["visit_nature", "next_steps"],
+        record={
+            "next_steps": [
+                {"action": "Enviar proposta", "responsible": "Bruno"},
+                {
+                    "action": "Revisar contrato",
+                    "responsible": "Ana",
+                    "deadline": "amanhã",
+                },
+                {"action": "Agendar reunião", "deadline": "2026-10-01"},
+            ]
+        },
+    )
+    if any(
+        expected not in nested_deadline_prompt
+        for expected in (
+            "Natureza da Visita",
+            "Enviar proposta",
+            "Revisar contrato",
+            "Responsável da ação \"Agendar reunião\"",
+        )
+    ):
+        raise AssertionError(
+            "missing and invalid next-step deadlines must be requested by action"
+        )
 
     participantes_field = next(
         field for field in FIELD_SCHEMA["fields"] if field["id"] == "participantes"
@@ -833,6 +916,10 @@ def check_packaging() -> None:
         "beginning with `# relatório de visita`",
         "no code fences",
         "the conversation copy button must copy only the report",
+        "final generation gate",
+        "qual é o prazo da ação",
+        "never invent a next step",
+        "without that explicit override",
         "a complete report contains no `pendências de informação` section",
         "responsável e o prazo de cada ação",
         "`ação`, `responsável` and `prazo`",
@@ -848,10 +935,10 @@ def check_packaging() -> None:
         )
 
     submission = (ROOT / "docs/public-submission.md").read_text(encoding="utf-8")
-    if "Version 0.5.0" not in submission:
-        raise AssertionError("submission release notes must name version 0.5.0")
+    if "Version 0.5.1" not in submission:
+        raise AssertionError("submission release notes must name version 0.5.1")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    if "dist/documentar-reuniao-0.5.0.zip" not in readme:
+    if "dist/documentar-reuniao-0.5.1.zip" not in readme:
         raise AssertionError("README must name the current public archive")
     public_docs = {
         "README.md": readme,
@@ -872,7 +959,7 @@ def check_packaging() -> None:
     required_submission_content = (
         "João Eduardo Ferreira Bertacchi",
         "https://github.com/joaobertacchi/gpt-workflows/issues",
-        "Version 0.5.0 delivers",
+        "Version 0.5.1 delivers",
         "Skills only",
         "No credentials or fixture data required",
         f"Short description: {expected_short_description}",

@@ -1607,7 +1607,7 @@
       "invoked": true,
       "turns": [
         {
-          "text": "Bruno enviará a proposta, mas o prazo ainda não foi definido.",
+          "text": "Como próximo passo, a Vinil Arena testará a nova versão do plugin e avaliará as melhorias implementadas.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-15",
@@ -1632,8 +1632,8 @@
             ],
             "next_steps": [
               {
-                "action": "Enviar proposta",
-                "responsible": "Bruno"
+                "action": "Testar a nova versão do plugin e avaliar as melhorias implementadas",
+                "responsible": "Vinil Arena"
               }
             ],
             "elaborado_por": "Bruna",
@@ -1641,13 +1641,13 @@
           }
         },
         {
-          "text": "O prazo do passo é 18/09/2026.",
+          "text": "O prazo dessa ação é 30/09/2026.",
           "fields": {
             "next_steps": [
               {
-                "action": "Enviar proposta",
-                "responsible": "Bruno",
-                "deadline": "2026-09-18"
+                "action": "Testar a nova versão do plugin e avaliar as melhorias implementadas",
+                "responsible": "Vinil Arena",
+                "deadline": "2026-09-30"
               }
             ],
             "visit_nature": "Comercial"
@@ -1662,7 +1662,8 @@
             "next_steps"
           ],
           "outputContains": [
-            "Próximos Passos"
+            "Qual é o prazo",
+            "Testar a nova versão do plugin e avaliar as melhorias implementadas"
           ],
           "outputNotContains": [
             "Cliente",

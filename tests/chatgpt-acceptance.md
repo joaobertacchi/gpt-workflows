@@ -12,11 +12,11 @@ These observations define the regression baseline for version `0.2.0`.
 
 ## Build
 
-- Plugin version: 0.5.0
+- Plugin version: 0.5.1
 - Marketplace: personal
 - Source verification: passed (`python3 scripts/test_flow.py`, 41/41)
-- Installed-cache verification: pending for 0.5.0
-- Auxiliary Codex loading: pending for 0.5.0
+- Installed-cache verification: pending for 0.5.1
+- Auxiliary Codex loading: pending for 0.5.1
 
 ## Local ChatGPT Scenarios
 
@@ -32,6 +32,7 @@ These observations define the regression baseline for version `0.2.0`.
 | Copyable report boundary | Passed | Work screenshots show one report block with no content after it; the user confirmed its copy control copied only the report. |
 | Report-only message | Passed | User-confirmed in chat on 0.3.7: the entire message was exactly the rendered report — no status, no guidance, no code fences; the message copy button copied only the report; behavior described as perfect after install and test. |
 | Next-step deadline column | Passed | User-confirmed in chat on 0.3.6: report generated correctly with the rendered `Prazo` column; relative deadline phrases were confirmed as calendar dates shown in the table; the explicit override generated with `Não informado` in the `Prazo` cell as expected. |
+| Missing next-step deadline | Pending | Retest required on version 0.5.1 after the 0.5.0 regression generated `Não informado` without an override. |
 
 ## Partial-Collection History On 0.3.0
 
@@ -67,7 +68,7 @@ These attempts used the regular Chat surface rather than ChatGPT Work and theref
 
 ## Procedure
 
-Quit and reopen ChatGPT after installing version `0.5.0`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
+Quit and reopen ChatGPT after installing version `0.5.1`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
 
 ### Start checklist
 
@@ -93,13 +94,23 @@ Send:
 Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).
 ```
 
-Expected: the plugin requests only nature, visit type, objective, both representatives, topics, next steps with a responsible person and deadline for each action, and report author for the same Beta-style prompt. After those answers, it generates without asking again for client, date, or participants.
+Expected: the plugin requests only nature, visit type, objective, both representatives, topics, next steps with a responsible party and deadline for each action, and report author for the same Beta-style prompt. After those answers, it generates without asking again for client, date, or participants.
 
 ### Relative-date confirmation
 
 Provide otherwise complete notes using `ontem` for the meeting date and `sexta que vem` for a next-step deadline.
 
 Expected: shows both inferred calendar dates and waits for confirmation or correction before generation.
+
+### Missing next-step deadline
+
+Provide all required report fields and this next step, without a deadline:
+
+```text
+Como próximo passo, Ana testará a nova versão do plugin para a Acme.
+```
+
+Expected: no report is generated. The plugin asks specifically for the deadline of that action. After a valid deadline is supplied, it generates the report. In a separate run, `Não informado` may appear in the deadline cell only after the user affirmatively says `continuar mesmo assim`.
 
 ### Explicit no next steps
 

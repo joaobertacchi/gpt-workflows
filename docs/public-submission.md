@@ -21,7 +21,7 @@
 
 ## Release Notes
 
-Version 0.5.0 delivers `Natureza da Visita` with the canonical values `Comercial`, `Técnica` and `Técnica Comercial`, adopts the shorter labels `Cliente`, `Data` and `Tipo de Visita`, and removes the follow-up field from collection and output.
+Version 0.5.1 delivers a regression fix that blocks report generation when a next-step deadline is missing, asks specifically for that deadline, and renders `Não informado` in a deadline cell only after an explicit incomplete-report override. It retains the `Natureza da Visita` values and shorter labels introduced in version 0.5.0.
 
 ## Reviewer Data
 
@@ -49,7 +49,7 @@ Expected result shape: complete report block with no `Pendências de informaçã
 
 Prompt: `Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).`
 
-Expected behavior: ask only for `Natureza da Visita`, `Tipo de Visita`, objective, commercial and technical representatives, topics, next steps with responsible people and deadlines, and report author.
+Expected behavior: ask only for `Natureza da Visita`, `Tipo de Visita`, objective, commercial and technical representatives, topics, next steps with responsible parties and deadlines, and report author.
 
 Expected result shape: one missing-field list; no report.
 
