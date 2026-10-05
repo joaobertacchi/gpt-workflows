@@ -57,7 +57,7 @@ The report generates automatically only after `follow_up_date` contains either:
 Render the restored field in the header after `Responsável técnico` and before `Participantes`:
 
 ```markdown
-**Responsável técnico:** {{responsavel_tecnico}}  
+**Responsável técnico:** {{responsavel_tecnico}}
 **Data para follow up:** {{follow_up_date}}
 ```
 
