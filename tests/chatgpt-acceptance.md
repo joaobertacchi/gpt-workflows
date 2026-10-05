@@ -15,7 +15,7 @@ These observations define the regression baseline for version `0.2.0`.
 - Plugin version: 0.6.0
 - Marketplace: personal
 - Source verification: passed (`python3 scripts/test_flow.py`, 43/43)
-- Installed-cache verification: pending for 0.6.0
+- Installed-cache verification: passed for 0.6.0 (user-confirmed in chat)
 - Auxiliary Codex loading: pending for 0.6.0
 
 ## Historical Local ChatGPT Evidence
@@ -34,7 +34,8 @@ Rows that name an earlier version preserve regression evidence from that release
 | Copyable report boundary | Passed | Work screenshots show one report block with no content after it; the user confirmed its copy control copied only the report. |
 | Report-only message | Passed | User-confirmed in chat on 0.3.7: the entire message was exactly the rendered report — no status, no guidance, no code fences; the message copy button copied only the report; behavior described as perfect after install and test. |
 | Next-step deadline column | Passed | User-confirmed in chat on 0.3.6: report generated correctly with the rendered `Prazo` column; relative deadline phrases were confirmed as calendar dates shown in the table; the explicit override generated with `Não informado` in the `Prazo` cell as expected. |
-| Missing next-step deadline | Pending | Source harness passes on 0.6.0; installed Work retest remains required after the 0.5.0 regression generated `Não informado` without an override. |
+| Missing next-step deadline | Passed | User-confirmed in chat on 0.6.0; the manual acceptance behaved as expected after the 0.5.0 regression. |
+| Restored follow-up date | Passed | User-confirmed in chat on 0.6.0; the required follow-up behavior worked as expected. |
 
 ## Partial-Collection History On 0.3.0
 

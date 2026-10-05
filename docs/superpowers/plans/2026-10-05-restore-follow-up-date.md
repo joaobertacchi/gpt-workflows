@@ -492,7 +492,7 @@ Expected final verification line: `manifest ok`.
 Run:
 
 ```bash
-unzip -p dist/documentar-reuniao-0.6.0.zip skills/relatorio-reuniao/SKILL.md | python3 -c 'import sys; t=sys.stdin.read(); assert "follow_up_date" in t; assert "Data para follow up" in t; assert "Não haverá follow up" in t; assert "Natureza da Visita" in t; assert "| Ação | Responsável | Prazo |" in t; print("contract ok")'
+unzip -p dist/documentar-reuniao-0.6.0.zip skills/relatorio-reuniao/SKILL.md | python3 -c 'import sys; t=sys.stdin.read(); assert "follow_up_date" in t; assert "Data para follow up" in t; assert "Não haverá follow up" in t; assert "Natureza da Visita" in t; assert "`Ação`, `Responsável` and `Prazo`" in t; print("contract ok")'
 ```
 
 Expected: `contract ok`.
