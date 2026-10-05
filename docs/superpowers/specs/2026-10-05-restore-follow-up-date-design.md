@@ -14,7 +14,7 @@ Action deadlines and the report follow-up date have different meanings:
 - Restore `Data para follow up` as a required report field.
 - Keep `Natureza da Visita` and every current required field.
 - Accept an absolute date or the explicit value `Não haverá follow up`.
-- Confirm relative follow-up dates before report generation.
+- Confirm relative follow-up dates before complete report generation.
 - Render the follow-up date in the report header.
 - Keep every existing next-step deadline rule unchanged.
 
@@ -39,7 +39,9 @@ Restore these explicit negative answers for `follow_up_date`:
 ["não haverá follow up","não será feito follow up","sem follow up"]
 ```
 
-An absent, invalid, conflicting, or unconfirmed follow-up date leaves only `follow_up_date` unresolved when all other fields are complete. The existing explicit override can still generate a draft with `Não informado` and list `Data para follow up` under `Pendências de informação`.
+Each accepted phrase is normalized to the canonical stored and rendered value `Não haverá follow up`. The deterministic fixtures contain this canonical extracted value; natural-language aliases do not require a second stored value.
+
+An absent, invalid, conflicting, or unconfirmed follow-up date leaves only `follow_up_date` unresolved when all other fields are complete. The existing explicit override can still generate a draft with `Não informado` and list `Data para follow up` under `Pendências de informação`. An override never renders an unconfirmed inferred date as confirmed.
 
 ## Intake And Workflow
 
@@ -47,10 +49,14 @@ The intake adds `data para follow up` after next steps and before `elaborado por
 
 Validation follows the existing absolute-date path used by `meeting_date`. A relative follow-up date is resolved from the conversation date, shown as a calendar date, and held for confirmation or correction. The skill must not infer it from an action deadline or any unrelated date.
 
-The report generates automatically only after `follow_up_date` contains either:
+The complete report generates automatically only after `follow_up_date` contains either:
 
 - a valid absolute date; or
 - the explicit value `Não haverá follow up`.
+
+If the date came from a relative expression, it must also be confirmed. The existing explicit override remains the only way to generate while the follow-up date or a next-step deadline is unresolved. In that case, the draft renders `Não informado` for the unresolved value and lists its field under `Pendências de informação`.
+
+Follow-up dates and next-step deadlines are independent. Either may be equal to, earlier than, or later than the other; the workflow applies no chronological relationship between them.
 
 ## Report Format
 
@@ -60,6 +66,8 @@ Render the restored field in the header after `Responsável técnico` and before
 **Responsável técnico:** {{responsavel_tecnico}}
 **Data para follow up:** {{follow_up_date}}
 ```
+
+The rendered template retains the Markdown hard break after the `Responsável técnico` line so both labels display on separate lines.
 
 The `Próximos Passos` table remains unchanged with `Ação`, `Responsável`, and `Prazo` columns.
 
@@ -79,12 +87,15 @@ The deterministic harness must verify:
 
 1. A complete report renders `Data para follow up` with an absolute date.
 2. A missing follow-up date blocks generation and requests only that field when nothing else is unresolved.
-3. `Não haverá follow up` completes only `follow_up_date`.
-4. A relative follow-up date requires confirmation and then renders the confirmed calendar date.
-5. An explicit override renders `Não informado` and lists `Data para follow up` as pending.
-6. A correction replaces the prior follow-up value and regenerates the report.
-7. Next-step deadlines remain independently required and are never reused as the follow-up date.
-8. Intake, template, public documentation, manifests, and archive assertions match version `0.6.0`.
+3. Each accepted negative phrase normalizes to `Não haverá follow up` and completes only `follow_up_date`.
+4. Relative meeting and follow-up dates can be confirmed together, after which the confirmed calendar dates render.
+5. An explicit override of an unconfirmed follow-up date renders `Não informado`, not the inferred date, and lists `Data para follow up` as pending.
+6. A correction or conflict reopens only the affected follow-up field and regenerates after resolution.
+7. Valid action deadlines do not satisfy a missing `follow_up_date`.
+8. A valid follow-up date or `Não haverá follow up` does not satisfy a missing action deadline.
+9. The existing explicit override remains the only way to generate while either date is unresolved.
+10. Packaging assertions require exactly twelve required fields while retaining `Natureza da Visita`.
+11. Intake, template, public documentation, manifests, and archive assertions match version `0.6.0`.
 
 The ChatGPT Work acceptance procedure must cover the intake, a complete first-turn report, missing-field collection, relative-date confirmation, explicit no follow up, and report-only rendering.
 
