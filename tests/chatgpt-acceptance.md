@@ -18,7 +18,9 @@ These observations define the regression baseline for version `0.2.0`.
 - Installed-cache verification: pending for 0.6.0
 - Auxiliary Codex loading: pending for 0.6.0
 
-## Local ChatGPT Scenarios
+## Historical Local ChatGPT Evidence
+
+Rows that name an earlier version preserve regression evidence from that release; they do not count as installed verification for `0.6.0`. The Build section remains the source of truth for current installed verification status.
 
 | Scenario | Result | Evidence |
 | --- | --- | --- |

@@ -973,12 +973,14 @@ def check_packaging() -> None:
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     if "dist/documentar-reuniao-0.6.0.zip" not in readme:
         raise AssertionError("README must name the current public archive")
+    acceptance = (ROOT / "tests/chatgpt-acceptance.md").read_text(encoding="utf-8")
     public_docs = {
         "README.md": readme,
         "INSTRUCOES_DE_USO.md": (ROOT / "INSTRUCOES_DE_USO.md").read_text(
             encoding="utf-8"
         ),
         "docs/public-submission.md": submission,
+        "tests/chatgpt-acceptance.md": acceptance,
     }
     for path, content in public_docs.items():
         if "Data para follow up" not in content:
@@ -999,6 +1001,15 @@ def check_packaging() -> None:
     )
     if any(phrase not in submission for phrase in required_submission_content):
         raise AssertionError("submission material is missing mandatory portal content")
+    required_acceptance_content = (
+        "Plugin version: 0.6.0",
+        "Source verification: passed (`python3 scripts/test_flow.py`, 43/43)",
+        "Historical Local ChatGPT Evidence",
+        "twelve required collection categories",
+        "Unconfirmed follow-up override",
+    )
+    if any(phrase not in acceptance for phrase in required_acceptance_content):
+        raise AssertionError("manual acceptance is stale for version 0.6.0")
 
     intake = extract_skill_section("INTAKE")
     required_intake_labels = (
