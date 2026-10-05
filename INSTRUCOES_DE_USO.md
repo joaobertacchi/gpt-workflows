@@ -25,7 +25,8 @@ Você não precisa seguir uma ordem nem preencher um formulário. Fale naturalme
 - responsável técnico (ou a declaração de que não houve);
 - participantes, com o lado (cliente ou empresa) e a função de cada um;
 - assuntos discutidos;
-- próximos passos, com responsável e prazo de cada ação; e
+- próximos passos, com responsável e prazo de cada ação;
+- data para follow up (ou a declaração de que não haverá); e
 - elaborado por.
 
 ## 3. Use texto ou voz
@@ -34,17 +35,21 @@ Você pode digitar, colar anotações ou usar a entrada de voz disponível no Ch
 
 Exemplo de relato completo:
 
-> Visitei o cliente Acme em 15/09/2026. A natureza foi Comercial e o tipo foi negociação. O objetivo foi renovar o contrato. Bruno foi o responsável comercial e Caio, o responsável técnico. Participaram Ana Souza (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato e a revisão dos valores. Bruno enviará a proposta revisada até 17/09/2026, e Ana analisará a proposta até 19/09/2026. Elaborado por Bruno.
+> Visitei o cliente Acme em 15/09/2026. A natureza foi Comercial e o tipo foi negociação. O objetivo foi renovar o contrato. Bruno foi o responsável comercial e Caio, o responsável técnico. Participaram Ana Souza (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato e a revisão dos valores. Bruno enviará a proposta revisada até 17/09/2026, e Ana analisará a proposta até 19/09/2026. O follow up será em 22/09/2026. Elaborado por Bruno.
 
 ## 4. Responda somente ao que estiver faltando
 
 Se alguma informação obrigatória estiver ausente ou inválida, o plugin solicitará apenas os campos que ainda precisam ser completados. Você pode responder normalmente, em uma ou mais mensagens.
 
-Se uma data relativa for usada para a visita ou para o prazo de uma ação, como “ontem” ou “sexta que vem”, o plugin mostrará a data que interpretou e pedirá sua confirmação antes de gerar o relatório.
+Se uma data relativa for usada para a visita, para o prazo de uma ação ou para o follow up, como “ontem”, “sexta que vem” ou “terça que vem”, o plugin mostrará a data que interpretou e pedirá sua confirmação antes de gerar o relatório completo.
 
 Caso não existam próximos passos, informe isso explicitamente:
 
 - `Não existem próximos passos.`
+
+Caso não exista acompanhamento previsto, informe isso explicitamente:
+
+- `Não haverá follow up.`
 
 ## 5. Revise e copie o relatório
 
@@ -53,7 +58,8 @@ Assim que todas as informações obrigatórias estiverem válidas, o plugin gera
 - cliente, data, natureza, tipo, objetivo e responsáveis comercial e técnico;
 - participantes, com o lado e a função de cada um;
 - descrição dos assuntos discutidos agrupada por tópico, reescrita em linguagem profissional sem inventar nenhuma informação;
-- próximos passos, responsáveis e prazos; e
+- próximos passos, responsáveis e prazos;
+- `Data para follow up`; e
 - linha de elaborado por.
 
 Revise nomes, datas, responsabilidades e demais informações antes de compartilhar ou registrar o conteúdo no sistema da empresa. Se encontrar algum erro, informe a correção na mesma conversa; o plugin atualizará e gerará novamente o relatório.

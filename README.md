@@ -32,12 +32,15 @@ O PoC não possui MCP, backend, banco de dados, API externa, CRM, credenciais ou
 - responsável técnico (ou a declaração de que não houve);
 - participantes, com o lado (cliente ou empresa) e a função de cada um;
 - assuntos discutidos;
-- próximos passos, com responsável e prazo de cada ação; e
+- próximos passos, com responsável e prazo de cada ação;
+- data para follow up (ou a declaração de que não haverá); e
 - elaborado por.
 
 Uma declaração explícita de que não existem próximos passos completa apenas esse campo e é registrada como `Nenhum próximo passo definido`.
 
-Datas relativas, como “ontem” ou “sexta que vem”, são interpretadas a partir da data da conversa. O relatório só é considerado completo depois que o usuário confirma ou corrige as datas interpretadas.
+As frases `não haverá follow up`, `não será feito follow up` e `sem follow up` completam somente a data de follow up e são registradas como `Não haverá follow up`.
+
+Datas relativas, como “ontem”, “sexta que vem” ou “terça que vem”, são interpretadas a partir da data da conversa. O relatório só é considerado completo depois que o usuário confirma ou corrige as datas interpretadas.
 
 ## Estrutura
 
@@ -92,7 +95,7 @@ Antes da submissão pública:
 4. selecione a skill pelo menu `@`; e
 5. envie `começar`.
 
-A primeira resposta deve mostrar imediatamente os onze campos obrigatórios. Os demais cenários estão em `tests/chatgpt-acceptance.md`.
+A primeira resposta deve mostrar imediatamente os doze campos obrigatórios. Os demais cenários estão em `tests/chatgpt-acceptance.md`.
 
 O teste no ChatGPT para Android ocorre somente depois que o plugin estiver publicado no marketplace público e o cliente instalar essa versão pública. Android não faz parte do critério pré-submissão.
 
@@ -104,11 +107,13 @@ Gere o pacote público na raiz do repositório:
 ./scripts/build_public_zip.sh
 ```
 
-O script executa a validação automatizada e cria `dist/documentar-reuniao-0.5.1.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
+O script executa a validação automatizada e cria `dist/documentar-reuniao-0.6.0.zip` contendo somente o manifest, o logo e os dois arquivos da skill. Esse ZIP é o arquivo enviado em **Create plugin → Skills only**.
 
 O relatório é entregue como a mensagem inteira da conversa, renderizado em Markdown, sem orientações ou cercas de código; o botão de cópia da mensagem copia apenas o relatório.
 
 A tabela de próximos passos inclui a coluna `Prazo` com a data de cada ação; passos gerados por override sem prazo exibem `Não informado`.
+
+`Data para follow up` indica quando o andamento geral será revisto. Ela é independente dos prazos das ações e pode ser anterior, igual ou posterior a eles.
 
 O pacote usa estes recursos públicos obrigatórios:
 

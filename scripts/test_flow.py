@@ -716,7 +716,7 @@ def check_packaging() -> None:
 
     portable_manifest = load_json("plugin.json")
     compat_manifest = load_json(".codex-plugin/plugin.json")
-    expected_version = "0.5.1"
+    expected_version = "0.6.0"
     expected_developer = "João Eduardo Ferreira Bertacchi"
     expected_author_url = "https://github.com/joaobertacchi"
     expected_repository = "https://github.com/joaobertacchi/gpt-workflows"
@@ -968,10 +968,10 @@ def check_packaging() -> None:
         )
 
     submission = (ROOT / "docs/public-submission.md").read_text(encoding="utf-8")
-    if "Version 0.5.1" not in submission:
-        raise AssertionError("submission release notes must name version 0.5.1")
+    if "Version 0.6.0" not in submission:
+        raise AssertionError("submission release notes must name version 0.6.0")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    if "dist/documentar-reuniao-0.5.1.zip" not in readme:
+    if "dist/documentar-reuniao-0.6.0.zip" not in readme:
         raise AssertionError("README must name the current public archive")
     public_docs = {
         "README.md": readme,
@@ -981,8 +981,8 @@ def check_packaging() -> None:
         "docs/public-submission.md": submission,
     }
     for path, content in public_docs.items():
-        if "Data para follow up" in content or "Não haverá follow up" in content:
-            raise AssertionError(f"{path} contains obsolete follow-up language")
+        if "Data para follow up" not in content:
+            raise AssertionError(f"{path} must document the restored follow-up date")
     positive_cases = re.findall(r"^### P[1-5] ", submission, flags=re.MULTILINE)
     negative_cases = re.findall(r"^### N[1-3] ", submission, flags=re.MULTILINE)
     if len(positive_cases) != 5 or len(negative_cases) != 3:
@@ -992,7 +992,7 @@ def check_packaging() -> None:
     required_submission_content = (
         "João Eduardo Ferreira Bertacchi",
         "https://github.com/joaobertacchi/gpt-workflows/issues",
-        "Version 0.5.1 delivers",
+        "Version 0.6.0 delivers",
         "Skills only",
         "No credentials or fixture data required",
         f"Short description: {expected_short_description}",

@@ -12,11 +12,11 @@ These observations define the regression baseline for version `0.2.0`.
 
 ## Build
 
-- Plugin version: 0.5.1
+- Plugin version: 0.6.0
 - Marketplace: personal
-- Source verification: passed (`python3 scripts/test_flow.py`, 41/41)
-- Installed-cache verification: pending for 0.5.1
-- Auxiliary Codex loading: pending for 0.5.1
+- Source verification: passed (`python3 scripts/test_flow.py`, 43/43)
+- Installed-cache verification: pending for 0.6.0
+- Auxiliary Codex loading: pending for 0.6.0
 
 ## Local ChatGPT Scenarios
 
@@ -32,7 +32,7 @@ These observations define the regression baseline for version `0.2.0`.
 | Copyable report boundary | Passed | Work screenshots show one report block with no content after it; the user confirmed its copy control copied only the report. |
 | Report-only message | Passed | User-confirmed in chat on 0.3.7: the entire message was exactly the rendered report — no status, no guidance, no code fences; the message copy button copied only the report; behavior described as perfect after install and test. |
 | Next-step deadline column | Passed | User-confirmed in chat on 0.3.6: report generated correctly with the rendered `Prazo` column; relative deadline phrases were confirmed as calendar dates shown in the table; the explicit override generated with `Não informado` in the `Prazo` cell as expected. |
-| Missing next-step deadline | Pending | Retest required on version 0.5.1 after the 0.5.0 regression generated `Não informado` without an override. |
+| Missing next-step deadline | Pending | Source harness passes on 0.6.0; installed Work retest remains required after the 0.5.0 regression generated `Não informado` without an override. |
 
 ## Partial-Collection History On 0.3.0
 
@@ -68,23 +68,23 @@ These attempts used the regular Chat surface rather than ChatGPT Work and theref
 
 ## Procedure
 
-Quit and reopen ChatGPT after installing version `0.5.1`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
+Quit and reopen ChatGPT after installing version `0.6.0`. On the ChatGPT homepage, switch from **Chat** to **Work**. For each scenario, start a new Work conversation, type `@`, and select **Documentar Reunião** from the menu. Do not use the regular Chat surface or manually typed mention text as acceptance evidence.
 
 ### Start checklist
 
 Send `começar` after the selected mention.
 
-Expected: the response lists the eleven required collection categories, including `Natureza da Visita`, with no follow-up field.
+Expected: the response lists the twelve required collection categories, including `Natureza da Visita` and `Data para follow up`.
 
 ### Complete first turn
 
 Send:
 
 ```text
-Cliente Acme. Data: 15/09/2026. Natureza: Comercial. Tipo: negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato. Bruno enviará a proposta revisada até 17/09/2026. Elaborado por Bruno.
+Cliente Acme. Data: 15/09/2026. Natureza: Comercial. Tipo: negociação. Objetivo: renovar o contrato. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Ana (cliente, compras) e Bruno (empresa, comercial). Discutimos a renovação do contrato. Bruno enviará a proposta revisada até 17/09/2026. Follow up: 20/09/2026. Elaborado por Bruno.
 ```
 
-Expected: complete report generated immediately with `Natureza da Visita`, the `Participantes` list and the `Elaborado por` signature, and no pending section.
+Expected: complete report generated immediately with `Natureza da Visita`, `Data para follow up: 20/09/2026`, the `Participantes` list and the `Elaborado por` signature, and no pending section.
 
 ### Missing-field collection
 
@@ -94,17 +94,17 @@ Send:
 Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).
 ```
 
-Expected: the plugin requests only nature, visit type, objective, both representatives, topics, next steps with a responsible party and deadline for each action, and report author for the same Beta-style prompt. After those answers, it generates without asking again for client, date, or participants.
+Expected: the plugin requests only nature, visit type, objective, both representatives, topics, next steps with a responsible party and deadline for each action, follow-up date, and report author for the same Beta-style prompt. After those answers, it generates without asking again for client, date, or participants.
 
 ### Relative-date confirmation
 
-Provide otherwise complete notes using `ontem` for the meeting date and `sexta que vem` for a next-step deadline.
+Provide otherwise complete notes using `ontem` for the meeting date, an absolute date for every next-step deadline, and `terça que vem` for the follow-up date.
 
-Expected: shows both inferred calendar dates and waits for confirmation or correction before generation.
+Expected: shows the inferred meeting and follow-up calendar dates and waits for confirmation or correction before generation.
 
 ### Missing next-step deadline
 
-Provide all required report fields and this next step, without a deadline:
+Provide all required report fields, including a valid follow-up date, and this next step without a deadline:
 
 ```text
 Como próximo passo, Ana testará a nova versão do plugin para a Acme.
@@ -112,15 +112,15 @@ Como próximo passo, Ana testará a nova versão do plugin para a Acme.
 
 Expected: no report is generated. The plugin asks specifically for the deadline of that action. After a valid deadline is supplied, it generates the report. In a separate run, `Não informado` may appear in the deadline cell only after the user affirmatively says `continuar mesmo assim`.
 
-### Explicit no next steps
+### Explicit no next steps and follow up
 
-Provide all other required fields and state:
+Provide all other required fields. Run this case in separate conversations with each follow-up phrase: `não haverá follow up`, `não será feito follow up`, and `sem follow up`. Also state:
 
 ```text
-Não existem próximos passos.
+Não existem próximos passos e não haverá follow up.
 ```
 
-Expected: a complete report containing `Nenhum próximo passo definido` and no pending section.
+Expected: every complete report contains `Nenhum próximo passo definido` and the canonical `Não haverá follow up`, with no pending section.
 
 ### Reversed nature alias
 
@@ -148,15 +148,25 @@ Gerar mesmo com pendências.
 
 Expected: an incomplete draft with a `Pendências de informação` section listing every unresolved required field.
 
+### Unconfirmed follow-up override
+
+Provide all required fields, use `sexta que vem` for the follow-up date, and affirmatively say:
+
+```text
+Continuar mesmo assim.
+```
+
+Expected: an incomplete draft renders `Data para follow up: Não informado`, lists `Data para follow up` under `Pendências de informação`, and never renders the inferred calendar date as confirmed.
+
 ### Detailed-note fidelity and copy boundary
 
 Send:
 
 ```text
-A visita da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Natureza: Técnica Comercial. Tipo: desenvolvimento. Objetivo: alinhar o registro de reuniões no CRM. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Luciano (cliente, operações) e João (empresa, produto). Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026. Elaborado por João.
+A visita da empresa Acme foi em 13/09/2026 às 13h, durou cerca de uma hora e foi com Luciano. Natureza: Técnica Comercial. Tipo: desenvolvimento. Objetivo: alinhar o registro de reuniões no CRM. Responsável comercial: Bruno. Responsável técnico: Caio. Participantes: Luciano (cliente, operações) e João (empresa, produto). Luciano relatou que o time deveria registrar reuniões com clientes, mas não vem fazendo isso e os registros deveriam entrar no CRM. Durante a conversa ele avaliou WhatsApp e pediu alternativas melhores. Propus um plugin público para ChatGPT. Recebi os requisitos na segunda-feira e fiquei de enviar a prova de conceito até o fim do dia. Luciano instalará, testará em dispositivos móveis e retornará em 17/09/2026. Follow up: 18/09/2026. Elaborado por João.
 ```
 
-Expected: a `Descrição` section grouping the supplied facts under their topics as professional prose, the `Participantes` list with side and function, the extended header with objective and both representatives, and the `Elaborado por` signature. Every supplied fact is preserved without invention; reproducing dictated sentences near-verbatim records `Failed`. The entire message must be exactly the rendered report beginning with `# Relatório de Visita`: no status, no guidance, no code fences. The message copy button copies only the report. The next-steps table must include the `Prazo` column with a calendar date per action. A draft report carries `Pendências de informação` inside the report.
+Expected: a `Descrição` section grouping the supplied facts under their topics as professional prose, the `Participantes` list with side and function, the extended header with objective, both representatives and `Data para follow up: 18/09/2026`, and the `Elaborado por` signature. Every supplied fact is preserved without invention; reproducing dictated sentences near-verbatim records `Failed`. The entire message must be exactly the rendered report beginning with `# Relatório de Visita`: no status, no guidance, no code fences. The message copy button copies only the report. The next-steps table must include the `Prazo` column with a calendar date per action. A draft report carries `Pendências de informação` inside the report.
 
 Record `Passed` or `Failed` and a conversation identifier, transcript, or screenshot in the table. Preserve the exact unexpected response for any failure.
 
