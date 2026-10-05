@@ -296,7 +296,8 @@
             "Pendências de informação",
             "Próximos Passos",
             "## Descrição",
-            "retrabalho manual"
+            "retrabalho manual",
+            "**Data para follow up:** Não informado"
           ]
         }
       ]
@@ -719,7 +720,11 @@
         {
           "action": "generate",
           "state": "DONE",
-          "missing": []
+          "missing": [],
+          "outputContains": [
+            "**Data:** 2026-09-14",
+            "**Data para follow up:** 2026-09-18"
+          ]
         }
       ]
     },
