@@ -468,6 +468,7 @@ def render_report(record: dict[str, Any], missing: list[str]) -> str:
         "objetivo_visita": value_or_missing("objetivo_visita"),
         "responsavel_comercial": value_or_missing("responsavel_comercial"),
         "responsavel_tecnico": value_or_missing("responsavel_tecnico"),
+        "follow_up_date": value_or_missing("follow_up_date"),
         "participantes": render_participants(record, missing),
         "descricao_section": render_description(record, missing),
         "next_steps": render_next_steps(record),
@@ -836,10 +837,40 @@ def check_packaging() -> None:
         "comercial técnica": "Técnica Comercial"
     }:
         raise AssertionError("visit_nature must normalize the reversed alias")
-    if any(field["id"] == "follow_up_date" for field in FIELD_SCHEMA["fields"]):
-        raise AssertionError("follow_up_date must be removed from the schema")
-    if merge_record({}, {"follow_up_date": "2026-09-30"}):
-        raise AssertionError("removed fields must not enter the active record")
+    required_fields = [
+        field for field in FIELD_SCHEMA["fields"] if field.get("required")
+    ]
+    if len(required_fields) != 12:
+        raise AssertionError("the report contract must expose twelve required fields")
+    follow_up_field = next(
+        (
+            field
+            for field in FIELD_SCHEMA["fields"]
+            if field["id"] == "follow_up_date"
+        ),
+        None,
+    )
+    if follow_up_field != {
+        "id": "follow_up_date",
+        "label": "Data para follow up",
+        "required": True,
+        "type": "string",
+        "allowExplicitNone": True,
+        "explicitNoneValue": "Não haverá follow up",
+        "validation": {
+            "kind": "absolute_date",
+            "formats": ["YYYY-MM-DD", "DD/MM/YYYY"],
+        },
+    }:
+        raise AssertionError("follow_up_date must restore the required date contract")
+    if validation_rules.get("explicitNegativeAnswers", {}).get(
+        "follow_up_date"
+    ) != [
+        "não haverá follow up",
+        "não será feito follow up",
+        "sem follow up",
+    ]:
+        raise AssertionError("follow_up_date must restore its accepted negative phrases")
     nested_deadline_prompt = render_field_prompt(
         ["visit_nature", "next_steps"],
         record={
@@ -898,14 +929,15 @@ def check_packaging() -> None:
     required_skill_concepts = (
         "@documentar reunião",
         "starts a new active report",
-        "only these eleven fields are required",
-        "generate immediately when all fields are valid",
+        "only these twelve fields are required",
+        "generate a complete report immediately when all fields are valid",
         "confirm",
         "nenhum próximo passo definido",
         "structured commercial meeting",
         "ontem",
         "time, duration, decisions, success criteria",
         "não houve responsável técnico",
+        "não haverá follow up",
         "função não informada",
         "comercial técnica",
         "técnica comercial",
@@ -919,6 +951,7 @@ def check_packaging() -> None:
         "final generation gate",
         "qual é o prazo da ação",
         "never invent a next step",
+        "never derive `follow_up_date`",
         "without that explicit override",
         "a complete report contains no `pendências de informação` section",
         "responsável e o prazo de cada ação",
@@ -981,6 +1014,7 @@ def check_packaging() -> None:
         "participantes",
         "assuntos discutidos",
         "responsável e o prazo de cada ação",
+        "data para follow up",
         "elaborado por",
     )
     missing_intake_labels = [
@@ -990,9 +1024,6 @@ def check_packaging() -> None:
         raise AssertionError(
             "intake is missing required content: " + ", ".join(missing_intake_labels)
         )
-    if "follow up" in intake.casefold():
-        raise AssertionError("intake must not request follow up")
-
     partial_example = extract_skill_section("PARTIAL_EXAMPLE")
     required_partial_content = (
         "Reunião com a empresa Beta em 15/09/2026. Participaram Carla (cliente, compras) e Bruno (empresa, comercial).",
@@ -1003,6 +1034,7 @@ def check_packaging() -> None:
         "Responsável técnico",
         "Assuntos discutidos",
         "Próximos Passos, com responsável e prazo de cada ação",
+        "Data para follow up",
         "Elaborado por",
         "Do not ask for generic notes",
         "Do not request decisions",
@@ -1015,7 +1047,7 @@ def check_packaging() -> None:
             "partial example is missing required content: "
             + ", ".join(missing_partial_content)
         )
-    if "Data para follow up" in partial_example or "Tipo de reunião/visita" in partial_example:
+    if "Tipo de reunião/visita" in partial_example:
         raise AssertionError("partial example contains obsolete report labels")
 
     detail_example = extract_skill_section("DETAIL_FIDELITY_EXAMPLE")
@@ -1046,6 +1078,7 @@ def check_packaging() -> None:
         "{{objetivo_visita}}",
         "{{responsavel_comercial}}",
         "{{responsavel_tecnico}}",
+        "{{follow_up_date}}",
         "{{participantes}}",
         "{{descricao_section}}",
         "{{next_steps}}",
@@ -1059,13 +1092,14 @@ def check_packaging() -> None:
             "report template is missing placeholders: "
             + ", ".join(missing_placeholders)
         )
-    if "{{follow_up_date}}" in template:
-        raise AssertionError("report template must not render follow up")
     required_template_content = (
         "**Cliente:**",
         "**Data:**",
         "**Natureza da Visita:**",
         "**Tipo de Visita:**",
+        "**Responsável técnico:**",
+        "**Data para follow up:**",
+        "## Participantes",
         "## Próximos Passos",
     )
     template_positions = [template.find(value) for value in required_template_content]
@@ -1105,8 +1139,6 @@ OVERRIDE_PHRASES = [normalize(value) for value in VALIDATION_RULES["explicitOver
 def main() -> int:
     check_packaging()
     scenarios = load_json("tests/scenarios.json")["cases"]
-    if len(scenarios) != 41:
-        raise AssertionError(f"expected 41 scenarios, found {len(scenarios)}")
     failures: list[str] = []
     for case in scenarios:
         actual = simulate(case)

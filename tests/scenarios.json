@@ -96,6 +96,7 @@
                 "deadline": "2026-09-12"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -148,6 +149,7 @@
                 "deadline": "2026-09-12"
               }
             ],
+            "follow_up_date": "2026-09-11",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -162,7 +164,8 @@
             "## Descrição",
             "- Ana — Cliente — Compras",
             "- Bruna — Empresa — Comercial",
-            "**Elaborado por:** Bruna"
+            "**Elaborado por:** Bruna",
+            "**Data para follow up:** 2026-09-11"
           ],
           "outputNotContains": [
             "Pendências de informação",
@@ -204,7 +207,7 @@
           }
         },
         {
-          "text": "O próximo passo é preparar a demonstração até 2026-09-17, com Carla como responsável.",
+          "text": "O próximo passo é preparar a demonstração até 2026-09-17, com Carla como responsável; o follow up será em 18/09/2026.",
           "fields": {
             "next_steps": [
               {
@@ -213,7 +216,8 @@
                 "deadline": "2026-09-17"
               }
             ],
-            "visit_nature": "Comercial"
+            "visit_nature": "Comercial",
+            "follow_up_date": "2026-09-18"
           }
         }
       ],
@@ -222,14 +226,14 @@
           "action": "ask_missing",
           "state": "WAITING_FOR_MISSING",
           "missing": [
-            "next_steps"
+            "next_steps",
+            "follow_up_date"
           ],
           "outputContains": [
             "Próximos Passos"
           ],
           "outputNotContains": [
             "Cliente",
-            "Data",
             "Tipo de Visita",
             "Objetivo da visita",
             "Responsável comercial",
@@ -285,7 +289,8 @@
           "action": "generate",
           "state": "DONE_WITH_GAPS",
           "missing": [
-            "next_steps"
+            "next_steps",
+            "follow_up_date"
           ],
           "outputContains": [
             "Pendências de informação",
@@ -321,6 +326,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -356,6 +362,7 @@
                 "deadline": "2026-09-18"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -417,6 +424,7 @@
                 "deadline": "2026-09-18"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -468,6 +476,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -535,6 +544,7 @@
             "objetivo_visita",
             "responsavel_comercial",
             "responsavel_tecnico",
+            "follow_up_date",
             "elaborado_por"
           ]
         },
@@ -548,6 +558,7 @@
             "objetivo_visita",
             "responsavel_comercial",
             "responsavel_tecnico",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -571,6 +582,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -587,11 +599,11 @@
       ]
     },
     {
-      "id": "explicit-none-completes-next-steps",
+      "id": "explicit-none-completes-next-steps-and-follow-up",
       "invoked": true,
       "turns": [
         {
-          "text": "Não existem próximos passos.",
+          "text": "Não existem próximos passos e sem follow up.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-15",
@@ -615,6 +627,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -626,7 +639,8 @@
           "state": "DONE",
           "missing": [],
           "outputContains": [
-            "Nenhum próximo passo definido"
+            "Nenhum próximo passo definido",
+            "Não haverá follow up"
           ],
           "outputNotContains": [
             "Pendências de informação"
@@ -635,11 +649,11 @@
       ]
     },
     {
-      "id": "relative-meeting-date-requires-confirmation",
+      "id": "relative-meeting-and-follow-up-dates-require-confirmation",
       "invoked": true,
       "turns": [
         {
-          "text": "A reunião foi ontem.",
+          "text": "A reunião foi ontem e o follow up será sexta que vem.",
           "fields": {
             "company": "Acme",
             "meeting_date": "2026-09-14",
@@ -669,18 +683,21 @@
                 "deadline": "2026-09-17"
               }
             ],
+            "follow_up_date": "2026-09-18",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           },
           "inferredDates": [
-            "meeting_date"
+            "meeting_date",
+            "follow_up_date"
           ]
         },
         {
-          "text": "Confirmo a data.",
+          "text": "Confirmo as duas datas.",
           "fields": {},
           "confirmedDates": [
-            "meeting_date"
+            "meeting_date",
+            "follow_up_date"
           ]
         }
       ],
@@ -689,7 +706,14 @@
           "action": "confirm_dates",
           "state": "WAITING_FOR_CONFIRMATION",
           "missing": [
-            "meeting_date"
+            "meeting_date",
+            "follow_up_date"
+          ],
+          "outputContains": [
+            "Data",
+            "2026-09-14",
+            "Data para follow up",
+            "2026-09-18"
           ]
         },
         {
@@ -728,6 +752,7 @@
               "Contrato"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           },
@@ -783,6 +808,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -817,6 +843,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -878,6 +905,7 @@
                 "responsible": 456
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -922,6 +950,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -978,14 +1007,15 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
         },
         {
-          "text": "A empresa foi Beta ou Gama; não tenho certeza. O objetivo anterior também está incorreto e ainda não foi informado.",
+          "text": "A empresa foi Beta ou Gama; não tenho certeza. A data de follow up anterior também está incorreta e ainda não foi informada.",
           "fields": {
-            "objetivo_visita": "não informado"
+            "follow_up_date": "não informado"
           },
           "conflictingFields": [
             "company"
@@ -998,9 +1028,9 @@
           }
         },
         {
-          "text": "O objetivo foi revisar o equipamento.",
+          "text": "Não haverá follow up.",
           "fields": {
-            "objetivo_visita": "Revisar o equipamento"
+            "follow_up_date": "Não haverá follow up"
           }
         }
       ],
@@ -1015,19 +1045,21 @@
           "state": "WAITING_FOR_CLARIFICATION",
           "missing": [
             "company",
-            "objetivo_visita"
+            "follow_up_date"
           ],
           "outputContains": [
             "Cliente"
           ],
           "outputNotContains": [
             "Data",
+            "Natureza da Visita",
             "Tipo de Visita",
             "Objetivo da visita",
             "Responsável comercial",
             "Responsável técnico",
             "Participantes",
             "Assuntos discutidos",
+            "Data para follow up",
             "Elaborado por"
           ]
         },
@@ -1035,16 +1067,16 @@
           "action": "ask_missing",
           "state": "WAITING_FOR_MISSING",
           "missing": [
-            "objetivo_visita"
+            "follow_up_date"
           ],
           "outputContains": [
-            "Objetivo da visita"
+            "Data para follow up"
           ],
           "outputNotContains": [
             "Cliente",
-            "Data",
             "Natureza da Visita",
             "Tipo de Visita",
+            "Objetivo da visita",
             "Responsável comercial",
             "Responsável técnico",
             "Participantes",
@@ -1058,7 +1090,8 @@
           "state": "DONE",
           "missing": [],
           "outputContains": [
-            "Beta"
+            "Beta",
+            "Não haverá follow up"
           ]
         }
       ]
@@ -1088,6 +1121,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -1122,6 +1156,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           },
@@ -1179,6 +1214,7 @@
               }
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1250,6 +1286,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1298,6 +1335,7 @@
                 "action": "Enviar proposta"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1342,6 +1380,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         },
@@ -1358,6 +1397,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -1393,6 +1433,7 @@
                 "deadline": "2026-09-18"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1443,6 +1484,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         },
@@ -1459,6 +1501,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         },
@@ -1475,6 +1518,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -1505,6 +1549,7 @@
             "participantes",
             "topics_discussed",
             "next_steps",
+            "follow_up_date",
             "elaborado_por"
           ]
         }
@@ -1573,6 +1618,7 @@
                 "deadline": "2026-09-17"
               }
             ],
+            "follow_up_date": "2026-09-18",
             "elaborado_por": "João",
             "visit_nature": "Comercial"
           }
@@ -1636,6 +1682,7 @@
                 "responsible": "Vinil Arena"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1719,6 +1766,7 @@
                 "deadline": "2026-09-18"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           },
@@ -1787,6 +1835,7 @@
                 "responsible": "Bruno"
               }
             ],
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1836,6 +1885,7 @@
               "Contrato"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1884,6 +1934,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1926,6 +1977,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -1979,6 +2031,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -2051,6 +2104,7 @@
               }
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -2108,6 +2162,7 @@
               }
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna",
             "visit_nature": "Comercial"
           }
@@ -2159,6 +2214,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna"
           }
         }
@@ -2218,6 +2274,7 @@
               "Revisão"
             ],
             "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "Não haverá follow up",
             "elaborado_por": "Bruna"
           }
         }
@@ -2235,6 +2292,120 @@
             "Comercial Técnica",
             "comercial técnica",
             "Pendências de informação"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "action-deadline-does-not-satisfy-missing-follow-up",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "A ação tem prazo, mas a data de follow up não foi informada.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "visit_nature": "Comercial",
+            "visit_type": "preventiva",
+            "objetivo_visita": "Revisar o equipamento",
+            "responsavel_comercial": "Bruna",
+            "responsavel_tecnico": "Caio",
+            "participantes": [
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
+            ],
+            "topics_discussed": [
+              "Revisão"
+            ],
+            "next_steps": [
+              {
+                "action": "Enviar proposta",
+                "responsible": "Bruno",
+                "deadline": "2026-09-18"
+              }
+            ],
+            "elaborado_por": "Bruna"
+          }
+        }
+      ],
+      "expectations": [
+        {
+          "action": "ask_missing",
+          "state": "WAITING_FOR_MISSING",
+          "missing": [
+            "follow_up_date"
+          ],
+          "outputContains": [
+            "Data para follow up"
+          ],
+          "outputNotContains": [
+            "Próximos Passos",
+            "Prazo da ação",
+            "Elaborado por"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "override-unconfirmed-follow-up-renders-pending",
+      "invoked": true,
+      "turns": [
+        {
+          "text": "O follow up será sexta que vem. Continuar mesmo assim.",
+          "fields": {
+            "company": "Acme",
+            "meeting_date": "2026-09-15",
+            "visit_nature": "Comercial",
+            "visit_type": "preventiva",
+            "objetivo_visita": "Revisar o equipamento",
+            "responsavel_comercial": "Bruna",
+            "responsavel_tecnico": "Caio",
+            "participantes": [
+              {
+                "nome": "Ana",
+                "lado": "cliente",
+                "funcao": "Compras"
+              },
+              {
+                "nome": "Bruna",
+                "lado": "empresa",
+                "funcao": "Comercial"
+              }
+            ],
+            "topics_discussed": [
+              "Revisão"
+            ],
+            "next_steps": "Nenhum próximo passo definido",
+            "follow_up_date": "2026-09-18",
+            "elaborado_por": "Bruna"
+          },
+          "inferredDates": [
+            "follow_up_date"
+          ]
+        }
+      ],
+      "expectations": [
+        {
+          "action": "generate",
+          "state": "DONE_WITH_GAPS",
+          "missing": [
+            "follow_up_date"
+          ],
+          "outputContains": [
+            "**Data para follow up:** Não informado",
+            "Pendências de informação",
+            "Data para follow up"
+          ],
+          "outputNotContains": [
+            "2026-09-18"
           ]
         }
       ]
